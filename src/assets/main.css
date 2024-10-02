@@ -1,0 +1,36 @@
+#app {
+  font-size: 50px;
+  font-family: cursive;
+}
+block {
+  display: block;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+section {
+  /* display: inline-block; */
+  width: fit-content;
+}
+
+.spk {
+  background-color: #aea;
+  margin-left: 1em;
+}
+
+/* [word='“'] ~ word {
+  background-color: #aaeeee;
+}
+[word='”'] ~ word {
+  background-color: transparent;
+}
+
+[word='”'] ~ [word='“'] ~ word {
+  background-color: #aaeeee;
+}
+[word='”'] ~ [word='“'] ~ [word='”'] ~ word {
+  background-color: transparent;
+}
+
+[word='”'] {
+  background-color: transparent !important;
+} */
