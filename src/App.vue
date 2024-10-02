@@ -5,8 +5,7 @@ import { getParams, runWithTime } from './debug'
 import './loop'
 import { globalData } from './utils'
 
-const splitToBlock = /(?<=[。！？])(?![”])|(?<=[。！？，]”)/
-const splitToSection = /(?<=[，…—；：])/
+const splitToSection = /(?<=[。！？，…—；：])/
 
 type datas = line[]
 type line = block[]
@@ -21,7 +20,7 @@ const x = txt0.split('\r\n').slice(0, all ? 9999 : 90)
 let spk = false
 const datas: datas = runWithTime(() =>
   x.map((line) =>
-    line.split(splitToBlock).map((block) =>
+    line2block(line).map((block) =>
       block.split(splitToSection).map((section) => {
         const rs: section = [...section]
 
@@ -47,6 +46,29 @@ const datas: datas = runWithTime(() =>
     )
   )
 )
+
+const blockFlag = '。！？'
+function line2block(line: string): string[] {
+  let spk = false
+  return [...line].reduce(
+    (acc, cur, i, arr) => {
+      acc[acc.length - 1] += cur
+
+      if (cur === '“') {
+        spk = true
+      }
+      if ((!spk && blockFlag.includes(cur)) || (blockFlag.includes(arr[i - 1]) && cur === '”')) {
+        acc.push('')
+      }
+      if (blockFlag.includes(arr[i - 1]) && cur === '”') {
+        spk = false
+      }
+
+      return acc
+    },
+    ['']
+  )
+}
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
