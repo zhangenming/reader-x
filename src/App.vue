@@ -5,22 +5,23 @@ import { getParams, runWithTime } from './debug'
 import './loop'
 import { globalData } from './utils'
 
-const splitToLine = /(?<=[。！？])(?![”])|(?<=[。！？，]”)/
+const splitToBlock = /(?<=[。！？])(?![”])|(?<=[。！？，]”)/
 const splitToSection = /(?<=[，…—；：])/
 
-type word = string
-type section = word[] & { spk?: boolean }
-type block = section[]
+type datas = line[]
 type line = block[]
+type block = section[]
+type section = word[] & { spk?: boolean }
+type word = string
 
 const { all } = getParams()
 
 const x = txt0.split('\r\n').slice(0, all ? 9999 : 90)
 
 let spk = false
-const datas: line[] = runWithTime(() =>
+const datas: datas = runWithTime(() =>
   x.map((line) =>
-    line.split(splitToLine).map((block) =>
+    line.split(splitToBlock).map((block) =>
       block.split(splitToSection).map((section) => {
         const rs: section = [...section]
 
@@ -56,9 +57,14 @@ document.addEventListener('click', (e) => {
   getSelection()!.empty()
 
   const { selectionsData, setSelectionsData, sectionDoms } = globalData
+  const {
+    nodeName,
+    dataset: { selection },
+    offsetTop,
+  } = target
 
   if (query) {
-    if (!(target.nodeName === 'SECTION')) return
+    if (!(nodeName === 'SECTION')) return
     globalData.version++
 
     if (selectionsData.includes(query)) {
@@ -67,14 +73,12 @@ document.addEventListener('click', (e) => {
       setSelectionsData([...selectionsData, query])
     }
   } else {
-    const { selection } = target.dataset
-    const 原始位置 = target.offsetTop
     if (selection) {
       const 含有Sections = sectionDoms.filter((section) => section.textContent!.includes(selection))
       const 第一个Section = 含有Sections[0]
       const 末一个Section = 含有Sections[含有Sections.length - 1]
-      const 下一个Section = 含有Sections.find((e) => e.offsetTop > 原始位置)
-      const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < 原始位置)
+      const 下一个Section = 含有Sections.find((e) => e.offsetTop > offsetTop)
+      const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < offsetTop)
 
       const jmp = (() => {
         if (shiftKey && ctrlKey) return 第一个Section
@@ -84,7 +88,7 @@ document.addEventListener('click', (e) => {
       })()
 
       document.documentElement.scrollBy({
-        top: jmp.offsetTop - 原始位置,
+        top: jmp.offsetTop - offsetTop,
         behavior: 'smooth',
       })
     }
