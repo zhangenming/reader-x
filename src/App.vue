@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import txt0 from '../txt/笑傲江湖 (1).txt?raw'
-import { runWithTime } from './debug'
+import { getParams, runWithTime } from './debug'
 import './loop'
 import { globalData } from './utils'
 
@@ -11,7 +12,10 @@ type word = string
 type section = word[] & { spk?: boolean }
 type block = section[]
 type line = block[]
-const x = txt0.split('\r\n').slice(0, 900)
+
+const { all } = getParams()
+
+const x = txt0.split('\r\n').slice(0, all ? 9999 : 90)
 
 let spk = false
 const datas: line[] = runWithTime(() =>
@@ -44,21 +48,51 @@ const datas: line[] = runWithTime(() =>
 )
 
 document.addEventListener('click', (e) => {
-  const { target } = e
+  const { target, shiftKey, ctrlKey } = e
+  if (!target) return
+  if (!(target instanceof HTMLElement)) return
 
   const query = getSelection() + ''
   getSelection()!.empty()
 
+  const { selectionsData, setSelectionsData, sectionDoms } = globalData
+
   if (query) {
-    if (!((target as any).nodeName === 'SECTION')) return
-    const { setVersion, getVersion, selectionsData, setSelectionsData } = globalData
-    setVersion(getVersion() + 1)
+    if (!(target.nodeName === 'SECTION')) return
+    globalData.version++
+
     if (selectionsData.includes(query)) {
       setSelectionsData(selectionsData.filter((item) => item !== query))
     } else {
       setSelectionsData([...selectionsData, query])
     }
+  } else {
+    const { selection } = target.dataset
+    const 原始位置 = target.offsetTop
+    if (selection) {
+      const 含有Sections = sectionDoms.filter((section) => section.textContent!.includes(selection))
+      const 第一个Section = 含有Sections[0]
+      const 末一个Section = 含有Sections[含有Sections.length - 1]
+      const 下一个Section = 含有Sections.find((e) => e.offsetTop > 原始位置) || 第一个Section
+      const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < 原始位置) || 末一个Section
+
+      const jmp = (() => {
+        if (shiftKey && ctrlKey) return 第一个Section
+        if (ctrlKey) return 末一个Section
+        if (shiftKey) return 上一个Section
+        return 下一个Section
+      })()
+
+      document.documentElement.scrollBy({
+        top: jmp.offsetTop - 原始位置,
+        behavior: 'smooth',
+      })
+    }
   }
+})
+
+onMounted(() => {
+  globalData.sectionDoms = Array.from(document.querySelectorAll('section'))
 })
 </script>
 

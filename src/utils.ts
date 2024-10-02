@@ -1,20 +1,17 @@
-let version = 0
 export const globalData = {
-  getVersion() {
-    return version
-  },
-  setVersion(v: number) {
-    version = v
-  },
+  version: 0,
+
   //
   selectionsData: ['福建', '福威镖局'],
   setSelectionsData(data: string[]) {
     globalData.selectionsData = data
   },
+
+  //
+  sectionDoms: [] as HTMLElement[],
 }
 
 export function findAllIndex(l: string, r: string) {
-  // todo 全局search 然后cache
   if (r == '') {
     console.error('x')
     return []
