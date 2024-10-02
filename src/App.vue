@@ -73,14 +73,14 @@ document.addEventListener('click', (e) => {
       const 含有Sections = sectionDoms.filter((section) => section.textContent!.includes(selection))
       const 第一个Section = 含有Sections[0]
       const 末一个Section = 含有Sections[含有Sections.length - 1]
-      const 下一个Section = 含有Sections.find((e) => e.offsetTop > 原始位置) || 第一个Section
-      const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < 原始位置) || 末一个Section
+      const 下一个Section = 含有Sections.find((e) => e.offsetTop > 原始位置)
+      const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < 原始位置)
 
       const jmp = (() => {
         if (shiftKey && ctrlKey) return 第一个Section
         if (ctrlKey) return 末一个Section
-        if (shiftKey) return 上一个Section
-        return 下一个Section
+        if (shiftKey) return 上一个Section || 末一个Section
+        return 下一个Section || 第一个Section
       })()
 
       document.documentElement.scrollBy({

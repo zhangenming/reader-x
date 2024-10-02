@@ -1,10 +1,16 @@
+import { useStorage } from '@vueuse/core'
+
+const selectionsData = useStorage<string[]>('selectionsData', []) // returns Ref<number>
+
 export const globalData = {
   version: 0,
 
   //
-  selectionsData: ['福建', '福威镖局'],
+  get selectionsData() {
+    return selectionsData.value
+  },
   setSelectionsData(data: string[]) {
-    globalData.selectionsData = data
+    selectionsData.value = data
   },
 
   //
