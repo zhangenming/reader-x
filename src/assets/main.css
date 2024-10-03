@@ -41,3 +41,7 @@ section {
 [word='”'] {
   background-color: transparent !important;
 } */
+
+[data-selection] {
+  cursor: pointer;
+}

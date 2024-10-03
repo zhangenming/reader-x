@@ -1,4 +1,4 @@
-import { findAllIndex, globalData } from './utils'
+import { findAllIndex, globalData, hoverR, version } from './utils'
 
 let visibleSections = getVisibleSections()
 document.onscroll = () => {
@@ -15,7 +15,7 @@ function getVisibleSections() {
 requestAnimationFrame(function f() {
   requestAnimationFrame(f)
 
-  const { version, selectionsData } = globalData
+  const { selectionsData } = globalData
 
   visibleSections.forEach((section) => {
     if (section.getAttribute('version') === version + '') return
@@ -31,5 +31,11 @@ requestAnimationFrame(function f() {
         children[index].dataset.selection = selection
       })
     })
+
+    hoverR &&
+      findAllIndex(section.textContent!, hoverR).forEach((index) => {
+        children[index].style.backgroundColor = 'black'
+        children[index].style.color = 'white'
+      })
   })
 })

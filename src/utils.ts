@@ -2,10 +2,21 @@ import { useStorage } from '@vueuse/core'
 
 const selectionsData = useStorage<string[]>('selectionsData', []) // returns Ref<number>
 
-export const globalData = {
-  version: 0,
+export let version = 0
+export function upVersion() {
+  version++
+}
 
-  //
+export let hoverR = ''
+export function setHoverR(r: string) {
+  if (!r) return
+  if (r === hoverR) return
+
+  hoverR = r
+  upVersion()
+}
+
+export const globalData = {
   get selectionsData() {
     return selectionsData.value
   },

@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import txt0 from '../txt/笑傲江湖 (1).txt?raw'
 import { getParams, runWithTime } from './debug'
 import './loop'
-import { globalData } from './utils'
+import { globalData, setHoverR, upVersion } from './utils'
 
 const splitToSection = /(?<=[。！？，…—；：])/
 
@@ -87,7 +87,7 @@ document.addEventListener('click', (e) => {
 
   if (query) {
     if (!(nodeName === 'SECTION')) return
-    globalData.version++
+    upVersion()
 
     if (selectionsData.includes(query)) {
       setSelectionsData(selectionsData.filter((item) => item !== query))
@@ -115,6 +115,12 @@ document.addEventListener('click', (e) => {
       })
     }
   }
+})
+
+document.addEventListener('mousemove', (e) => {
+  const { target } = e
+  if (!(target instanceof HTMLElement)) return
+  setHoverR(target.dataset.selection!)
 })
 
 onMounted(() => {
