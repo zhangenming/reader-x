@@ -50,7 +50,9 @@ export function getParams() {
   return new Proxy(urlParams, {
     get(urlParams, arg) {
       const rs = urlParams.get(arg as string)
-      return rs === '' ? true : rs
+      if (rs === null) return false
+      if (rs === '') return true
+      return rs
     },
-  }) as unknown as { [s: string]: string }
+  }) as unknown as { [s: string]: string | boolean }
 }

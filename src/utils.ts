@@ -58,3 +58,7 @@ export function findAllIndex(l: string, r: string) {
 
   return rsAll
 }
+
+export function deleteItem(arr: any[], item: any) {
+  return arr.splice(arr.indexOf(item), 1)
+}
