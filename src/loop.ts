@@ -1,21 +1,36 @@
-import { findAllIndex, globalData, hoverR, version } from './utils'
+import { runWithTime } from './debug'
+import { findAllIndex, globalData, hoverR, RItems, version } from './utils'
+
+const { innerHeight } = window
+let old = document.documentElement.scrollTop
+function getVisibleSections() {
+  return runWithTime(() => {
+    const newScrollTop = document.documentElement.scrollTop
+    if (newScrollTop - old < 100) return []
+    old = newScrollTop
+
+    return globalData.sectionDoms.filter((section) => {
+      if (!section.ot) section.ot = section.offsetTop
+
+      return (
+        section.ot > document.documentElement.scrollTop &&
+        section.ot < document.documentElement.scrollTop + innerHeight
+      )
+    })
+  })
+}
 
 let visibleSections = getVisibleSections()
 document.onscroll = () => {
   visibleSections = getVisibleSections()
 }
 
-function getVisibleSections() {
-  return globalData.sectionDoms.filter((section) => {
-    const rect = section.getBoundingClientRect()
-    return rect.top >= 0 && rect.bottom <= window.innerHeight
-  })
-}
+// document.onscrollend = () => {
+//   visibleSections = getVisibleSections()
+// }
 
 requestAnimationFrame(function f() {
   requestAnimationFrame(f)
-
-  const { selectionsData } = globalData
 
   visibleSections.forEach((section) => {
     if (section.getAttribute('version') === version + '') return
@@ -25,7 +40,7 @@ requestAnimationFrame(function f() {
     const children = section.children as unknown as HTMLElement[]
     ;[...children].forEach((e) => (e.style.cssText = ''))
     // apply new
-    selectionsData.forEach((selection) => {
+    RItems.value.forEach((selection) => {
       findAllIndex(section.textContent!, selection).forEach((index) => {
         children[index].style.color = 'red'
         children[index].dataset.selection = selection

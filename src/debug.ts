@@ -28,7 +28,7 @@ export async function runWithTimeSync<T>(key: string, fn: () => T): Promise<Awai
 }
 
 // 同步测试 使用异步版本测量会不准确
-export function runWithTime(fn: Function, key = 'runWithTime') {
+export function runWithTime<T>(fn: () => T, key = 'runWithTime') {
   console.time(key)
 
   const rs = fn()

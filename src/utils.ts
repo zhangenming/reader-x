@@ -7,6 +7,8 @@ export function upVersion() {
   version++
 }
 
+export const RItems = useStorage('RItems', new Set<string>([]))
+
 export let hoverR = ''
 export function setHoverR(r: string) {
   if (!r) return

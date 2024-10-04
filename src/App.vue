@@ -3,51 +3,58 @@ import { onMounted } from 'vue'
 import txt0 from '../txt/笑傲江湖 (1).txt?raw'
 import { getParams, runWithTime } from './debug'
 import './loop'
-import { globalData, setHoverR, upVersion } from './utils'
+import { findAllIndex, globalData, RItems, setHoverR, upVersion } from './utils'
 
-const splitToSection = /(?<=[。！？，…—；：])/
+const splitToSection = /(?<=[。！？，—；：])/
 
 type datas = line[]
 type line = block[]
 type block = section[]
-type section = word[] & { spk?: boolean }
-type word = string
+type section = word[] & { raw: string; spk?: boolean }
+type word = { word: string; R: string[] }
 
 const { all } = getParams()
 
-const x = txt0.split('\r\n').slice(0, all ? 9999 : 90)
+const x = txt0.split('\r\n').slice(0, all ? 1999 : 290)
 
 let spk = false
+// todo vue data
 const datas: datas = runWithTime(() =>
   x.map((line) =>
     line2block(line).map((block) =>
-      block.split(splitToSection).map((section) => {
-        const rs: section = [...section]
+      block
+        .split(splitToSection)
+        .filter(Boolean)
+        .map((section) => {
+          const rs = [...section]
+            .filter((e) => e !== '，')
+            .map((word) => ({ word, R: [] })) as unknown as section
+          rs.raw = section
 
-        if (rs[0] === '“') {
-          spk = true
-          rs.shift()
-        }
+          if (rs[0].word === '“') {
+            spk = true
+            rs.shift()
+          }
 
-        rs.spk = spk
+          rs.spk = spk
 
-        // if (spk) {
-        //   rs.unshift('   ')
-        //   rs.unshift('   ')
-        // }
+          // if (spk) {
+          //   rs.unshift('   ')
+          //   rs.unshift('   ')
+          // }
 
-        if (spk && rs[rs.length - 1] === '”') {
-          rs.pop()
-          spk = false
-        }
+          if (spk && rs[rs.length - 1].word === '”') {
+            rs.pop()
+            spk = false
+          }
 
-        return rs
-      })
+          return rs
+        })
     )
   )
 )
 
-const blockFlag = '。！？'
+const blockFlag = '。！？…'
 function line2block(line: string): string[] {
   let spk = false
   return [...line].reduce(
@@ -57,7 +64,10 @@ function line2block(line: string): string[] {
       if (cur === '“') {
         spk = true
       }
-      if ((!spk && blockFlag.includes(cur)) || (blockFlag.includes(arr[i - 1]) && cur === '”')) {
+      if (
+        i !== arr.length - 1 &&
+        ((!spk && blockFlag.includes(cur)) || (blockFlag.includes(arr[i - 1]) && cur === '”'))
+      ) {
         acc.push('')
       }
       if (blockFlag.includes(arr[i - 1]) && cur === '”') {
@@ -70,6 +80,7 @@ function line2block(line: string): string[] {
   )
 }
 
+const allSectionsData = datas.flat(2)
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
   if (!target) return
@@ -78,7 +89,7 @@ document.addEventListener('click', (e) => {
   const query = getSelection() + ''
   getSelection()!.empty()
 
-  const { selectionsData, setSelectionsData, sectionDoms } = globalData
+  const { sectionDoms } = globalData
   const {
     nodeName,
     dataset: { selection },
@@ -89,10 +100,15 @@ document.addEventListener('click', (e) => {
     if (!(nodeName === 'SECTION')) return
     upVersion()
 
-    if (selectionsData.includes(query)) {
-      setSelectionsData(selectionsData.filter((item) => item !== query))
+    if (RItems.value.has(query)) {
+      RItems.value.delete(query)
     } else {
-      setSelectionsData([...selectionsData, query])
+      RItems.value.add(query)
+      allSectionsData.forEach((section) => {
+        findAllIndex(section.raw, query).forEach((index) => {
+          section[index].R.push(query)
+        })
+      })
     }
   } else {
     if (selection) {
@@ -132,8 +148,8 @@ onMounted(() => {
   <line v-for="line of datas">
     <block v-for="block of line">
       <section v-for="section of block" :class="section.spk && 'spk'">
-        <word v-for="word of section">
-          {{ word }}
+        <word v-for="word of section" :style="word.R?.length ? 'color:red' : ''">
+          {{ word.word }}
         </word>
       </section>
     </block>
