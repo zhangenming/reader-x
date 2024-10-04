@@ -4,30 +4,28 @@ import { findAllIndex, globalData, hoverR, RItems, version } from './utils'
 const { innerHeight } = window
 let old = document.documentElement.scrollTop
 function getVisibleSections() {
-  return runWithTime(() => {
-    const newScrollTop = document.documentElement.scrollTop
-    if (newScrollTop - old < 100) return []
-    old = newScrollTop
+  // const newScrollTop = document.documentElement.scrollTop
+  // if (newScrollTop - old < 100) return []
+  // old = newScrollTop
 
-    return globalData.sectionDoms.filter((section) => {
-      if (!section.ot) section.ot = section.offsetTop
+  return globalData.sectionDoms.filter((section) => {
+    //   if (!section.ot) section.ot = section.offsetTop
 
-      return (
-        section.ot > document.documentElement.scrollTop &&
-        section.ot < document.documentElement.scrollTop + innerHeight
-      )
-    })
+    return (
+      section.offsetTop > document.documentElement.scrollTop &&
+      section.offsetTop < document.documentElement.scrollTop + innerHeight
+    )
   })
 }
 
 let visibleSections = getVisibleSections()
-document.onscroll = () => {
-  visibleSections = getVisibleSections()
-}
-
-// document.onscrollend = () => {
+// document.onscroll = () => {
 //   visibleSections = getVisibleSections()
 // }
+
+document.onscrollend = () => {
+  visibleSections = getVisibleSections()
+}
 
 requestAnimationFrame(function f() {
   requestAnimationFrame(f)

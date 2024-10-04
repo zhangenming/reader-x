@@ -35,6 +35,9 @@ export function findAllIndex(l: string, r: string) {
     console.error('x')
     return []
   }
+  if (!l.includes(r)) {
+    return []
+  }
 
   const rs = []
   let pos = 0

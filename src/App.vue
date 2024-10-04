@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import txt0 from '../txt/笑傲江湖 (1).txt?raw'
 import { getParams, runWithTime } from './debug'
 import './loop'
@@ -11,25 +11,26 @@ type datas = line[]
 type line = block[]
 type block = section[]
 type section = word[] & { raw: string; spk?: boolean }
-type word = { word: string; R: string[] }
+type word = { word: string; R: Set<string> }
 
 const { all } = getParams()
 
-const x = txt0.split('\r\n').slice(0, all ? 1999 : 290)
+const x = txt0.split('\r\n').slice(0, all ? 1999 : 100)
 
 let spk = false
-// todo vue data
-const datas: datas = runWithTime(() =>
+const datas: datas = reactive(
   x.map((line) =>
     line2block(line).map((block) =>
       block
         .split(splitToSection)
         .filter(Boolean)
         .map((section) => {
-          const rs = [...section]
-            .filter((e) => e !== '，')
-            .map((word) => ({ word, R: [] })) as unknown as section
-          rs.raw = section
+          const rs: section = Object.assign(
+            [...section].filter((e) => e !== '，').map((word) => ({ word, R: new Set<string>() })),
+            {
+              raw: '',
+            }
+          )
 
           if (rs[0].word === '“') {
             spk = true
@@ -47,6 +48,8 @@ const datas: datas = runWithTime(() =>
             rs.pop()
             spk = false
           }
+
+          rs.raw = rs.map((e) => e.word).join('')
 
           return rs
         })
@@ -81,6 +84,7 @@ function line2block(line: string): string[] {
 }
 
 const allSectionsData = datas.flat(2)
+
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
   if (!target) return
@@ -100,16 +104,11 @@ document.addEventListener('click', (e) => {
     if (!(nodeName === 'SECTION')) return
     upVersion()
 
-    if (RItems.value.has(query)) {
-      RItems.value.delete(query)
-    } else {
-      RItems.value.add(query)
-      allSectionsData.forEach((section) => {
-        findAllIndex(section.raw, query).forEach((index) => {
-          section[index].R.push(query)
-        })
+    allSectionsData.forEach((section) => {
+      findAllIndex(section.raw, query).forEach((i) => {
+        section[i].R.has(query) ? section[i].R.delete(query) : section[i].R.add(query)
       })
-    }
+    })
   } else {
     if (selection) {
       const 含有Sections = sectionDoms.filter((section) => section.textContent!.includes(selection))
@@ -148,7 +147,7 @@ onMounted(() => {
   <line v-for="line of datas">
     <block v-for="block of line">
       <section v-for="section of block" :class="section.spk && 'spk'">
-        <word v-for="word of section" :style="word.R?.length ? 'color:red' : ''">
+        <word v-for="word of section" :style="word.R?.size ? 'color:red' : ''">
           {{ word.word }}
         </word>
       </section>
