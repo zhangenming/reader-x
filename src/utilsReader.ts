@@ -7,11 +7,11 @@ export function dom2Data(dom: HTMLElement) {
 
   const wordIdx = getDomIndex(dom)
   const sectionIdx = getDomIndex(dom.parentElement!)
-  const blockIdx = getDomIndex(dom.parentElement!.parentElement!)
+  const periodIdx = getDomIndex(dom.parentElement!.parentElement!)
   const lineIdx = getDomIndex(dom.parentElement!.parentElement!.parentElement!)
-  console.log(lineIdx, blockIdx, sectionIdx, wordIdx)
+  console.log(lineIdx, periodIdx, sectionIdx, wordIdx)
 
-  return datas[lineIdx][blockIdx][sectionIdx][wordIdx]
+  return datas[lineIdx][periodIdx][sectionIdx][wordIdx]
 
   function getDomIndex(dom: HTMLElement) {
     return Array.from(dom.parentElement!.children).findIndex((child) => child === dom)

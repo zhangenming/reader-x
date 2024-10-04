@@ -1,10 +1,12 @@
 import { useStorage } from '@vueuse/core'
+import { flash } from './loop'
 
 const selectionsData = useStorage<string[]>('selectionsData', []) // returns Ref<number>
 
 export let version = 0
 export function upVersion() {
   version++
+  flash()
 }
 
 export const RItems = useStorage('RItems', new Set<string>([]))
@@ -62,3 +64,5 @@ export function findAllIndex(l: string, r: string) {
 export function deleteItem(arr: any[], item: any) {
   return arr.splice(arr.indexOf(item), 1)
 }
+
+export const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s))

@@ -8,11 +8,9 @@ line {
   margin-bottom: 1.5em;
   /* border-bottom: 5px solid #444; */
 }
-block {
+period:nth-child(even) {
   display: block;
-  /* margin-top: 0.5em;
-  margin-bottom: 0.5em; */
-  border-bottom: 1px solid #aaa;
+  box-shadow: -3px 0px 0px 0px red;
 }
 section {
   /* display: inline-block; */
@@ -22,11 +20,14 @@ section {
 
 .spk {
   /* background-color: #aea; */
-  margin-left: 1em;
+  /* margin-left: 1em; */
   font-family: cursive;
   font-weight: 900;
 }
-
+.spk :is(:nth-child(1), :nth-child(2)) {
+  display: inline-block;
+  width: 1em;
+}
 /* [word='“'] ~ word {
   background-color: #aaeeee;
 }

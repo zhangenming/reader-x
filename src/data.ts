@@ -1,83 +1,108 @@
-import txt0 from '../txt/笑傲江湖 (1).txt?raw'
+import txt0 from '../txt/生死疲劳.txt?raw'
 
 import { reactive } from 'vue'
 
 import { getParams } from './debug'
 
-const splitToSection = /(?<=[。！？，—；：])/
-const blockFlag = '。！？…'
-
 type datas = line[]
-type line = block[]
-type block = section[]
+type line = period[]
+type period = section[]
 type section = word[] & { spk?: boolean }
 type word = string
-
 const { all } = getParams()
 
-const x = txt0.split('\r\n').slice(0, all ? (all === true ? undefined : Number(all)) : 100)
-const xx = x.map((line) => line2block(line).map(block2setion))
-export const datas = reactive(xx)
+const x = txt0.split(/\r\n */).slice(0, all ? (all === true ? undefined : Number(all)) : 50)
+export const datas = reactive(x.map(doLayout))
 
-function line2block(line: string): string[] {
-  let spk = false
-  return [...line].reduce(
-    (acc, cur, i, arr) => {
-      acc[acc.length - 1] += cur
+function doLayout(txt: string) {
+  return line2period(txt).map(period2setion)
 
-      if (cur === '“') {
-        spk = true
-      }
-      if (
-        i !== arr.length - 1 &&
-        ((!spk && blockFlag.includes(cur)) || (blockFlag.includes(arr[i - 1]) && cur === '”'))
-      ) {
-        acc.push('')
-      }
-      if (blockFlag.includes(arr[i - 1]) && cur === '”') {
-        spk = false
-      }
+  /*
+ 淋淋漓漓的鲜血写着六个大字：“出门十步者死”。
+ */
+  function line2period(line: string): string[] {
+    let spk = false
+    const periodFlag = '。！？…'
+    const periodFlag2 = '。！？…'
+    return [...line].reduce(
+      (acc, cur, i, arr) => {
+        acc[acc.length - 1] += cur
 
-      return acc
-    },
-    ['']
-  )
-}
+        const prev = arr[i - 1]
+        const next = arr[i + 1]
 
-function block2setion(block: string) {
-  let spk = false
-  return block
-    .split(splitToSection)
-    .filter(Boolean)
-    .map((section) => {
-      const rs: section = Object.assign(
-        [...section].filter((e) => e !== '，'),
-        {
-          content: '',
+        const 下一个下引号前面的字符 = arr[arr.indexOf('”', i) - 1]
+        // 引号里面整体作为一句话
+        if (cur === '“' && periodFlag.includes(下一个下引号前面的字符)) {
+          spk = true
         }
+        if (
+          (!spk && periodFlag.includes(cur) && !periodFlag.includes(next)) ||
+          (periodFlag2.includes(prev) && cur === '”')
+        ) {
+          if (i !== arr.length - 1) {
+            console.log('p')
+            acc.push('')
+          }
+        }
+        if (periodFlag2.includes(prev) && cur === '”') {
+          spk = false
+        }
+
+        return acc
+      },
+      ['']
+    )
+  }
+
+  function period2setion(period: string) {
+    let spk = false
+    const allFlag = '。！？，—；：…'
+    return [...period]
+      .reduce(
+        (acc, cur, i, arr) => {
+          acc[acc.length - 1] += cur
+
+          const prev = arr[i - 1]
+          const next = arr[i + 1]
+
+          if (
+            (allFlag.includes(cur) && !allFlag.includes(next) && next !== '”') ||
+            (next === '”' && allFlag.includes(prev))
+          ) {
+            if (i !== arr.length - 1) {
+              acc.push('')
+            }
+          }
+
+          return acc
+        },
+        ['']
       )
+      .filter(Boolean)
+      .map((section) => {
+        const rs: section = [...section] //.filter((e) => e !== '，'),
 
-      if (rs[0] === '“') {
-        spk = true
-        rs.shift()
-      }
+        if (rs[0] === '“') {
+          spk = true
+          rs.shift()
+        }
 
-      rs.spk = spk
+        rs.spk = spk
 
-      // if (spk) {
-      //   rs.unshift('   ')
-      //   rs.unshift('   ')
-      // }
+        if (spk) {
+          rs.unshift(' ')
+          rs.unshift(' ')
+        }
 
-      if (spk && rs[rs.length - 1] === '”') {
-        rs.pop()
-        spk = false
-      }
+        if (spk && rs[rs.length - 1] === '”') {
+          spk = false
+          rs.pop()
+        }
 
-      // rs.content = rs.map((e) => e).join('')
-
-      return rs
-    })
+        return rs
+      })
+  }
 }
 
 export const allSectionsData = datas.flat(2)

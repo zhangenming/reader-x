@@ -10,7 +10,7 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => ['word', 'section', 'line', 'block'].includes(tag),
+          isCustomElement: (tag) => ['word', 'section', 'line', 'period'].includes(tag),
         },
       },
     }),
