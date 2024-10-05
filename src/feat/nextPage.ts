@@ -1,9 +1,12 @@
 import { 屏幕内sectionsDoms } from '@/utils'
 
 function nextPage() {
-  屏幕内sectionsDoms.at(-1)!.scrollIntoView({
-    behavior: 'smooth',
-  })
+  屏幕内sectionsDoms
+    .sort((a, b) => a.offsetTop - b.offsetTop)
+    .at(-1)!
+    .scrollIntoView({
+      behavior: 'smooth',
+    })
 }
 
 document.addEventListener('keydown', (e) => {
