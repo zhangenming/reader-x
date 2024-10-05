@@ -9,9 +9,12 @@ type line = period[]
 type period = section[]
 type section = word[] & { spk?: boolean }
 type word = string
-const { all } = getParams()
 
-const x = txt0.split(/\r\n */).slice(0, all ? (all === true ? undefined : Number(all)) : 50)
+const { chunk } = getParams()
+
+const d = txt0.split(/\r\n */)
+const x = d.slice(0, d.length / (chunk === false ? 100 : Number(chunk)))
+
 export const datas = reactive(x.map(doLayout))
 
 function doLayout(txt: string) {
@@ -41,7 +44,7 @@ function doLayout(txt: string) {
           (periodFlag2.includes(prev) && cur === '”')
         ) {
           if (i !== arr.length - 1) {
-            console.log('p')
+            // console.log('p')
             acc.push('')
           }
         }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import './loop'
-import { $$, RItems, setHoverR, upVersion } from './utils'
+import { $$, RItems, setAllSectionDoms, setHoverR, upVersion } from './utils'
 import { datas } from './data'
-import { flash } from './loop'
+import './feat/nextPage'
+import { flash } from './utilsReader'
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
@@ -51,6 +51,7 @@ document.addEventListener('mousemove', (e) => {
 })
 
 onMounted(() => {
+  setAllSectionDoms($$('section'))
   flash()
 })
 </script>
