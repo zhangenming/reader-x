@@ -1,7 +1,7 @@
-import { 屏幕内sectionsDoms } from '@/utils'
+import { 屏幕内sectionDoms } from '@/utils'
 
 function nextPage() {
-  屏幕内sectionsDoms
+  屏幕内sectionDoms
     .sort((a, b) => a.offsetTop - b.offsetTop)
     .at(-1)!
     .scrollIntoView({

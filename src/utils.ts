@@ -9,24 +9,23 @@ export function upVersion() {
   flash()
 }
 
-export let allSectionDoms: HTMLElement[]
-export function setAllSectionDoms(doms: HTMLElement[]) {
+export function setupSectionScroll(doms: HTMLElement[]) {
   const o = new IntersectionObserver((doms) => {
     doms.forEach((e) => {
       if (e.isIntersecting) {
-        屏幕内sectionsDoms.push(e.target as HTMLElement)
+        屏幕内sectionDoms.push(e.target as HTMLElement)
         colorSection(e.target as HTMLElement)
       } else {
-        deleteItem(屏幕内sectionsDoms, e.target as HTMLElement)
+        deleteItem(屏幕内sectionDoms, e.target as HTMLElement)
       }
     })
   })
-  ;(allSectionDoms = doms).forEach((dom) => {
+  doms.forEach((dom) => {
     o.observe(dom)
   })
 }
 
-export let 屏幕内sectionsDoms: HTMLElement[] = []
+export let 屏幕内sectionDoms: HTMLElement[] = []
 
 export const RItems = useStorage('RItems', new Set<string>([]))
 
