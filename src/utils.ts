@@ -9,23 +9,42 @@ export function upVersion() {
   flash()
 }
 
-export function setupSectionScroll(doms: HTMLElement[]) {
-  const o = new IntersectionObserver((doms) => {
-    doms.forEach((e) => {
-      if (e.isIntersecting) {
-        屏幕内sectionDoms.push(e.target as HTMLElement)
-        colorSection(e.target as HTMLElement)
+export function setupSectionScroll() {
+  const o = new IntersectionObserver((lines) => {
+    lines.forEach(({ isIntersecting, target: line }) => {
+      if (isIntersecting) {
+        激活lineDoms.push(line as HTMLElement)
+        // line.style.display = 'block'
+
+        line.querySelectorAll<HTMLElement>('period').forEach((p) => (p.style.display = 'block'))
+        line.querySelectorAll<HTMLElement>('section').forEach(colorSection)
       } else {
-        deleteItem(屏幕内sectionDoms, e.target as HTMLElement)
+        deleteItem(激活lineDoms, line)
+        line.querySelectorAll<HTMLElement>('period').forEach((p) => (p.style.display = 'none'))
+        // line.style.display = 'none'
       }
     })
   })
-  doms.forEach((dom) => {
-    o.observe(dom)
-  })
+  console.log(
+    $$('line').map((line) => {
+      o.observe(line)
+      return line.offsetTop
+    })
+  )
 }
 
-export let 屏幕内sectionDoms: HTMLElement[] = []
+let 激活lineDoms: HTMLElement[] = []
+
+export function get屏幕内sectionDoms() {
+  return 激活lineDoms
+    .flatMap((line) => Array.from(line.querySelectorAll('section')))
+    .filter((section) => {
+      return (
+        section.offsetTop > document.documentElement.scrollTop &&
+        section.offsetTop < document.documentElement.scrollTop + innerHeight
+      )
+    })
+}
 
 export const RItems = useStorage('RItems', new Set<string>([]))
 
@@ -79,7 +98,7 @@ export function findAllIndex(l: string, r: string) {
   return rsAll
 }
 
-export function deleteItem(arr: any[], item: any) {
+export function deleteItem<T>(arr: T[], item: T) {
   const idx = arr.indexOf(item)
   if (idx === -1) return
   arr.splice(idx, 1)

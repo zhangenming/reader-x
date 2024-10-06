@@ -1,9 +1,9 @@
-import { 屏幕内sectionDoms } from '@/utils'
+import { get屏幕内sectionDoms } from '@/utils'
 
 function nextPage() {
-  屏幕内sectionDoms
+  get屏幕内sectionDoms()
     .sort((a, b) => a.offsetTop - b.offsetTop)
-    .at(-1)!
+    .at(-2)!
     .scrollIntoView({
       behavior: 'smooth',
     })

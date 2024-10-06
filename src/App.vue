@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { $$, RItems, setupSectionScroll, setHoverR, upVersion } from './utils'
-import { datas } from './data'
+import { datas, tops } from './data'
 import './feat/nextPage'
-import { flash } from './utilsReader'
+import './feat/scroll'
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
@@ -51,13 +51,13 @@ document.addEventListener('mousemove', (e) => {
 })
 
 onMounted(() => {
-  setupSectionScroll($$('section'))
-  flash()
+  setupSectionScroll()
+  // flash()
 })
 </script>
 
 <template>
-  <line v-for="line of datas">
+  <line v-for="(line, idx) of datas" :style="`height:${tops[idx + 1] - tops[idx]}px`">
     <period v-for="period of line">
       <section v-for="section of period" :class="section.spk && 'spk'">
         <word v-for="word of section" :style="0 ? 'color:red' : ''">

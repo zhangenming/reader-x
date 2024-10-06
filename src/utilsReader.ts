@@ -1,5 +1,5 @@
 import { datas } from './data'
-import { findAllIndex, hoverR, RItems, version, 屏幕内sectionDoms } from './utils'
+import { findAllIndex, hoverR, RItems, version, get屏幕内sectionDoms } from './utils'
 
 export function dom2Data(dom: HTMLElement) {
   if (dom.tagName !== 'WORD') {
@@ -42,5 +42,5 @@ export function colorSection(section: HTMLElement) {
 }
 
 export function flash() {
-  屏幕内sectionDoms.forEach(colorSection)
+  get屏幕内sectionDoms().forEach(colorSection)
 }
