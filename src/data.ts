@@ -1,4 +1,4 @@
-import txt0 from '../txt/生死疲劳.txt?raw'
+import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
 import { reactive } from 'vue'
 
@@ -12,13 +12,15 @@ type word = string
 
 const { chunk } = getParams()
 
-const d = txt0.split(/\r\n */).filter((e) => e.trim())
+const d = txt0.split(/\r*\n */).filter((e) => e.trim())
 const x = d.slice(0, d.length / (chunk === false ? 100 : Number(chunk)))
 
 let totalTop = 0
 let totalLine = 0
 
 export const datas = reactive(x.map(doLayout))
+
+document.documentElement.style.height = totalLine * 50 + 'px'
 
 function doLayout(txt: string) {
   const section = section2period(txt).map(period2line) as section

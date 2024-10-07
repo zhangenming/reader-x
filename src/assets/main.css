@@ -1,7 +1,6 @@
 html {
   font-size: 50px;
   font-family: fangsong;
-  height: 2382350px;
   overflow-x: scroll;
 }
 body {
@@ -16,7 +15,7 @@ line {
   display: block;
 }
 
-period:nth-child(even) {
+period:nth-child(2n + 3) {
   display: block;
   box-shadow: inset 5px 0 0 0 red;
 }
