@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { $$, RItems, setupSectionScroll, setHoverR, upVersion } from './utils'
-import { datas, tops } from './data'
+import { datas } from './data'
 import './feat/nextPage'
-import { start, end } from './feat/scroll'
+import { startSection, endSection, startLine, endLine, appScrollTop } from './feat/scroll'
 import { getParams } from './debug'
 
 const { static: isStatic } = getParams()
@@ -53,16 +53,7 @@ document.addEventListener('mousemove', (e) => {
   setHoverR(target.dataset.selection!)
 })
 
-onMounted(() => {
-  isStatic &&
-    console.log(
-      $$('section').map((section) => {
-        return section.offsetTop
-      })
-    )
-})
 //   paragraph  sentence  verse section period line   phrase
-
 // 段落(语义) 段落/txt原始文本/回车 句子/句号 行/片/标点
 </script>
 
@@ -70,8 +61,8 @@ onMounted(() => {
   <div v-if="isStatic" class="isStatic">
     <section v-for="section of datas">
       <period v-for="period of section">
-        <line v-for="line of period" :class="line.spk && 'spk'">
-          <word v-for="word of line" :style="0 ? 'color:red' : ''">
+        <line v-for="line of period">
+          <word v-for="word of line">
             {{ word }}
           </word>
         </line>
@@ -79,15 +70,14 @@ onMounted(() => {
     </section>
   </div>
 
-  <div v-if="!isStatic">
-    <section
-      v-for="(section, idx) of datas.slice(start, end)"
-      :style="{ top: tops[start + idx] + 'px' }"
-      :key="start + idx"
-    >
+  <div v-if="!isStatic" :style="{ top: datas[startSection].totalTop + 'px', position: 'absolute' }">
+    <section v-for="section of datas.slice(startSection, endSection)" :key="section.totalTop">
       <period v-for="period of section">
-        <line v-for="line of period" :class="line.spk && 'spk'">
-          <word v-for="word of line" :style="0 ? 'color:red' : ''">
+        <line
+          v-for="line of period.filter((line) => line.totalLine < endLine)"
+          :class="line.spk && 'spk'"
+        >
+          <word v-for="word of line">
             {{ word }}
           </word>
         </line>

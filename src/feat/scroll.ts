@@ -1,10 +1,14 @@
 // 滚动位置 -> 渲染dom
 
-import { datas, tops } from '@/data'
+import { datas } from '@/data'
 import { ref } from 'vue'
 
-export let start = ref(0)
-export let end = ref(0)
+export let startSection = ref(0)
+export let endSection = ref(0)
+export let startLine = ref(0)
+export let endLine = ref(0)
+
+export let appScrollTop = ref(0)
 
 let oldScrollTop = 0
 let oldStart = 0
@@ -15,44 +19,49 @@ const { innerHeight } = window
 document.onscroll = () => {
   const { scrollTop } = document.documentElement
 
+  appScrollTop.value = scrollTop
+
+  startLine.value = scrollTop / 50
+  endLine.value = (scrollTop + innerHeight) / 50
+
   let times = 0
   if (scrollTop > oldScrollTop) {
-    for (let i = start.value + 1; i < tops.length; i++) {
+    for (let i = startSection.value + 1; i < datas.length; i++) {
       times++
-      if (tops[i] > scrollTop) {
-        start.value = i - 1
+      if (datas[i].totalTop > scrollTop) {
+        startSection.value = i - 1
         break
       }
     }
   } else {
-    for (let i = start.value; i >= 0; i--) {
+    for (let i = startSection.value; i >= 0; i--) {
       times++
-      if (tops[i] < scrollTop) {
-        start.value = i
+      if (datas[i].totalTop < scrollTop) {
+        startSection.value = i
         break
       }
     }
   }
 
-  for (let i = start.value; i < tops.length; i++) {
-    if (tops[i] > scrollTop + innerHeight) {
-      end.value = i
+  for (let i = startSection.value; i < datas.length; i++) {
+    if (datas[i].totalTop > scrollTop + innerHeight) {
+      endSection.value = i
       break
     }
   }
 
   //   console.log(start.value - oldStart, end.value - oldEnd)
-  if (end.value - oldEnd === 1) {
+  if (endSection.value - oldEnd === 1) {
     const addLen =
-      datas[end.value - 1].flat(0).length +
-      datas[end.value - 1].flat(1).length +
-      datas[end.value - 1].flat(2).length
+      datas[endSection.value - 1].flat(0).length +
+      datas[endSection.value - 1].flat(1).length +
+      datas[endSection.value - 1].flat(2).length
     console.log(addLen)
     performance.mark(addLen + '')
   }
 
-  oldStart = start.value
-  oldEnd = end.value
+  oldStart = startSection.value
+  oldEnd = endSection.value
 
   //   console.log(scrollTop - old > 0 ? 'down' : 'up', times)
   oldScrollTop = scrollTop

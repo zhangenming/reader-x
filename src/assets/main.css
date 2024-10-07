@@ -1,27 +1,24 @@
-body {
-  margin: 0;
+html {
   font-size: 50px;
   font-family: fangsong;
   height: 2382350px;
+  overflow-x: scroll;
+}
+body {
+  margin: 0;
+}
+#app {
   white-space: pre;
 }
-
 section,
 period,
 line {
   display: block;
 }
 
-section {
-  position: absolute;
-}
-.isStatic section {
-  position: relative;
-}
-
 period:nth-child(even) {
   display: block;
-  box-shadow: -3px 0px 0px 0px red;
+  box-shadow: inset 5px 0 0 0 red;
 }
 line {
   /* display: inline-block; */
