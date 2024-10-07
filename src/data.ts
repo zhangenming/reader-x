@@ -12,7 +12,7 @@ type word = string
 
 const { chunk } = getParams()
 
-const d = txt0.split(/\r\n */)
+const d = txt0.split(/\r\n */).filter((e) => e.trim())
 const x = d.slice(0, d.length / (chunk === false ? 100 : Number(chunk)))
 
 export const datas = reactive(x.map(doLayout))
@@ -249,16 +249,16 @@ export const tops = [
   2251100, 2251200, 2251750, 2252900, 2254200, 2254800, 2255200, 2255350, 2256400, 2257400,
 ]
 function doLayout(txt: string) {
-  return line2period(txt).map(period2setion)
+  return section2period(txt).map(period2line)
 
   /*
  淋淋漓漓的鲜血写着六个大字：“出门十步者死”。
  */
-  function line2period(line: string): string[] {
+  function section2period(section: string): string[] {
     let spk = false
     const periodFlag = '。！？…'
     const periodFlag2 = '。！？…'
-    return [...line].reduce(
+    return [...section].reduce(
       (acc, cur, i, arr) => {
         acc[acc.length - 1] += cur
 
@@ -285,11 +285,11 @@ function doLayout(txt: string) {
 
         return acc
       },
-      ['']
+      [' ', ''] // section之间的空行
     )
   }
 
-  function period2setion(period: string) {
+  function period2line(period: string) {
     let spk = false
     const allFlag = '。！？，—；：…'
     return [...period]
@@ -297,13 +297,9 @@ function doLayout(txt: string) {
         (acc, cur, i, arr) => {
           acc[acc.length - 1] += cur
 
-          const prev = arr[i - 1]
           const next = arr[i + 1]
 
-          if (
-            (allFlag.includes(cur) && !allFlag.includes(next) && next !== '”') ||
-            (next === '”' && allFlag.includes(prev))
-          ) {
+          if (allFlag.includes(cur) && !(allFlag + '”').includes(next)) {
             if (i !== arr.length - 1) {
               acc.push('')
             }
@@ -313,7 +309,12 @@ function doLayout(txt: string) {
         },
         ['']
       )
-      .filter(Boolean)
+      .filter((e) => {
+        if (e) {
+          return true
+        }
+        console.error(e) // todo?
+      })
       .map((section) => {
         const rs: section = [...section] //.filter((e) => e !== '，'),
 

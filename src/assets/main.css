@@ -3,6 +3,7 @@ body {
   font-size: 50px;
   font-family: fangsong;
   height: 2382350px;
+  white-space: pre;
 }
 
 section,
@@ -16,7 +17,6 @@ section {
 }
 .isStatic section {
   position: relative;
-  margin: 1em 0;
 }
 
 period:nth-child(even) {
@@ -34,10 +34,6 @@ line {
   /* margin-left: 1em; */
   font-family: cursive;
   font-weight: 900;
-}
-.spk :is(:nth-child(1), :nth-child(2)) {
-  display: inline-block;
-  width: 1em;
 }
 /* [word='“'] ~ word {
   background-color: #aaeeee;
