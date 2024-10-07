@@ -4,6 +4,9 @@ import { $$, RItems, setupSectionScroll, setHoverR, upVersion } from './utils'
 import { datas, tops } from './data'
 import './feat/nextPage'
 import { start, end } from './feat/scroll'
+import { getParams } from './debug'
+
+const { static: isStatic } = getParams()
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
@@ -51,25 +54,44 @@ document.addEventListener('mousemove', (e) => {
 })
 
 onMounted(() => {
-  // setupSectionScroll()
-  // flash()
+  isStatic &&
+    console.log(
+      $$('section').map((section) => {
+        return section.offsetTop
+      })
+    )
 })
+//   paragraph  sentence  verse section period line   phrase
+
+// 段落(语义) 段落/txt原始文本/回车 句子/句号 行/片/标点
 </script>
 
 <template>
-  <line
-    v-for="(line, idx) of datas.slice(start, end)"
-    :key="idx + start"
-    :style="{
-      top: `${tops[idx + start]}px`,
-    }"
-  >
-    <period v-for="period of line">
-      <section v-for="section of period" :class="section.spk && 'spk'">
-        <word v-for="word of section" :style="0 ? 'color:red' : ''">
-          {{ word }}
-        </word>
-      </section>
-    </period>
-  </line>
+  <div v-if="isStatic" class="isStatic">
+    <section v-for="section of datas">
+      <period v-for="period of section">
+        <line v-for="line of period" :class="line.spk && 'spk'">
+          <word v-for="word of line" :style="0 ? 'color:red' : ''">
+            {{ word }}
+          </word>
+        </line>
+      </period>
+    </section>
+  </div>
+
+  <div v-if="!isStatic">
+    <section
+      v-for="(section, idx) of datas.slice(start, end)"
+      :style="{ top: tops[start + idx] + 'px' }"
+      :key="start + idx"
+    >
+      <period v-for="period of section">
+        <line v-for="line of period" :class="line.spk && 'spk'">
+          <word v-for="word of line" :style="0 ? 'color:red' : ''">
+            {{ word }}
+          </word>
+        </line>
+      </period>
+    </section>
+  </div>
 </template>

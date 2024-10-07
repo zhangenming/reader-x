@@ -1,23 +1,29 @@
 body {
   margin: 0;
-  /* display: none; */
-}
-#app {
   font-size: 50px;
   font-family: fangsong;
-  height: 87650px;
+  height: 2382350px;
 }
+
+section,
+period,
 line {
-  position: absolute;
-  /* display: block; */
-  /* margin-top: 1em;
-  margin-bottom: 1em; */
+  display: block;
 }
+
+section {
+  position: absolute;
+}
+.isStatic section {
+  position: relative;
+  margin: 1em 0;
+}
+
 period:nth-child(even) {
   display: block;
   box-shadow: -3px 0px 0px 0px red;
 }
-section {
+line {
   /* display: inline-block; */
   width: fit-content;
   line-height: 1em;
