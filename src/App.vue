@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { $$, RItems, setupSectionScroll, setHoverR, upVersion } from './utils'
 import { datas } from './data'
 import './feat/nextPage'
-import { startSection, endSection, startLine, endLine, appScrollTop } from './feat/scroll'
+import { startSection, endSection, endLine, appScrollTop } from './feat/scroll'
 import { getParams } from './debug'
 
 const { static: isStatic } = getParams()

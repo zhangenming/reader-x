@@ -1,18 +1,27 @@
-import { get屏幕内sectionDoms } from '@/utils'
+import { $$ } from '@/utils'
 
 function nextPage() {
-  get屏幕内sectionDoms()
-    .sort((a, b) => a.offsetTop - b.offsetTop)
-    .at(-2)!
-    .scrollIntoView({
-      behavior: 'smooth',
-    })
+  $$('line').at(-2)!.scrollIntoView({
+    // behavior: 'smooth',
+    block: 'start',
+  })
+}
+function prevPage() {
+  $$('line').at(-20)!.scrollIntoView({
+    // behavior: 'smooth',
+    block: 'end',
+  })
 }
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault()
-    nextPage()
+
+    if (e.shiftKey) {
+      prevPage()
+    } else {
+      nextPage()
+    }
   }
 })
 

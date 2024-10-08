@@ -66,6 +66,8 @@ function doLayout(txt: string) {
     )
   }
 
+  //   “文革”来了，父亲挨了斗，戴着尖尖的纸帽，敲着一面铜锣游街。
+  //   后来人们就忘了他，抓“活老虎”“走资派”去了。
   function period2line(period: string) {
     let spk = false
     const allFlag = '。！？，—；：…'

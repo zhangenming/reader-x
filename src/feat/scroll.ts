@@ -5,7 +5,6 @@ import { ref } from 'vue'
 
 export let startSection = ref(0)
 export let endSection = ref(0)
-export let startLine = ref(0)
 export let endLine = ref(0)
 
 export let appScrollTop = ref(0)
@@ -21,8 +20,7 @@ document.onscroll = () => {
 
   appScrollTop.value = scrollTop
 
-  startLine.value = scrollTop / 50
-  endLine.value = (scrollTop + innerHeight) / 50
+  endLine.value = (scrollTop + innerHeight) / 50 + 1
 
   let times = 0
   if (scrollTop > oldScrollTop) {
@@ -51,14 +49,14 @@ document.onscroll = () => {
   }
 
   //   console.log(start.value - oldStart, end.value - oldEnd)
-  if (endSection.value - oldEnd === 1) {
-    const addLen =
-      datas[endSection.value - 1].flat(0).length +
-      datas[endSection.value - 1].flat(1).length +
-      datas[endSection.value - 1].flat(2).length
-    console.log(addLen)
-    performance.mark(addLen + '')
-  }
+  //   if (endSection.value - oldEnd === 1) {
+  //     const addLen =
+  //       datas[endSection.value - 1].flat(0).length +
+  //       datas[endSection.value - 1].flat(1).length +
+  //       datas[endSection.value - 1].flat(2).length
+  //     console.log(addLen)
+  //     performance.mark(addLen + '')
+  //   }
 
   oldStart = startSection.value
   oldEnd = endSection.value
