@@ -1,66 +1,43 @@
 // 滚动位置 -> 渲染dom
 
 import { datas } from '@/data'
+import { get屏幕高度, get滚动info } from '@/utils'
 import { ref } from 'vue'
 
 export let startSection = ref(0)
 export let endSection = ref(0)
-export let endLine = ref(0)
 
-export let appScrollTop = ref(0)
+const 屏幕高度 = get屏幕高度()
 
-let oldScrollTop = 0
-let oldStart = 0
-let oldEnd = 0
+// setTimeout(() => {
+//   get滚动info().当前滚动位置 || document.documentElement.scrollTo(0, 1)
+// })
 
-const { innerHeight } = window
+document.onscrollend = () => {
+  const { 当前滚动位置, 滚动方向 } = get滚动info()
 
-document.onscroll = () => {
-  const { scrollTop } = document.documentElement
-
-  appScrollTop.value = scrollTop
-
-  endLine.value = (scrollTop + innerHeight) / 50 + 1
-
-  let times = 0
-  if (scrollTop > oldScrollTop) {
+  if (滚动方向 === '下') {
     for (let i = startSection.value + 1; i < datas.length; i++) {
-      times++
-      if (datas[i].totalTop > scrollTop) {
+      if (datas[i].totalTop > 当前滚动位置) {
         startSection.value = i - 1
         break
       }
     }
   } else {
     for (let i = startSection.value; i >= 0; i--) {
-      times++
-      if (datas[i].totalTop < scrollTop) {
+      if (datas[i].totalTop <= 当前滚动位置) {
         startSection.value = i
         break
       }
     }
   }
 
+  // 确定了开始 自然就确定了结束 开始位置往后加几个就行
+  endSection.value = startSection.value
   for (let i = startSection.value; i < datas.length; i++) {
-    if (datas[i].totalTop > scrollTop + innerHeight) {
-      endSection.value = i
+    if (datas[i].totalTop > 当前滚动位置 + 屏幕高度 * 2) {
       break
     }
+    endSection.value++
   }
-
-  //   console.log(start.value - oldStart, end.value - oldEnd)
-  //   if (endSection.value - oldEnd === 1) {
-  //     const addLen =
-  //       datas[endSection.value - 1].flat(0).length +
-  //       datas[endSection.value - 1].flat(1).length +
-  //       datas[endSection.value - 1].flat(2).length
-  //     console.log(addLen)
-  //     performance.mark(addLen + '')
-  //   }
-
-  oldStart = startSection.value
-  oldEnd = endSection.value
-
-  //   console.log(scrollTop - old > 0 ? 'down' : 'up', times)
-  oldScrollTop = scrollTop
 }

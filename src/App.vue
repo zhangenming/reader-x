@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUpdated } from 'vue'
+import { getParams } from './debug'
 import { $$, RItems, setupSectionScroll, setHoverR, upVersion } from './utils'
 import { datas } from './data'
+
 import './feat/nextPage'
-import { startSection, endSection, endLine, appScrollTop } from './feat/scroll'
-import { getParams } from './debug'
+import { startSection, endSection } from './feat/scroll'
 
 const { static: isStatic } = getParams()
 
@@ -53,13 +54,50 @@ document.addEventListener('mousemove', (e) => {
   setHoverR(target.dataset.selection!)
 })
 
+// let oldS
+// let oldP
+// let oldL
+// let oldW
+// onUpdated(() => {
+//   console.log(
+//     document.querySelectorAll('section').length - oldS,
+//     document.querySelectorAll('period').length - oldP,
+//     document.querySelectorAll('line').length - oldL,
+//     document.querySelectorAll('word').length - oldW
+//   )
+//   oldS = document.querySelectorAll('section').length
+//   oldP = document.querySelectorAll('period').length
+//   oldL = document.querySelectorAll('line').length
+//   oldW = document.querySelectorAll('word').length
+// })
+
 //   paragraph  sentence  verse section period line   phrase
 // 段落(语义) 段落/txt原始文本/回车 句子/句号 行/片/标点
 </script>
 
 <template>
-  <div v-if="isStatic" class="isStatic">
+  <template v-if="isStatic">
     <section v-for="section of datas">
+      <period
+        v-for="period of section"
+        :style="{ containIntrinsicSize: period.length * 50 + 'px' }"
+      >
+        <line v-for="line of period">
+          <word v-for="word of line">
+            {{ word }}
+          </word>
+        </line>
+      </period>
+    </section>
+  </template>
+
+  <template v-else>
+    <section
+      v-for="(section, i) of datas.slice(startSection, endSection)"
+      :i="i + startSection"
+      :key="section.totalTop"
+      :style="{ marginTop: i === 0 ? datas[startSection].totalTop + 'px' : '' }"
+    >
       <period v-for="period of section">
         <line v-for="line of period">
           <word v-for="word of line">
@@ -68,20 +106,5 @@ document.addEventListener('mousemove', (e) => {
         </line>
       </period>
     </section>
-  </div>
-
-  <div v-if="!isStatic" :style="{ top: datas[startSection].totalTop + 'px', position: 'absolute' }">
-    <section v-for="section of datas.slice(startSection, endSection)" :key="section.totalTop">
-      <period v-for="period of section">
-        <line
-          v-for="line of period.filter((line) => line.totalLine < endLine)"
-          :class="line.spk && 'spk'"
-        >
-          <word v-for="word of line">
-            {{ word }}
-          </word>
-        </line>
-      </period>
-    </section>
-  </div>
+  </template>
 </template>

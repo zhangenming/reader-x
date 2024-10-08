@@ -1,8 +1,6 @@
 import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
-import { reactive } from 'vue'
-
-import { getParams } from './debug'
+import { shallowReactive } from 'vue'
 
 type datas = section[]
 type section = period[] & { totalTop: number }
@@ -10,15 +8,15 @@ type period = line[]
 type line = word[] & { totalLine: number; spk?: boolean }
 type word = string
 
-const { chunk } = getParams()
-
-const d = txt0.split(/\r*\n */).filter((e) => e.trim())
-const x = d.slice(0, d.length / (chunk === false ? 100 : Number(chunk)))
-
 let totalTop = 0
 let totalLine = 0
 
-export const datas = reactive(x.map(doLayout))
+export const datas = shallowReactive(
+  txt0
+    .split(/\r*\n */)
+    .filter((e) => e.trim())
+    .map(doLayout)
+)
 
 document.documentElement.style.height = totalLine * 50 + 'px'
 
@@ -122,22 +120,3 @@ function doLayout(txt: string) {
 }
 
 export const allSectionsData = datas.flat(2)
-
-// watchEffect(() => {
-//   console.log(1, datas[2][1][1][14].R)
-// })
-
-// effect(() => {
-//   console.log(2, datas[2][1][1][14].R)
-// })
-
-// watch(datas, () => {
-//   console.log(3, datas)
-// })
-
-// setTimeout(() => {
-//   datas[2][1][1][14].R.add('1')
-// }, 100)
-// setTimeout(() => {
-//   datas[2][1][1][14].R.add('21')
-// }, 200)
