@@ -44,15 +44,3 @@ export function 意外(f: boolean) {
   }
   return f
 }
-
-export function getParams() {
-  const urlParams = new URLSearchParams(location.search)
-  return new Proxy(urlParams, {
-    get(urlParams, arg) {
-      const rs = urlParams.get(arg as string)
-      if (rs === null) return false
-      if (rs === '') return true
-      return rs
-    },
-  }) as unknown as { [s: string]: string | boolean }
-}
