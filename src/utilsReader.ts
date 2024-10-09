@@ -12,7 +12,7 @@ export function dom2Data(dom: HTMLElement) {
   const lineIdx = getDomIndex(dom.parentElement!.parentElement!.parentElement!)
   console.log(lineIdx, periodIdx, sectionIdx, wordIdx)
 
-  return datas.value[lineIdx].v[periodIdx][sectionIdx].v[wordIdx]
+  return datas[lineIdx].v[periodIdx][sectionIdx].v[wordIdx]
 
   function getDomIndex(dom: HTMLElement) {
     return Array.from(dom.parentElement!.children).findIndex((child) => child === dom)

@@ -1,6 +1,9 @@
 import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
+import { runWithTime } from './debug'
 
+import { reactive } from 'vue'
 import { useStorage } from '@vueuse/core'
+import { getLocal } from './feat/store'
 
 type datas = section[]
 type section = { v: period[]; totalTop: number }
@@ -17,16 +20,14 @@ type word = string
 let totalTop = 0
 let totalLine = 0
 
-export const datas = useStorage(
-  'datas',
-  txt0
-    .split(/\r*\n */)
-    .filter((e) => e.trim())
-    .map(doLayout)
+export const datas = reactive(
+  getLocal('datas', () =>
+    txt0
+      .split(/\r*\n */)
+      .filter((e) => e.trim())
+      .map(doLayout)
+  )
 )
-console.log(datas)
-
-document.documentElement.style.height = totalLine * 50 + 'px'
 
 function doLayout(txt: string): section {
   const section = {
@@ -131,6 +132,8 @@ function doLayout(txt: string): section {
   }
 }
 
-export const allLine: line[] = datas.value.flatMap((section) => [...section.v]).flat()
+export const allLine: line[] = datas.flatMap((section) => [...section.v]).flat()
 
 export const RItems = useStorage('RItems', new Set<string>([]))
+
+document.documentElement.style.height = allLine.length * 50 + 'px'
