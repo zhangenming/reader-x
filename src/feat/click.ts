@@ -1,6 +1,6 @@
 import { allLine, datas, RItems } from '@/data'
 import { runWithTime } from '@/debug'
-import { upVersion, $$, findAllIndex } from '@/utils'
+import { upVersion, $$, findAllIndex, deleteItem } from '@/utils'
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
@@ -20,16 +20,21 @@ document.addEventListener('click', (e) => {
   if (query) {
     if (!(nodeName === 'LINE')) return
 
-    // if (RItems.value.has(query)) {
-    //   RItems.value.delete(query)
-    // } else {
-    RItems.value.add(query)
-    allLine.forEach((line) => {
-      const rs = findAllIndex(line.raw, query)
-      line.colorIndex.push(...rs)
-    })
-    // }
-    // upVersion()
+    if (RItems.value.has(query)) {
+      RItems.value.delete(query)
+      allLine.forEach((line) => {
+        const rs = findAllIndex(line.raw, query)
+        rs.forEach((v) => {
+          deleteItem(line.colorIndex, v)
+        })
+      })
+    } else {
+      RItems.value.add(query)
+      allLine.forEach((line) => {
+        const rs = findAllIndex(line.raw, query)
+        line.colorIndex.push(...rs)
+      })
+    }
   }
 
   // 跳转
