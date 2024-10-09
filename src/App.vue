@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { datas } from './data'
+import { allLine, datas } from './data'
 import { getParams } from './utils'
 
 import { startSection, endSection } from './feat/虚拟scroll'
 import './feat/nextPage'
 import './feat/click' // 修改 colorIndex
 
+document.documentElement.style.height = allLine.length * 50 + 'px'
 // let oldS
 // let oldP
 // let oldL
@@ -25,8 +26,6 @@ import './feat/click' // 修改 colorIndex
 
 //   paragraph  sentence  verse section period line   phrase
 // 段落(语义) 段落/txt原始文本/回车 句子/句号 行/片/标点
-
-// datas[0][1][0].colorIndex.push(0)
 </script>
 
 <template>
@@ -56,7 +55,7 @@ import './feat/click' // 修改 colorIndex
         <line v-for="line of period">
           <word
             v-for="(word, idx) of line.v"
-            :style="line.colorIndex.includes(idx) && { color: 'red' }"
+            :style="line.colorIndex.includes(idx) && { color: '#eee' }"
           >
             {{ word }}
           </word>
