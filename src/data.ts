@@ -6,10 +6,10 @@ import { useStorage } from '@vueuse/core'
 import { getLocal } from './feat/store'
 
 type datas = section[]
-type section = { v: period[]; totalTop: number }
+type section = { sectionV: period[]; totalTop: number }
 type period = line[]
 type line = {
-  v: word[]
+  lineV: word[]
   totalLine: number
   raw: string
   spk?: boolean
@@ -19,8 +19,8 @@ type word = {
   wordR?: string[]
 }
 
-export const datas = reactive(getLocal('datas', geneData, 1))
-export const allLine: line[] = datas.flatMap((section) => [...section.v]).flat()
+export const datas = reactive(getLocal('datas', geneData, 11))
+export const allLine: line[] = datas.flatMap((section) => [...section.sectionV]).flat()
 
 function geneData() {
   let totalTop = 0
@@ -29,9 +29,9 @@ function geneData() {
   return txt0
     .split(/\r*\n */)
     .filter((e) => e.trim())
-    .map(function doLayout(txt): section {
-      const section = {
-        v: section2period(txt).map(period2line),
+    .map(function doLayout(txt) {
+      const section: section = {
+        sectionV: section2period(txt).map(period2line),
         totalTop: totalTop * 50,
       }
       totalTop = totalLine
@@ -106,31 +106,31 @@ function geneData() {
           .map((section) => {
             totalLine++
 
-            const rsV = [...section].map((w) => ({ wordV: w }))
+            const lineV = [...section].map((w) => ({ wordV: w }))
             const rs: line = {
-              v: rsV,
+              lineV,
               totalLine,
               raw: '',
             }
 
-            if (rsV[0].wordV === '“') {
+            if (lineV[0].wordV === '“') {
               spk = true
-              rsV.shift()
+              lineV.shift()
             }
 
             rs.spk = spk
 
             if (spk) {
-              rsV.unshift({ wordV: ' ' })
-              rsV.unshift({ wordV: ' ' })
+              lineV.unshift({ wordV: ' ' })
+              lineV.unshift({ wordV: ' ' })
             }
 
-            if (spk && rsV[rsV.length - 1].wordV === '”') {
+            if (spk && lineV[lineV.length - 1].wordV === '”') {
               spk = false
-              rsV.pop()
+              lineV.pop()
             }
 
-            rs.raw = rsV.map((e) => e.wordV).join('')
+            rs.raw = lineV.map((e) => e.wordV).join('')
 
             return rs
           })

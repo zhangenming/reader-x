@@ -32,7 +32,7 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
   <template v-if="getParams().static">
     <section v-for="section of datas">
       <period
-        v-for="period of section.v"
+        v-for="period of section.sectionV"
         :style="{ containIntrinsicSize: period.length * 50 + 'px' }"
       >
         <line v-for="line of period">
@@ -51,10 +51,10 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
       :key="i + startSection"
       :style="{ marginTop: i === 0 ? section.totalTop + 'px' : '' }"
     >
-      <period v-for="period of section.v">
+      <period v-for="period of section.sectionV">
         <line v-for="line of period">
           <word
-            v-for="word of line.v"
+            v-for="word of line.lineV"
             v-bind="{
               ...(word.wordR && {
                 style: {
