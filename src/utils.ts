@@ -36,14 +36,12 @@ export function setupSectionScroll() {
 let 激活lineDoms: HTMLElement[] = []
 
 export function get屏幕内sectionDoms() {
-  return 激活lineDoms
-    .flatMap((line) => Array.from(line.querySelectorAll('section')))
-    .filter((section) => {
-      return (
-        section.offsetTop > document.documentElement.scrollTop &&
-        section.offsetTop < document.documentElement.scrollTop + innerHeight
-      )
-    })
+  return $$('line').filter((line) => {
+    return (
+      line.offsetTop > document.documentElement.scrollTop &&
+      line.offsetTop < document.documentElement.scrollTop + innerHeight
+    )
+  })
 }
 
 export const RItems = useStorage('RItems', new Set<string>([]))

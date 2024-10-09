@@ -1,8 +1,8 @@
-import { $$ } from '@/utils'
+import { $$, get屏幕内sectionDoms } from '@/utils'
 
 function nextPage() {
-  $$('line').at(-2)!.scrollIntoView({
-    // behavior: 'smooth',
+  get屏幕内sectionDoms().at(-2)!.scrollIntoView({
+    behavior: 'smooth',
     block: 'start',
   })
 }
