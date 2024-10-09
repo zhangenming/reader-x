@@ -5,7 +5,7 @@ import { $$, RItems, setupSectionScroll, setHoverR, upVersion } from './utils'
 import { datas } from './data'
 
 import './feat/nextPage'
-import { startSection, endSection } from './feat/scroll'
+import { startSection, endSection } from './feat/虚拟scroll'
 
 const { static: isStatic } = getParams()
 

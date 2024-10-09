@@ -2,6 +2,7 @@ html {
   font-size: 50px;
   font-family: fangsong;
   overflow-x: scroll;
+  color: transparent;
 }
 body {
   margin: 0;
@@ -17,7 +18,7 @@ line {
 
 period:nth-child(2n + 3) {
   display: block;
-  box-shadow: inset 5px 0 0 0 red;
+  box-shadow: inset 5px 0 0 0 #eee;
 }
 line {
   /* display: inline-block; */
