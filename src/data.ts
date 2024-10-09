@@ -13,11 +13,13 @@ type line = {
   totalLine: number
   raw: string
   spk?: boolean
-  colorIndex: number[]
 }
-type word = string
+type word = {
+  wordV: string
+  wordR?: string[]
+}
 
-export const datas = reactive(getLocal('datas', geneData))
+export const datas = reactive(getLocal('datas', geneData, 1))
 export const allLine: line[] = datas.flatMap((section) => [...section.v]).flat()
 
 function geneData() {
@@ -104,26 +106,31 @@ function geneData() {
           .map((section) => {
             totalLine++
 
-            const rs: line = { v: [...section], totalLine, raw: '', colorIndex: [] }
+            const rsV = [...section].map((w) => ({ wordV: w }))
+            const rs: line = {
+              v: rsV,
+              totalLine,
+              raw: '',
+            }
 
-            if (rs.v[0] === '“') {
+            if (rsV[0].wordV === '“') {
               spk = true
-              rs.v.shift()
+              rsV.shift()
             }
 
             rs.spk = spk
 
             if (spk) {
-              rs.v.unshift(' ')
-              rs.v.unshift(' ')
+              rsV.unshift({ wordV: ' ' })
+              rsV.unshift({ wordV: ' ' })
             }
 
-            if (spk && rs.v[rs.v.length - 1] === '”') {
+            if (spk && rsV[rsV.length - 1].wordV === '”') {
               spk = false
-              rs.v.pop()
+              rsV.pop()
             }
 
-            rs.raw = rs.v.join('')
+            rs.raw = rsV.map((e) => e.wordV).join('')
 
             return rs
           })

@@ -54,10 +54,16 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
       <period v-for="period of section.v">
         <line v-for="line of period">
           <word
-            v-for="(word, idx) of line.v"
-            :style="line.colorIndex.includes(idx) && { color: '#eee' }"
+            v-for="word of line.v"
+            v-bind="{
+              ...(word.wordR && {
+                style: {
+                  color: '#eee',
+                },
+              }),
+            }"
           >
-            {{ word }}
+            {{ word.wordV }}
           </word>
         </line>
       </period>
