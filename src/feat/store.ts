@@ -1,15 +1,27 @@
 import { runWithTime } from '@/debug'
+import localforage from 'localforage'
 
-export function getLocal<T>(key: string, defaultVal: () => T): T {
-  const rs = JSON.parse(localStorage.getItem(key)!) || defaultVal()
+export async function local<T>(key: string, defaultVal: () => T, dbg: number = 11): Promise<T> {
+  // clear
+  if (String(dbg).length % 2) {
+    console.log('clear')
+    await setLocal(key, null)
+  }
 
-  window.addEventListener('unload', () => {
-    setLocal(key, rs) // 只能自动存储可变修改
-  })
+  const result = (await getLocal<T>(key)) || defaultVal()
+  // setInterval(() => setLocal(key, result), 1000 * 5)
+  setLocal(key, result)
 
-  return rs
+  return result
 }
 
-function setLocal(key: string, val: any) {
-  return localStorage.setItem(key, JSON.stringify(val))
+async function setLocal(key: string, val: any) {
+  // console.log('存储', JSON.stringify(val).length) // 8171360
+  // performance.mark('存储')
+  await localforage.setItem(key, val)
+  // console.log('存储 成功')
+  // performance.mark('存储 成功')
+}
+async function getLocal<T>(key: string) {
+  return localforage.getItem<T>(key)
 }

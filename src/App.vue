@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { allLine, datas } from './data'
+import { allLine, datas, itemRdata } from './data'
 import { getParams } from './utils'
 
 import { startSection, endSection } from './feat/虚拟scroll'
@@ -54,16 +54,11 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
       <period v-for="period of section.sectionV">
         <line v-for="line of period">
           <word
-            v-for="word of line.lineV"
-            v-bind="{
-              ...(word.wordR && {
-                style: {
-                  color: '#eee',
-                },
-              }),
-            }"
+            v-for="(word, wordIdx) of line.lineV"
+            :style="itemRdata[line.lineIdx]?.[wordIdx] && { color: 'red' }"
+            :R="itemRdata[line.lineIdx]?.[wordIdx]?.join()"
           >
-            {{ word.wordV }}
+            {{ word }}
           </word>
         </line>
       </period>

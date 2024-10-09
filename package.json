@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^11.1.0",
+    "localforage": "^1.10.0",
     "vue": "^3.4.29",
     "vue5": "npm:vue"
   },

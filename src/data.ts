@@ -3,28 +3,26 @@ import { runWithTime } from './debug'
 
 import { reactive } from 'vue'
 import { useStorage } from '@vueuse/core'
-import { getLocal } from './feat/store'
+import { local } from './feat/store'
 
 type datas = section[]
 type section = { sectionV: period[]; totalTop: number }
 type period = line[]
 type line = {
-  lineV: word[]
-  totalLine: number
-  raw: string
+  lineV: string
   spk?: boolean
-}
-type word = {
-  wordV: string
-  wordR?: string[]
+  lineIdx: number
 }
 
-export const datas = reactive(getLocal('datas', geneData, 11))
+export const datas = reactive(await local('datas', geneData, 11))
 export const allLine: line[] = datas.flatMap((section) => [...section.sectionV]).flat()
 
 function geneData() {
+  console.log('geneData')
+
   let totalTop = 0
   let totalLine = 0
+  let lineIdx = 0
 
   return txt0
     .split(/\r*\n */)
@@ -106,31 +104,28 @@ function geneData() {
           .map((section) => {
             totalLine++
 
-            const lineV = [...section].map((w) => ({ wordV: w }))
             const rs: line = {
-              lineV,
-              totalLine,
-              raw: '',
+              lineV: '',
+              lineIdx: lineIdx++,
             }
 
-            if (lineV[0].wordV === '“') {
+            if (section[0] === '“') {
               spk = true
-              lineV.shift()
+              section = section.slice(1)
             }
 
             rs.spk = spk
 
             if (spk) {
-              lineV.unshift({ wordV: ' ' })
-              lineV.unshift({ wordV: ' ' })
+              section = '  ' + section
             }
 
-            if (spk && lineV[lineV.length - 1].wordV === '”') {
+            if (spk && section[section.length - 1] === '”') {
               spk = false
-              lineV.pop()
+              section = section.slice(0, -1)
             }
 
-            rs.raw = lineV.map((e) => e.wordV).join('')
+            rs.lineV = section
 
             return rs
           })
@@ -139,3 +134,5 @@ function geneData() {
 }
 
 export const RItems = useStorage('RItems', new Set<string>([]))
+
+export const itemRdata = reactive<Record<number, any>>(await local('itemRdata', () => ({}), 11))
