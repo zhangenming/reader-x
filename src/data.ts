@@ -1,17 +1,17 @@
 import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
-import { shallowReactive } from 'vue'
+import { reactive } from 'vue'
 
 type datas = section[]
 type section = period[] & { totalTop: number }
 type period = line[]
-type line = word[] & { totalLine: number; spk?: boolean }
+type line = word[] & { totalLine: number; raw: string; spk?: boolean; colorIndex: number[] }
 type word = string
 
 let totalTop = 0
 let totalLine = 0
 
-export const datas = shallowReactive(
+export const datas = reactive(
   txt0
     .split(/\r*\n */)
     .filter((e) => e.trim())
@@ -95,7 +95,7 @@ function doLayout(txt: string) {
       .map((section) => {
         totalLine++
 
-        const rs: line = Object.assign([...section], { totalLine }) //.filter((e) => e !== '，'),
+        const rs: line = Object.assign([...section], { totalLine, raw: '', colorIndex: [] }) //.filter((e) => e !== '，'),
 
         if (rs[0] === '“') {
           spk = true
@@ -114,9 +114,11 @@ function doLayout(txt: string) {
           rs.pop()
         }
 
+        rs.raw = rs.join('')
+
         return rs
       })
   }
 }
 
-export const allSectionsData = datas.flat(2)
+export const allLine = datas.flat(2)

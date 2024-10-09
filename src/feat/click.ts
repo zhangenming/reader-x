@@ -1,4 +1,6 @@
-import { RItems, upVersion, $$ } from '@/utils'
+import { allLine, datas } from '@/data'
+import { runWithTime } from '@/debug'
+import { RItems, upVersion, $$, findAllIndex } from '@/utils'
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
@@ -10,20 +12,33 @@ document.addEventListener('click', (e) => {
 
   const {
     nodeName,
-    offsetTop,
+    offsetTop: offsetTopClick,
     dataset: { selection },
   } = target
 
+  // 着色 修改 colorIndex
   if (query) {
-    if (!(nodeName === 'SECTION')) return
-    RItems.value.has(query) ? RItems.value.delete(query) : RItems.value.add(query)
-    upVersion()
-  } else if (selection) {
+    if (!(nodeName === 'LINE')) return
+
+    // if (RItems.value.has(query)) {
+    //   RItems.value.delete(query)
+    // } else {
+    RItems.value.add(query)
+    allLine.forEach((line) => {
+      const rs = findAllIndex(line.raw, query)
+      line.colorIndex.push(...rs)
+    })
+    // }
+    // upVersion()
+  }
+
+  // 跳转
+  if (selection) {
     const 含有Sections = $$('section').filter((section) => section.textContent!.includes(selection))
     const 第一个Section = 含有Sections[0]
     const 末一个Section = 含有Sections[含有Sections.length - 1]
-    const 下一个Section = 含有Sections.find((e) => e.offsetTop > offsetTop)
-    const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < offsetTop)
+    const 下一个Section = 含有Sections.find((e) => e.offsetTop > offsetTopClick)
+    const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < offsetTopClick)
 
     const jmp = (() => {
       if (shiftKey && ctrlKey) return 第一个Section
@@ -33,7 +48,7 @@ document.addEventListener('click', (e) => {
     })()
 
     document.documentElement.scrollBy({
-      top: jmp.offsetTop - offsetTop,
+      top: jmp.offsetTop - offsetTopClick,
       behavior: 'smooth',
     })
   }

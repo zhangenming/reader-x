@@ -2,8 +2,9 @@
 import { datas } from './data'
 import { getParams } from './utils'
 
-import './feat/nextPage'
 import { startSection, endSection } from './feat/虚拟scroll'
+import './feat/nextPage'
+import './feat/click' // 修改 colorIndex
 
 // let oldS
 // let oldP
@@ -24,6 +25,8 @@ import { startSection, endSection } from './feat/虚拟scroll'
 
 //   paragraph  sentence  verse section period line   phrase
 // 段落(语义) 段落/txt原始文本/回车 句子/句号 行/片/标点
+
+// datas[0][1][0].colorIndex.push(0)
 </script>
 
 <template>
@@ -42,16 +45,19 @@ import { startSection, endSection } from './feat/虚拟scroll'
     </section>
   </template>
 
+  <!-- todo 逐行渲染/着色 -->
   <template v-else>
     <section
       v-for="(section, i) of datas.slice(startSection, endSection)"
-      :i="i + startSection"
-      :key="section.totalTop"
+      :key="i + startSection"
       :style="{ marginTop: i === 0 ? datas[startSection].totalTop + 'px' : '' }"
     >
       <period v-for="period of section">
         <line v-for="line of period">
-          <word v-for="word of line">
+          <word
+            v-for="(word, idx) of line"
+            :style="line.colorIndex.includes(idx) && { color: 'red' }"
+          >
             {{ word }}
           </word>
         </line>
