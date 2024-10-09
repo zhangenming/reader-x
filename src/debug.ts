@@ -1,8 +1,22 @@
+let showOne = true
 Object.defineProperties(Object.prototype, {
   xx: {
     get() {
       console.log(this)
       return this
+    },
+  },
+  xxx: {
+    get() {
+      return (arg: string) => {
+        if (arg === 'one') {
+          if (showOne) {
+            console.log(this)
+            showOne = false
+          }
+        }
+        return this
+      }
     },
   },
 })

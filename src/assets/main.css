@@ -4,6 +4,10 @@ html {
   overflow-x: scroll;
   color: transparent;
 }
+::selection {
+  background-color: #eee;
+  color: #ddd;
+}
 body {
   margin: 0;
 }
