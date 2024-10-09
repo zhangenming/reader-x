@@ -9,11 +9,10 @@ export let endSection = ref(0)
 
 const 屏幕高度 = get屏幕高度()
 
-// setTimeout(() => {
-//   get滚动info().当前滚动位置 || document.documentElement.scrollTo(0, 1)
-// })
+geneRenderDom()
+document.onscrollend = geneRenderDom
 
-document.onscrollend = () => {
+function geneRenderDom() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()
 
   if (滚动方向 === '下') {
@@ -35,7 +34,7 @@ document.onscrollend = () => {
   // 确定了开始 自然就确定了结束 开始位置往后加几个就行
   endSection.value = startSection.value
   for (let i = startSection.value; i < datas.length; i++) {
-    if (datas[i].totalTop > 当前滚动位置 + 屏幕高度 * 2) {
+    if (datas[i].totalTop > 当前滚动位置 + 屏幕高度) {
       break
     }
     endSection.value++
