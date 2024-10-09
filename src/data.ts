@@ -1,28 +1,38 @@
 import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
-import { reactive } from 'vue'
+import { useStorage } from '@vueuse/core'
 
 type datas = section[]
-type section = period[] & { totalTop: number }
+type section = { v: period[]; totalTop: number }
 type period = line[]
-type line = word[] & { totalLine: number; raw: string; spk?: boolean; colorIndex: number[] }
+type line = {
+  v: word[]
+  totalLine: number
+  raw: string
+  spk?: boolean
+  colorIndex: number[]
+}
 type word = string
 
 let totalTop = 0
 let totalLine = 0
 
-export const datas = reactive(
+export const datas = useStorage(
+  'datas',
   txt0
     .split(/\r*\n */)
     .filter((e) => e.trim())
     .map(doLayout)
 )
+console.log(datas)
 
 document.documentElement.style.height = totalLine * 50 + 'px'
 
-function doLayout(txt: string) {
-  const section = section2period(txt).map(period2line) as section
-  section.totalTop = totalTop * 50
+function doLayout(txt: string): section {
+  const section = {
+    v: section2period(txt).map(period2line),
+    totalTop: totalTop * 50,
+  }
   totalTop = totalLine
   return section
 
@@ -95,30 +105,32 @@ function doLayout(txt: string) {
       .map((section) => {
         totalLine++
 
-        const rs: line = Object.assign([...section], { totalLine, raw: '', colorIndex: [] }) //.filter((e) => e !== '，'),
+        const rs: line = { v: [...section], totalLine, raw: '', colorIndex: [] }
 
-        if (rs[0] === '“') {
+        if (rs.v[0] === '“') {
           spk = true
-          rs.shift()
+          rs.v.shift()
         }
 
         rs.spk = spk
 
         if (spk) {
-          rs.unshift(' ')
-          rs.unshift(' ')
+          rs.v.unshift(' ')
+          rs.v.unshift(' ')
         }
 
-        if (spk && rs[rs.length - 1] === '”') {
+        if (spk && rs.v[rs.v.length - 1] === '”') {
           spk = false
-          rs.pop()
+          rs.v.pop()
         }
 
-        rs.raw = rs.join('')
+        rs.raw = rs.v.join('')
 
         return rs
       })
   }
 }
 
-export const allLine = datas.flat(2)
+export const allLine: line[] = datas.value.flatMap((section) => [...section.v]).flat()
+
+export const RItems = useStorage('RItems', new Set<string>([]))

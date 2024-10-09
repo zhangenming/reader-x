@@ -33,7 +33,7 @@ import './feat/click' // 修改 colorIndex
   <template v-if="getParams().static">
     <section v-for="section of datas">
       <period
-        v-for="period of section"
+        v-for="period of section.v"
         :style="{ containIntrinsicSize: period.length * 50 + 'px' }"
       >
         <line v-for="line of period">
@@ -50,12 +50,12 @@ import './feat/click' // 修改 colorIndex
     <section
       v-for="(section, i) of datas.slice(startSection, endSection)"
       :key="i + startSection"
-      :style="{ marginTop: i === 0 ? datas[startSection].totalTop + 'px' : '' }"
+      :style="{ marginTop: i === 0 ? section.totalTop + 'px' : '' }"
     >
-      <period v-for="period of section">
+      <period v-for="period of section.v">
         <line v-for="line of period">
           <word
-            v-for="(word, idx) of line"
+            v-for="(word, idx) of line.v"
             :style="line.colorIndex.includes(idx) && { color: 'red' }"
           >
             {{ word }}

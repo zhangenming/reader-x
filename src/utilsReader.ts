@@ -1,5 +1,5 @@
-import { datas } from './data'
-import { findAllIndex, hoverR, RItems, version, get屏幕内sectionDoms } from './utils'
+import { datas, RItems } from './data'
+import { findAllIndex, hoverR, version, get屏幕内sectionDoms } from './utils'
 
 export function dom2Data(dom: HTMLElement) {
   if (dom.tagName !== 'WORD') {
@@ -12,7 +12,7 @@ export function dom2Data(dom: HTMLElement) {
   const lineIdx = getDomIndex(dom.parentElement!.parentElement!.parentElement!)
   console.log(lineIdx, periodIdx, sectionIdx, wordIdx)
 
-  return datas[lineIdx][periodIdx][sectionIdx][wordIdx]
+  return datas.value[lineIdx].v[periodIdx][sectionIdx].v[wordIdx]
 
   function getDomIndex(dom: HTMLElement) {
     return Array.from(dom.parentElement!.children).findIndex((child) => child === dom)

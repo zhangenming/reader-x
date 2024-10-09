@@ -44,8 +44,6 @@ export function get屏幕内sectionDoms() {
   })
 }
 
-export const RItems = useStorage('RItems', new Set<string>([]))
-
 export let hoverR = ''
 export function setHoverR(r: string) {
   if (!r) return

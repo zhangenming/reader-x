@@ -1,6 +1,6 @@
-import { allLine, datas } from '@/data'
+import { allLine, datas, RItems } from '@/data'
 import { runWithTime } from '@/debug'
-import { RItems, upVersion, $$, findAllIndex } from '@/utils'
+import { upVersion, $$, findAllIndex } from '@/utils'
 
 document.addEventListener('click', (e) => {
   const { target, shiftKey, ctrlKey } = e
