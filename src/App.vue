@@ -46,7 +46,7 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
     <section
       v-for="(section, sI) of datas.slice(startSection, endSection)"
       :key="sI + startSection"
-      :style="{ marginTop: sI === 0 ? 每个section前面有几个line[sI] + 'px' : '' }"
+      :style="{ marginTop: sI === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
     >
       <period v-for="period of section">
         <line v-for="line of period">
