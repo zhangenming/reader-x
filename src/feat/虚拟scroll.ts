@@ -1,9 +1,11 @@
 // 滚动位置 -> 渲染dom
 // 滚动的时候什么也不做 下一页提前渲染好
-
-import { datas, 每个section前面有几个line } from '@/data'
-import { get屏幕高度, get滚动info } from '@/utils'
 import { ref } from 'vue'
+
+import { datas, 每个section前面有几个line } from '../data'
+import { get屏幕高度, get滚动info } from '../assets/utils'
+
+console.log('scroll')
 
 export let startSection = ref(0)
 export let endSection = ref(0)

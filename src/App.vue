@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { allLine, datas, itemRdata, 每个section前面有几个line } from './data'
-import { getParams } from './utils'
+import { allLine, datas, rItemsData, 每个section前面有几个line } from './data.ts'
 
-import { startSection, endSection } from './feat/虚拟scroll'
-import './feat/nextPage'
-import './feat/click' // 修改 colorIndex
+import { startSection, endSection } from './feat/虚拟scroll.ts'
+import './feat/nextPage.ts'
+import './feat/click.ts'
+
+import { getParams } from './assets/utils.ts'
+
+if (getParams().home) {
+  document.documentElement.style.color = 'black'
+}
 
 document.documentElement.style.height = allLine.length * 50 + 'px'
+
+console.log('App.vue')
+
 // let oldS
 // let oldP
 // let oldL
@@ -44,16 +52,16 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
   <!-- todo 逐行渲染/着色 -->
   <template v-else>
     <section
-      v-for="(section, sI) of datas.slice(startSection, endSection)"
-      :key="sI + startSection"
-      :style="{ marginTop: sI === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
+      v-for="(section, sIdx) of datas.slice(startSection, endSection)"
+      :key="sIdx + startSection"
+      :style="{ marginTop: sIdx === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
     >
       <period v-for="period of section">
-        <line v-for="line of period">
+        <line v-for="{ words, lineIdx } of period">
           <word
-            v-for="(word, wI) of line.words"
-            :style="itemRdata[line.lineIdx]?.[wI] && { color: 'red' }"
-            :R="itemRdata[line.lineIdx]?.[wI]?.join()"
+            v-for="(word, wordIdx) of words"
+            :style="rItemsData[lineIdx]?.[wordIdx]?.length && { color: '#eee' }"
+            :R="rItemsData[lineIdx]?.[wordIdx]?.join()"
           >
             {{ word }}
           </word>

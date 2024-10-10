@@ -1,9 +1,9 @@
 import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
-import { runWithTime } from './debug'
 
 import { reactive } from 'vue'
 import { useStorage } from '@vueuse/core'
-import { local } from './feat/store'
+
+console.log('data')
 
 type datas = section[]
 type section = period[]
@@ -121,6 +121,6 @@ function geneData() {
     })
 }
 
-export const RItems = useStorage('RItems', new Set<string>([]))
+export const rItemsData = useStorage<Record<number, any>>('rItemsData', {}).value
 
-export const itemRdata = reactive<Record<number, any>>(await local('itemRdata', () => ({}), 11))
+// console.log(rItemsData, JSON.stringify(rItemsData.value).length)

@@ -1,5 +1,6 @@
-import { runWithTime } from '@/debug'
 import localforage from 'localforage'
+
+console.log('store')
 
 export async function local<T>(key: string, defaultVal: () => T, dbg: number = 11): Promise<T> {
   // clear

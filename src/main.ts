@@ -1,12 +1,9 @@
-import './debug'
-
-import './assets/main.css'
 import { createApp } from 'vue'
-import App from './App.vue'
-import { getParams } from './utils.js'
 
-if (getParams().home) {
-  document.documentElement.style.color = 'black'
-}
+import App from './App.vue'
+
+console.log('main 1')
 
 createApp(App).mount('#app')
+
+console.log('main 2')

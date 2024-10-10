@@ -1,4 +1,4 @@
-import { setHoverR } from '@/utils'
+import { setHoverR } from '../assets/utils'
 
 document.addEventListener('mousemove', (e) => {
   const { target } = e

@@ -1,4 +1,6 @@
-import { $$, get屏幕内sectionDoms } from '@/utils'
+import { $$, get屏幕内sectionDoms } from '../assets/utils'
+
+console.log('nextPage')
 
 function nextPage() {
   get屏幕内sectionDoms().at(-2)!.scrollIntoView({

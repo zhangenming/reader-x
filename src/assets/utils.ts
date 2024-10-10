@@ -1,39 +1,4 @@
-import { useStorage } from '@vueuse/core'
-import { colorSection, flash } from './utilsReader'
-
-const selectionsData = useStorage<string[]>('selectionsData', []) // returns Ref<number>
-
-export let version = 0
-export function upVersion() {
-  version++
-  flash()
-}
-
-export function setupSectionScroll() {
-  const o = new IntersectionObserver((lines) => {
-    lines.forEach(({ isIntersecting, target: line }) => {
-      if (isIntersecting) {
-        激活lineDoms.push(line as HTMLElement)
-        // line.style.display = 'block'
-
-        line.querySelectorAll<HTMLElement>('period').forEach((p) => (p.style.display = 'block'))
-        line.querySelectorAll<HTMLElement>('section').forEach(colorSection)
-      } else {
-        deleteItem(激活lineDoms, line)
-        line.querySelectorAll<HTMLElement>('period').forEach((p) => (p.style.display = 'none'))
-        // line.style.display = 'none'
-      }
-    })
-  })
-  console.log(
-    $$('line').map((line) => {
-      o.observe(line)
-      return line.offsetTop
-    })
-  )
-}
-
-let 激活lineDoms: HTMLElement[] = []
+console.log('utils')
 
 export function get屏幕内sectionDoms() {
   return $$('line').filter((line) => {
@@ -50,19 +15,6 @@ export function setHoverR(r: string) {
   if (r === hoverR) return
 
   hoverR = r
-  upVersion()
-}
-
-export const globalData = {
-  get selectionsData() {
-    return selectionsData.value
-  },
-  setSelectionsData(data: string[]) {
-    selectionsData.value = data
-  },
-
-  //
-  sectionDoms: [] as HTMLElement[],
 }
 
 export function findAllIndex(l: string, r: string) {
