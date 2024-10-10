@@ -121,6 +121,15 @@ function geneData() {
     })
 }
 
-export const rItemsData = useStorage<Record<number, any>>('rItemsData', {}).value
+type RItemsData = {
+  [lineIdx: number]:
+    | {
+        [wordIdx: number]: string[] | undefined
+      }
+    | undefined
+}
+
+export const rItemsDataKey = 'rItemsDataKey'
+export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
 
 // console.log(rItemsData, JSON.stringify(rItemsData.value).length)

@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { allLine, datas, rItemsData, 每个section前面有几个line } from './data.ts'
+import { allLine, datas, rItemsData, rItemsDataKey, 每个section前面有几个line } from './data.ts'
 
-import { startSection, endSection } from './feat/虚拟scroll.ts'
-import './feat/nextPage.ts'
-import './feat/click.ts'
+import { startSection, endSection } from './feat/1虚拟scroll.ts'
+import './feat/2nextPage.ts'
+import './feat/3selectionAddR.ts'
+import { hoverR } from './feat/4moveHover.ts'
+import './feat/5clickJump.ts'
 
 import { getParams } from './assets/utils.ts'
 
@@ -31,6 +33,28 @@ console.log('App.vue')
 //   oldL = document.querySelectorAll('line').length
 //   oldW = document.querySelectorAll('word').length
 // })
+
+function getDomAttr(lineIdx: number, wordIdx: number) {
+  const rItem = rItemsData[lineIdx]?.[wordIdx]
+
+  const style = (() => {
+    if (!rItem) return
+
+    if (rItem.includes(hoverR.value)) {
+      return {
+        color: '#888',
+      }
+    }
+
+    if (rItem.length) {
+      return {
+        color: '#eee',
+      }
+    }
+  })()
+
+  return { style, [rItemsDataKey]: rItem }
+}
 </script>
 
 <template>
@@ -58,11 +82,7 @@ console.log('App.vue')
     >
       <period v-for="period of section">
         <line v-for="{ words, lineIdx } of period">
-          <word
-            v-for="(word, wordIdx) of words"
-            :style="rItemsData[lineIdx]?.[wordIdx]?.length && { color: '#eee' }"
-            :R="rItemsData[lineIdx]?.[wordIdx]?.join()"
-          >
+          <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
             {{ word }}
           </word>
         </line>

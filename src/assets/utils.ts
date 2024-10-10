@@ -9,14 +9,6 @@ export function get屏幕内sectionDoms() {
   })
 }
 
-export let hoverR = ''
-export function setHoverR(r: string) {
-  if (!r) return
-  if (r === hoverR) return
-
-  hoverR = r
-}
-
 export function findAllIndex(l: string, r: string) {
   if (r == '') {
     console.error('x')
