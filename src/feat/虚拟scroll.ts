@@ -1,6 +1,7 @@
 // 滚动位置 -> 渲染dom
+// 滚动的时候什么也不做 下一页提前渲染好
 
-import { datas } from '@/data'
+import { datas, 每个section前面有几个line } from '@/data'
 import { get屏幕高度, get滚动info } from '@/utils'
 import { ref } from 'vue'
 
@@ -17,14 +18,14 @@ function geneRenderDom() {
 
   if (滚动方向 === '下') {
     for (let i = startSection.value + 1; i < datas.length; i++) {
-      if (datas[i].totalTop > 当前滚动位置) {
+      if (每个section前面有几个line[i] > 当前滚动位置) {
         startSection.value = i - 1
         break
       }
     }
   } else {
     for (let i = startSection.value; i >= 0; i--) {
-      if (datas[i].totalTop <= 当前滚动位置) {
+      if (每个section前面有几个line[i] <= 当前滚动位置) {
         startSection.value = i
         break
       }
@@ -34,7 +35,7 @@ function geneRenderDom() {
   // 确定了开始 自然就确定了结束 开始位置往后加几个就行
   endSection.value = startSection.value
   for (let i = startSection.value; i < datas.length; i++) {
-    if (datas[i].totalTop > 当前滚动位置 + 屏幕高度) {
+    if (每个section前面有几个line[i] > 当前滚动位置 + 屏幕高度) {
       break
     }
     endSection.value++

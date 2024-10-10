@@ -6,42 +6,35 @@ import { useStorage } from '@vueuse/core'
 import { local } from './feat/store'
 
 type datas = section[]
-type section = { sectionV: period[]; totalTop: number }
+type section = period[]
 type period = line[]
 type line = {
   lineV: string
-  spk?: boolean
+  spk: boolean
   lineIdx: number
 }
 
-export const datas = reactive(await local('datas', geneData, 11))
-export const allLine: line[] = datas.flatMap((section) => [...section.sectionV]).flat()
+export const 每个section前面有几个line: number[] = []
+export const datas = reactive<datas>(geneData()) // 没必要缓存
+export const allLine = datas.flat(3) //所有的line引用
 
 function geneData() {
   console.log('geneData')
 
-  let totalTop = 0
-  let totalLine = 0
   let lineIdx = 0
 
   return txt0
     .split(/\r*\n */)
     .filter((e) => e.trim())
     .map(function doLayout(txt) {
-      const section: section = {
-        sectionV: section2period(txt).map(period2line),
-        totalTop: totalTop * 50,
-      }
-      totalTop = totalLine
-      return section
+      return section2period(txt).map(period2line)
 
-      /*
-     淋淋漓漓的鲜血写着六个大字：“出门十步者死”。
-     */
       function section2period(section: string) {
         let spk = false
         const periodFlag = '。！？…'
         const periodFlag2 = '。！？…'
+        每个section前面有几个line.push(lineIdx * 50)
+
         return [...section].reduce(
           (acc, cur, i, arr) => {
             acc[acc.length - 1] += cur
@@ -73,8 +66,6 @@ function geneData() {
         )
       }
 
-      //   “文革”来了，父亲挨了斗，戴着尖尖的纸帽，敲着一面铜锣游街。
-      //   后来人们就忘了他，抓“活老虎”“走资派”去了。
       function period2line(period: string) {
         let spk = false
         const allFlag = '。！？，—；：…'
@@ -102,19 +93,16 @@ function geneData() {
             console.error(e) // todo?
           })
           .map((section) => {
-            totalLine++
-
-            const rs: line = {
-              lineV: '',
-              lineIdx: lineIdx++,
-            }
-
             if (section[0] === '“') {
               spk = true
               section = section.slice(1)
             }
 
-            rs.spk = spk
+            const rs = {
+              lineV: '', // 待定
+              lineIdx: lineIdx++,
+              spk,
+            }
 
             if (spk) {
               section = '  ' + section
