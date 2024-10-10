@@ -1,10 +1,10 @@
-import { allLine, datas, itemRdata, RItems } from '@/data'
-import { runWithTime } from '@/debug'
-import { upVersion, $$, findAllIndex, deleteItem } from '@/utils'
+import { rItemsData, allLine } from '../data'
+import { $$, findAllIndex, deleteItem } from '../assets/utils'
 
-document.addEventListener('click', (e) => {
+console.log('click')
+
+document.addEventListener('click', async (e) => {
   const { target, shiftKey, ctrlKey } = e
-  if (!target) return
   if (!(target instanceof HTMLElement)) return
 
   const query = getSelection() + ''
@@ -12,58 +12,52 @@ document.addEventListener('click', (e) => {
 
   const { nodeName, offsetTop: offsetTopClick } = target
 
-  // 添加删除着色 修改 colorIndex
+  // selection 添加删除着色 修改 colorIndex
   if (query) {
-    if (!(nodeName === 'LINE')) return
+    if (nodeName !== 'LINE') return
 
-    if (RItems.value.has(query)) {
-      RItems.value.delete(query)
-      allLine.forEach((line) => {
-        const rs = findAllIndex(line.words, query)
-        rs.forEach((v) => {
-          //   deleteItem(line.colorIndex, v)
-        })
-      })
-    } else {
-      RItems.value.add(query)
-      allLine.forEach((line) => {
-        const rs = findAllIndex(line.words, query)
-        if (rs.length) {
-          rs.forEach((idx) => {
-            if (!itemRdata[line.lineIdx]) {
-              itemRdata[line.lineIdx] = {}
-            }
-            if (!itemRdata[line.lineIdx][idx]) {
-              itemRdata[line.lineIdx][idx] = []
-            }
-            itemRdata[line.lineIdx][idx].push(query)
-          })
+    const rItemsDataAll = Object.values(rItemsData).map(Object.values).flat(2)
+    const 已经存在 = rItemsDataAll.includes(query)
+
+    allLine.forEach(({ words, lineIdx }) => {
+      findAllIndex(words, query).forEach((wordIdx) => {
+        if (已经存在) {
+          deleteItem(rItemsData[lineIdx][wordIdx], query)
+        } else {
+          // if (!rItemsData[lineIdx]) {
+          //   rItemsData[lineIdx] = {}
+          // }
+          // if (!rItemsData[lineIdx][wordIdx]) {
+          //   rItemsData[lineIdx][wordIdx] = []
+          // }
+          // rItemsData[lineIdx][wordIdx].push(query)
+          ;((rItemsData[lineIdx] ??= {})[wordIdx] ??= []).push(query)
         }
       })
+    })
+  } else {
+    //
+    // click 跳转
+    const selection = target.getAttribute('r')
+    if (!selection) return
+    const s2 = selection.split(',')[0]
 
-      console.log(itemRdata)
-    }
-    return
+    const 含有lines = allLine.filter((line) => line.words.includes(s2))
+    const 第一个line = 含有lines[0]
+    const 末一个line = 含有lines.at(-1)!
+    const 下一个line = 含有lines.find((e) => e.lineIdx * 50 > offsetTopClick)
+    const 上一个line = 含有lines.findLast((e) => e.lineIdx * 50 < offsetTopClick)
+
+    const jmpLine = (() => {
+      if (shiftKey && ctrlKey) return 第一个line
+      if (ctrlKey) return 末一个line
+      if (shiftKey) return 上一个line || 末一个line
+      return 下一个line || 第一个line
+    })()
+
+    document.documentElement.scrollBy({
+      top: jmpLine.lineIdx * 50 - offsetTopClick,
+      behavior: 'smooth', //todo
+    })
   }
-
-  console.log(target)
-
-  // 跳转
-  const 含有Sections = $$('section').filter((section) => section.textContent!.includes(selection))
-  const 第一个Section = 含有Sections[0]
-  const 末一个Section = 含有Sections[含有Sections.length - 1]
-  const 下一个Section = 含有Sections.find((e) => e.offsetTop > offsetTopClick)
-  const 上一个Section = 含有Sections.findLast((e) => e.offsetTop < offsetTopClick)
-
-  const jmp = (() => {
-    if (shiftKey && ctrlKey) return 第一个Section
-    if (ctrlKey) return 末一个Section
-    if (shiftKey) return 上一个Section || 末一个Section
-    return 下一个Section || 第一个Section
-  })()
-
-  document.documentElement.scrollBy({
-    top: jmp.offsetTop - offsetTopClick,
-    behavior: 'smooth',
-  })
 })
