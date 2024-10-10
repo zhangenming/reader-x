@@ -1,7 +1,20 @@
-import { rItemsData, allLine } from '../data'
+import { useStorage } from '@vueuse/core'
+
+import { allLine } from '../data'
 import { findAllIndex, deleteItem } from '../assets/utils'
 
 console.log('selection')
+
+type RItemsData = {
+  [lineIdx: number]:
+    | {
+        [wordIdx: number]: string[] | undefined
+      }
+    | undefined
+}
+
+export const rItemsDataKey = 'rItemsDataKey'
+export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
 
 document.addEventListener('click', ({ target }) => {
   if (!(target instanceof HTMLElement)) return

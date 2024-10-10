@@ -1,7 +1,6 @@
 import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
 import { reactive } from 'vue'
-import { useStorage } from '@vueuse/core'
 
 console.log('data')
 
@@ -120,16 +119,5 @@ function geneData() {
       }
     })
 }
-
-type RItemsData = {
-  [lineIdx: number]:
-    | {
-        [wordIdx: number]: string[] | undefined
-      }
-    | undefined
-}
-
-export const rItemsDataKey = 'rItemsDataKey'
-export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
 
 // console.log(rItemsData, JSON.stringify(rItemsData.value).length)

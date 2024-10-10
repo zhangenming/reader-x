@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { allLine, datas, rItemsData, rItemsDataKey, 每个section前面有几个line } from './data' //.ts
+import { allLine, datas, 每个section前面有几个line } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
-import './feat/3selectionAddR' //.ts
+import { rItemsData, rItemsDataKey } from './feat/3selectionAddR' //.ts
 import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 
