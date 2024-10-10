@@ -19,7 +19,7 @@ document.addEventListener('click', (e) => {
     if (RItems.value.has(query)) {
       RItems.value.delete(query)
       allLine.forEach((line) => {
-        const rs = findAllIndex(line.lineV, query)
+        const rs = findAllIndex(line.words, query)
         rs.forEach((v) => {
           //   deleteItem(line.colorIndex, v)
         })
@@ -27,7 +27,7 @@ document.addEventListener('click', (e) => {
     } else {
       RItems.value.add(query)
       allLine.forEach((line) => {
-        const rs = findAllIndex(line.lineV, query)
+        const rs = findAllIndex(line.words, query)
         if (rs.length) {
           rs.forEach((idx) => {
             if (!itemRdata[line.lineIdx]) {

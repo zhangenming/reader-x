@@ -51,7 +51,7 @@ document.documentElement.style.height = allLine.length * 50 + 'px'
       <period v-for="period of section">
         <line v-for="line of period">
           <word
-            v-for="(word, wI) of line.lineV"
+            v-for="(word, wI) of line.words"
             :style="itemRdata[line.lineIdx]?.[wI] && { color: 'red' }"
             :R="itemRdata[line.lineIdx]?.[wI]?.join()"
           >

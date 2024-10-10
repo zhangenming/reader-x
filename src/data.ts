@@ -9,7 +9,7 @@ type datas = section[]
 type section = period[]
 type period = line[]
 type line = {
-  lineV: string
+  words: string
   spk: boolean
   lineIdx: number
 }
@@ -92,28 +92,28 @@ function geneData() {
             }
             console.error(e) // todo?
           })
-          .map((section) => {
-            if (section[0] === '“') {
+          .map((line) => {
+            if (line[0] === '“') {
               spk = true
-              section = section.slice(1)
+              line = line.slice(1)
             }
 
             const rs = {
-              lineV: '', // 待定
+              words: '', // 待定
               lineIdx: lineIdx++,
               spk,
             }
 
             if (spk) {
-              section = '  ' + section
+              line = '  ' + line
             }
 
-            if (spk && section[section.length - 1] === '”') {
+            if (spk && line[line.length - 1] === '”') {
               spk = false
-              section = section.slice(0, -1)
+              line = line.slice(0, -1)
             }
 
-            rs.lineV = section
+            rs.words = line
 
             return rs
           })
