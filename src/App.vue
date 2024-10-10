@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { allLine, datas, rItemsData, rItemsDataKey, 每个section前面有几个line } from './data.ts'
+import { allLine, datas, rItemsData, rItemsDataKey, 每个section前面有几个line } from './data' //.ts
 
-import { startSection, endSection } from './feat/1虚拟scroll.ts'
-import './feat/2nextPage.ts'
-import './feat/3selectionAddR.ts'
-import { hoverR } from './feat/4moveHover.ts'
-import './feat/5clickJump.ts'
+import { startSection, endSection } from './feat/1虚拟scroll' //.ts
+import './feat/2nextPage' //.ts
+import './feat/3selectionAddR' //.ts
+import { hoverR } from './feat/4moveHover' //.ts
+import './feat/5clickJump' //.ts
 
-import { getParams } from './assets/utils.ts'
+import { getParams } from './assets/utils' //.ts
 
 if (getParams().home) {
   document.documentElement.style.color = 'black'
@@ -16,23 +16,6 @@ if (getParams().home) {
 document.documentElement.style.height = allLine.length * 50 + 'px'
 
 console.log('App.vue')
-
-// let oldS
-// let oldP
-// let oldL
-// let oldW
-// onUpdated(() => {
-//   console.log(
-//     document.querySelectorAll('section').length - oldS,
-//     document.querySelectorAll('period').length - oldP,
-//     document.querySelectorAll('line').length - oldL,
-//     document.querySelectorAll('word').length - oldW
-//   )
-//   oldS = document.querySelectorAll('section').length
-//   oldP = document.querySelectorAll('period').length
-//   oldL = document.querySelectorAll('line').length
-//   oldW = document.querySelectorAll('word').length
-// })
 
 function getDomAttr(lineIdx: number, wordIdx: number) {
   const rItem = rItemsData[lineIdx]?.[wordIdx]
