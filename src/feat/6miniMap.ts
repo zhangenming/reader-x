@@ -2,21 +2,18 @@ import { computed, watchEffect } from 'vue'
 
 import { allLine } from '../data'
 import { hoverR } from './4moveHover'
-import { findAllIndex } from '../assets/utils'
+import { $, findAllIndex, get屏幕高度 } from '../assets/utils'
 
 watchEffect(() => {
   const v = hoverR.value // vue
 
-  if (!v) return
+  if (!v) return // init vue watch
 
   const q = allLine.at(-1)!.lineIdx
   const data = allLine
     .filter((line) => findAllIndex(line.words, v))
-    .map((line) => (line.lineIdx / q) * 100)
+    .map((line) => (line.lineIdx / q) * get屏幕高度())
+    .map(Math.ceil)
 
-  document.querySelector<HTMLElement>('#miniMap')!.style.boxShadow = data
-    .map((x) => `red 0px ${x}vh 0px 0px`)
-    .join(',')
-
-  console.log(data)
+  $('#miniMap')!.style.boxShadow = data.map((x) => `red 0px ${x}px 0px 0px`).join(',')
 })
