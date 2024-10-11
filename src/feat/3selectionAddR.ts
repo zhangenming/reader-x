@@ -1,7 +1,7 @@
 import { useStorage } from '@vueuse/core'
 
-import { allLine } from '../data'
-import { findAllIndex, deleteItem } from '../assets/utils'
+import { allLine, txt } from '../data'
+import { findAllIndex, deleteItem, $$ } from '../assets/utils'
 
 console.log('selection')
 
@@ -40,4 +40,20 @@ document.addEventListener('click', ({ target }) => {
       }
     })
   })
+
+  // justOne
+  const len = txt.split(query).length - 1
+  if (len === 1) {
+    // wait vue render dom
+    setTimeout(() => {
+      $$(`[${rItemsDataKey}*="${query}"]`).forEach((dom) => {})
+    })
+    setTimeout(() => {
+      allLine.forEach(({ words, lineIdx }) => {
+        findAllIndex(words, query).forEach((wordIdx) => {
+          deleteItem(rItemsData[lineIdx]![wordIdx]!, query)
+        })
+      })
+    }, 2000)
+  }
 })

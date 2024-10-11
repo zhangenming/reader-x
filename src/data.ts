@@ -1,4 +1,4 @@
-import txt0 from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
+import txt from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
 import { reactive } from 'vue'
 
@@ -17,12 +17,14 @@ export const 每个section前面有几个line: number[] = []
 export const datas = reactive<datas>(geneData()) // 没必要缓存
 export const allLine = datas.flat(3) //所有的line引用
 
+export { txt }
+
 function geneData() {
   console.log('geneData')
 
   let lineIdx = 0
 
-  return txt0
+  return txt
     .split(/\r*\n */)
     .filter((e) => e.trim())
     .map(function doLayout(txt) {
