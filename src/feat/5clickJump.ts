@@ -1,17 +1,16 @@
 import { allLine } from '../data'
-import { rItemsDataKey } from './3selectionAddR'
+import { getDomR } from './3selectionAddR'
 
 console.log('.')
 
 document.addEventListener('click', ({ target, shiftKey, ctrlKey }) => {
   if (!(target instanceof HTMLElement)) return
 
-  const selection = target.getAttribute(rItemsDataKey)
-  if (!selection) return
+  const r = getDomR(target)
+  if (!r) return
 
-  const s2 = selection.split(',')[0]
   const { offsetTop: offsetTopClick } = target
-  const 含有lines = allLine.filter((line) => line.words.includes(s2))
+  const 含有lines = allLine.filter((line) => line.words.includes(r))
   const 第一个line = 含有lines[0]
   const 末一个line = 含有lines.at(-1)!
   const 下一个line = 含有lines.find((e) => e.lineIdx * 50 > offsetTopClick)

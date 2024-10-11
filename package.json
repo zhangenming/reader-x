@@ -8,7 +8,7 @@
     "build": "vite build",
     "build-only": "vite build",
     "preview": "vite preview",
-    "x":"npx depcruise src --include-only '^src' --output-type dot | dot -T svg > dependency-graph.svg",
+    "x": "npx depcruise src --include-only '^src' --output-type dot | dot -T svg > graph.svg",
     "svg": "madge --image graph.svg ./src/main.ts",
     "svg2": "madge --exclude utils.ts --image graph.svg ./src/main.ts",
     "svg3": "madge --exclude data.ts --image graph.svg ./src/main.ts"

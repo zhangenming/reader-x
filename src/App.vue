@@ -48,7 +48,7 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
     :style="{ marginTop: sIdx === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
   >
     <period v-for="period of section">
-      <line v-for="{ words, lineIdx, spk } of period" :class="{ spk }">
+      <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
         <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
           {{ word }}
         </word>
