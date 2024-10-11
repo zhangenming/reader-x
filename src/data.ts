@@ -1,6 +1,7 @@
 import txt from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
 import { reactive } from 'vue'
+import { $ } from './assets/utils'
 
 console.log('data')
 
@@ -120,4 +121,5 @@ function geneData() {
     })
 }
 
+export const 滚动dom = $('#app')
 // console.log(rItemsData, JSON.stringify(rItemsData.value).length)

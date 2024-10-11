@@ -12,7 +12,7 @@
   </head>
   <body>
     <div id="app"></div>
-    <div id="miniMap" style="height: 1px; width: 20px; position: fixed; top: 0; right: 0"></div>
+    <div id="miniMap" style="width: 20px"></div>
 
     <script type="module" src="/src/main.ts"></script>
 
@@ -42,25 +42,29 @@
     </script>
 
     <style>
-      ::selection {
-        background-color: #eee;
-        color: #ddd;
-      }
       html {
         font-size: 50px;
         font-family: fangsong;
-        overflow-x: scroll;
         color: transparent;
       }
       body {
         margin: 0;
       }
-      ::-webkit-scrollbar-button {
-        color: red;
-      }
       #app {
         white-space: pre;
+        height: 100vh;
+        overflow: scroll;
+        direction: rtl;
       }
+      #app > div {
+        direction: ltr;
+      }
+
+      ::selection {
+        background-color: #eee;
+        color: #ddd;
+      }
+      /*  */
       section,
       period,
       line {

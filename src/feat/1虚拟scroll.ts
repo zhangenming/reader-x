@@ -2,18 +2,18 @@
 // 滚动的时候什么也不做 下一页提前渲染好
 import { ref } from 'vue'
 
-import { datas, 每个section前面有几个line } from '../data'
-import { get屏幕高度, get滚动info } from '../assets/utils'
+import { datas, 每个section前面有几个line, 滚动dom } from '../data'
+import { $, $$, get屏幕高度, get滚动info } from '../assets/utils'
 
 console.log('.')
 
 export let startSection = ref(0)
 export let endSection = ref(0)
 
-const 屏幕高度 = get屏幕高度()
+const 屏幕高度 = get屏幕高度() * 2
 
 geneRenderDom()
-document.onscrollend = geneRenderDom
+滚动dom.onscrollend = geneRenderDom
 
 function geneRenderDom() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()

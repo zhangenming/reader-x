@@ -1,12 +1,14 @@
+import { 滚动dom } from '../data'
+
 console.log('.')
 
 export function findAllIndex(l: string, r: string) {
   if (r == '') {
     console.error('x')
-    return []
+    return
   }
   if (!l.includes(r)) {
-    return []
+    return
   }
 
   const rs = []
@@ -36,10 +38,11 @@ export function deleteItem<T>(arr: T[], item: T) {
 }
 
 export const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s))
+export const $ = (s: string) => document.querySelector<HTMLElement>(s)!
 
 let _上次滚动位置 = 0
 export function get滚动info() {
-  const 当前滚动位置 = document.documentElement.scrollTop
+  const 当前滚动位置 = 滚动dom.scrollTop
   const 滚动方向 = 当前滚动位置 > _上次滚动位置 ? '下' : '上'
   _上次滚动位置 = 当前滚动位置
 

@@ -14,8 +14,6 @@ if (getParams().home) {
   document.documentElement.style.color = 'black'
 }
 
-document.documentElement.style.height = allLine.length * 50 + 'px'
-
 console.log('App.vue')
 
 function getDomAttr(lineIdx: number, wordIdx: number) {
@@ -43,17 +41,23 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
 
 <template>
   <!-- todo 逐行渲染/着色 -->
-  <section
-    v-for="(section, sIdx) of datas.slice(startSection, endSection)"
-    :key="sIdx + startSection"
-    :style="{ marginTop: sIdx === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
+  <div
+    :style="{
+      height: allLine.length * 50 + 'px',
+      paddingTop: 每个section前面有几个line[startSection] + 'px',
+    }"
   >
-    <period v-for="period of section">
-      <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
-        <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
-          {{ word }}
-        </word>
-      </line>
-    </period>
-  </section>
+    <section
+      v-for="(section, sIdx) of datas.slice(startSection, endSection)"
+      :key="sIdx + startSection"
+    >
+      <period v-for="period of section">
+        <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
+          <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
+            {{ word }}
+          </word>
+        </line>
+      </period>
+    </section>
+  </div>
 </template>

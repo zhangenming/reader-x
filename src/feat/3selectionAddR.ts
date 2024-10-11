@@ -32,9 +32,12 @@ document.addEventListener('click', ({ target }) => {
     .includes(query)
 
   allLine.forEach(({ words, lineIdx }) => {
-    findAllIndex(words, query).forEach((wordIdx) => {
+    findAllIndex(words, query)?.forEach((wordIdx) => {
       if (已经存在) {
         deleteItem(rItemsData[lineIdx]![wordIdx]!, query)
+        // clean obj
+        if (rItemsData[lineIdx]![wordIdx]!.length === 0) delete rItemsData[lineIdx]![wordIdx]
+        if (Object.keys(rItemsData[lineIdx]!).length === 0) delete rItemsData[lineIdx]
       } else {
         ;((rItemsData[lineIdx] ??= {})[wordIdx] ??= []).push(query)
       }
@@ -50,7 +53,7 @@ document.addEventListener('click', ({ target }) => {
     })
     setTimeout(() => {
       allLine.forEach(({ words, lineIdx }) => {
-        findAllIndex(words, query).forEach((wordIdx) => {
+        findAllIndex(words, query)?.forEach((wordIdx) => {
           deleteItem(rItemsData[lineIdx]![wordIdx]!, query)
         })
       })
