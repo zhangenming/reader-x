@@ -1,13 +1,4 @@
-console.log('utils')
-
-export function get屏幕内sectionDoms() {
-  return $$('line').filter((line) => {
-    return (
-      line.offsetTop > document.documentElement.scrollTop &&
-      line.offsetTop < document.documentElement.scrollTop + innerHeight
-    )
-  })
-}
+console.log('.')
 
 export function findAllIndex(l: string, r: string) {
   if (r == '') {

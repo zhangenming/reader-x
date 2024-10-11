@@ -41,35 +41,18 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
 </script>
 
 <template>
-  <template v-if="getParams().static">
-    <section v-for="section of datas">
-      <period
-        v-for="period of section"
-        :style="{ containIntrinsicSize: period.length * 50 + 'px' }"
-      >
-        <line v-for="line of period">
-          <word v-for="word of line">
-            {{ word }}
-          </word>
-        </line>
-      </period>
-    </section>
-  </template>
-
   <!-- todo 逐行渲染/着色 -->
-  <template v-else>
-    <section
-      v-for="(section, sIdx) of datas.slice(startSection, endSection)"
-      :key="sIdx + startSection"
-      :style="{ marginTop: sIdx === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
-    >
-      <period v-for="period of section">
-        <line v-for="{ words, lineIdx } of period">
-          <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
-            {{ word }}
-          </word>
-        </line>
-      </period>
-    </section>
-  </template>
+  <section
+    v-for="(section, sIdx) of datas.slice(startSection, endSection)"
+    :key="sIdx + startSection"
+    :style="{ marginTop: sIdx === 0 ? 每个section前面有几个line[startSection] + 'px' : '' }"
+  >
+    <period v-for="period of section">
+      <line v-for="{ words, lineIdx, spk } of period" :class="{ spk }">
+        <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
+          {{ word }}
+        </word>
+      </line>
+    </period>
+  </section>
 </template>

@@ -1,9 +1,9 @@
-import { $$, get屏幕内sectionDoms } from '../assets/utils'
+import { $$ } from '../assets/utils'
 
-console.log('nextPage')
+console.log('.')
 
 function nextPage() {
-  get屏幕内sectionDoms().at(-2)!.scrollIntoView({
+  get屏幕内LineDoms().at(-2)!.scrollIntoView({
     behavior: 'smooth',
     block: 'start',
   })
@@ -27,4 +27,11 @@ document.addEventListener('keydown', (e) => {
   }
 })
 
-// document.addEventListener('click', nextPage)
+export function get屏幕内LineDoms() {
+  return $$('line').filter((line) => {
+    return (
+      line.offsetTop > document.documentElement.scrollTop &&
+      line.offsetTop < document.documentElement.scrollTop + innerHeight
+    )
+  })
+}

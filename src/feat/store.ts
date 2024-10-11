@@ -1,6 +1,6 @@
 import localforage from 'localforage'
 
-console.log('store')
+console.log('.')
 
 export async function local<T>(key: string, defaultVal: () => T, dbg: number = 11): Promise<T> {
   // clear

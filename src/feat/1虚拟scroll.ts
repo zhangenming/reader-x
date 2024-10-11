@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import { datas, 每个section前面有几个line } from '../data'
 import { get屏幕高度, get滚动info } from '../assets/utils'
 
-console.log('scroll')
+console.log('.')
 
 export let startSection = ref(0)
 export let endSection = ref(0)

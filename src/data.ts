@@ -20,8 +20,6 @@ export const allLine = datas.flat(3) //所有的line引用
 export { txt }
 
 function geneData() {
-  console.log('geneData')
-
   let lineIdx = 0
 
   return txt

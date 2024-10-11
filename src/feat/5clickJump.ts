@@ -1,6 +1,7 @@
-import { allLine, rItemsDataKey } from '../data'
+import { allLine } from '../data'
+import { rItemsDataKey } from './3selectionAddR'
 
-console.log('click')
+console.log('.')
 
 document.addEventListener('click', ({ target, shiftKey, ctrlKey }) => {
   if (!(target instanceof HTMLElement)) return

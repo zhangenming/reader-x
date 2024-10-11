@@ -1,4 +1,4 @@
-console.log('debug')
+console.log('.')
 
 export async function sleep(ms: number, key?: string) {
   console.time(key)

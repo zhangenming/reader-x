@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 
-import { rItemsDataKey } from '../data'
+import { rItemsDataKey } from './3selectionAddR'
+
+console.log('.')
 
 export const hoverR = ref('')
 
@@ -13,8 +15,6 @@ document.addEventListener('mousemove', ({ target }) => {
   const s2 = selection.split(',')[0]
 
   if (s2 === hoverR.value) return
-
-  console.log('hover', s2)
 
   hoverR.value = s2
 })

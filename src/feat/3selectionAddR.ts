@@ -3,7 +3,7 @@ import { useStorage } from '@vueuse/core'
 import { allLine, txt } from '../data'
 import { findAllIndex, deleteItem, $$ } from '../assets/utils'
 
-console.log('selection')
+console.log('.')
 
 type RItemsData = {
   [lineIdx: number]:
