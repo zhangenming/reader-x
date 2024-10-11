@@ -1,4 +1,4 @@
-import { allLine } from '../data'
+import { allLine, 滚动dom } from '../data'
 import { getDomR } from './3selectionAddR'
 
 console.log('.')
@@ -23,7 +23,7 @@ document.addEventListener('click', ({ target, shiftKey, ctrlKey }) => {
     return 下一个line || 第一个line
   })()
 
-  document.documentElement.scrollBy({
+  滚动dom.scrollBy({
     top: jmpLine.lineIdx * 50 - offsetTopClick,
     behavior: 'smooth', //todo
   })

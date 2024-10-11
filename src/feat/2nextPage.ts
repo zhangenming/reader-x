@@ -1,3 +1,4 @@
+import { 滚动dom } from '../data'
 import { $$, get屏幕高度 } from '../assets/utils'
 
 console.log('.')
@@ -29,9 +30,6 @@ document.addEventListener('keydown', (e) => {
 
 export function get屏幕内LineDoms() {
   return $$('line').filter((line) => {
-    return (
-      line.offsetTop > document.documentElement.scrollTop &&
-      line.offsetTop < document.documentElement.scrollTop + get屏幕高度()
-    )
+    return line.offsetTop > 滚动dom.offsetTop && line.offsetTop < 滚动dom.offsetTop + get屏幕高度()
   })
 }
