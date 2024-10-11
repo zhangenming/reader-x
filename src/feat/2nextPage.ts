@@ -1,4 +1,4 @@
-import { $$ } from '../assets/utils'
+import { $$, get屏幕高度 } from '../assets/utils'
 
 console.log('.')
 
@@ -31,7 +31,7 @@ export function get屏幕内LineDoms() {
   return $$('line').filter((line) => {
     return (
       line.offsetTop > document.documentElement.scrollTop &&
-      line.offsetTop < document.documentElement.scrollTop + innerHeight
+      line.offsetTop < document.documentElement.scrollTop + get屏幕高度()
     )
   })
 }

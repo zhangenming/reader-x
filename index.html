@@ -1,46 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
     <link
       rel="icon"
       href="data:image/vnd.microsoft.icon;base64,AAABAAEAMDAAAAEAIAARAwAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgDAAAAYNwJtQAAAAFzUkdCAdnJLH8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAEsUExURQAAADE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTE3PTAm17UAAABkdFJOUwAaVWeHs4ZeTREUVp3Y/9CSSw4ulN749Np9JwE4sPbrpSzv6ZodEpP36lTcyD+cE1PNPGX+hGyvja2MgllCSb81D47yeAtG1TEMd9lhJKLnFyiWih/FvRY7gcn6+/12OWmJZDPdq5NoAAABDklEQVR4nGNgGAWjgGaAkYmZhZWVlY2dg5MY5VzcPLx8EMAvIChEUL2wiKgYHwyIS0hK4VcuLSMrx4cM5BUUpfFpUJRV4kMFyiqqeNSrqWvwoQNNSTwatLQx1PPx6ejiVM+oJ4ZFgzibPi4NBrxY1PPxGRrh0mCMVT2fiSAuDaY4NJjh0mCOXQOfBdU0WOLQYIVLgzUOPzDj0mCDQ4MtLg12hlg12Dvg0uDo5IxFvbyLKy4NDG7u2CzwwKmewdNLGUO9tw9u9QwMvn7+aOpFrQLwaWAIDELV4R0cglc9MIl7hSJ8Lh/mE05APRBEREZFx8TGxsZEh8Xh8S8S4Ix3S0hMTEzSTcYdnqNgFGAAABPCMJ85GMHZAAAAAElFTkSuQmCC"
     />
-
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
   </head>
+
   <body>
+    <div id="miniMap" style="width: 20px; height: 1px; position: absolute"></div>
     <div id="app"></div>
-    <div id="miniMap" style="width: 20px"></div>
 
-    <script type="module" src="/src/main.ts"></script>
-
-    <script>
-      let showOne = true
-      Object.defineProperties(Object.prototype, {
-        xx: {
-          get() {
-            console.log(this)
-            return this
-          },
-        },
-        xxx: {
-          get() {
-            return (arg) => {
-              if (arg === 'one') {
-                if (showOne) {
-                  console.log(this)
-                  showOne = false
-                }
-              }
-              return this
-            }
-          },
-        },
-      })
-    </script>
-
+    <!--  -->
     <style>
       html {
         font-size: 50px;
@@ -109,5 +82,31 @@
         cursor: pointer;
       }
     </style>
+
+    <script type="module" src="/src/main.ts"></script>
+    <script>
+      let showOne = true
+      Object.defineProperties(Object.prototype, {
+        xx: {
+          get() {
+            console.log(this)
+            return this
+          },
+        },
+        xxx: {
+          get() {
+            return (arg) => {
+              if (arg === 'one') {
+                if (showOne) {
+                  console.log(this)
+                  showOne = false
+                }
+              }
+              return this
+            }
+          },
+        },
+      })
+    </script>
   </body>
 </html>
