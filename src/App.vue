@@ -3,12 +3,13 @@ import { allLine, datas, 每个section前面有几个line } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
-import { rItemsData, rItemsDataKey, rItemsFL } from './feat/3selectionAddR' //.ts
+import { rItemsData, rItemsDataKey } from './feat/3selectionAddR' //.ts
 import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
 
 import { getParams } from './assets/utils' //.ts
+import { computed } from 'vue'
 
 if (getParams().home) {
   document.documentElement.style.color = 'black'
@@ -16,33 +17,31 @@ if (getParams().home) {
 
 console.log('App.vue')
 
-function getDomAttr(lineIdx: number, wordIdx: number) {
-  const idx = `${lineIdx}-${wordIdx}`
-  const rItem = rItemsData[lineIdx]?.[wordIdx]
+const t = computed(() => Object.values(rItemsData))
+const all高亮坐标 = computed(() => t.value.flatMap((e) => e.wordIdx))
+const allFirst = computed(() => t.value.map((e) => e.first))
+const allLast = computed(() => t.value.map((e) => e.last))
 
-  const style: Record<string, string> = {}
+// 性能敏感
+function getDomAttr(wordID: string) {
+  let classs = ''
 
-  if (rItem?.includes(hoverR.value)) {
-    applyCss('color:#888')
-  } else if (rItem?.length) {
-    applyCss('color:#eee')
+  if (all高亮坐标.value.includes(wordID)) {
+    classs += '文案 '
   }
-
-  if (rItemsFL.first[idx]) {
-    applyCss('box-shadow: red -1px 0px 0 0, red 0px -1px 0 0')
+  if (rItemsData[hoverR.value]?.wordIdx.includes(wordID)) {
+    classs += '文案hover '
   }
-  if (rItemsFL.last[idx]) {
-    applyCss('box-shadow: red 1px 0px 0 0, red 0px 1px 0 0')
+  if (allFirst.value.includes(wordID)) {
+    classs += 'first '
+  }
+  if (allLast.value.includes(wordID)) {
+    classs += 'last '
   }
 
   return {
-    style,
-    [rItemsDataKey]: rItem,
-  }
-
-  function applyCss(css: string) {
-    const [prop, val] = css.split(':')
-    style[prop] = val
+    class: classs || undefined,
+    [rItemsDataKey]: Object.entries(rItemsData).find(([k, v]) => v.wordIdx.includes(wordID))?.[0],
   }
 }
 </script>
@@ -63,7 +62,7 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
     >
       <period v-for="period of section">
         <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
-          <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(lineIdx, wordIdx)">
+          <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(`${lineIdx}-${wordIdx}`)">
             {{ word }}
           </word>
         </line>
@@ -71,3 +70,21 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
     </section>
   </div>
 </template>
+
+<style>
+.文案 {
+  color: #eee;
+}
+.文案hover {
+  color: #111;
+}
+
+.first {
+  box-shadow: inset red 3px 0px 0 0, inset red 0px 3px 0 0;
+  border-radius: 10px 0 0 0;
+}
+.last {
+  box-shadow: inset red -3px 0px 0 0, inset red 0px -3px 0 0;
+  border-radius: 0 0 10px 0;
+}
+</style>

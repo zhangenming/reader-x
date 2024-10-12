@@ -1,30 +1,21 @@
 import { useStorage } from '@vueuse/core'
 
 import { allLine, txt } from '../data'
-import { findAllIndex, deleteItem, $$ } from '../assets/utils'
+import { findAllIndex, deleteItem, $$, get屏幕高度 } from '../assets/utils'
 
 console.log('.')
 
 type RItemsData = {
-  [lineIdx: number]:
-    | {
-        [wordIdx: number]: string[] | undefined
-      }
-    | undefined
+  [selection: string]: {
+    wordIdx: string[]
+    first: string
+    last: string
+    miniMap: any
+  }
 }
 
 export const rItemsDataKey = 'rItemsDataKey'
 export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
-export const rItemsFL: RItemsFL = useStorage('rItemsFL', { first: {}, last: {} }).value
-
-type RItemsFL = {
-  first: {
-    [idx: string]: boolean
-  }
-  last: {
-    [idx: string]: boolean
-  }
-}
 
 document.addEventListener('click', ({ target }) => {
   if (!(target instanceof HTMLElement)) return
@@ -36,45 +27,48 @@ document.addEventListener('click', ({ target }) => {
 
   getSelection()!.empty()
 
-  const 已经存在 = Object.values(rItemsData)
-    .map((e) => Object.values(e!))
-    .flat(2)
-    .includes(query)
+  if (rItemsData[query]) {
+    return delete rItemsData[query]
+  } else {
+    rItemsData[query] = {
+      wordIdx: [],
+      first: '',
+      last: '',
+      miniMap: new Set(),
+    }
+  }
 
-  let isFirst = ''
+  const data = rItemsData[query]
+
   allLine.forEach(({ words, lineIdx }) => {
     findAllIndex(words, query)?.forEach((wordIdx) => {
-      if (已经存在) {
-        deleteItem(rItemsData[lineIdx]![wordIdx]!, query)
-        // clean obj
-        if (rItemsData[lineIdx]![wordIdx]!.length === 0) delete rItemsData[lineIdx]![wordIdx]
-        if (Object.keys(rItemsData[lineIdx]!).length === 0) delete rItemsData[lineIdx]
-      } else {
-        ;((rItemsData[lineIdx] ??= {})[wordIdx] ??= []).push(query)
+      const idx = `${lineIdx}-${wordIdx}`
 
-        const idx = `${lineIdx}-${wordIdx}`
-        if (isFirst === '') {
-          rItemsFL.first[idx] = true
-        }
-        isFirst = idx
+      data.wordIdx.push(idx)
+
+      if (!data.first) {
+        data.first = idx
       }
+      data.last = idx
+      data.miniMap.add(lineIdx)
     })
   })
-  rItemsFL.last[isFirst] = true
 
-  // justOne
-  const len = txt.split(query).length - 1
-  if (len === 1) {
-    // wait vue render dom
+  const q = allLine.at(-1)!.lineIdx
+
+  data.miniMap = [...data.miniMap]
+    .map((lineIdx) => (lineIdx / q) * get屏幕高度())
+    .map((e) => Math.max(1, Math.floor(e))) //向下取整 但不小于1
+    .map((x) => `red 0px ${x}px 0px 0px`)
+
+  if (data.miniMap.length === 1) {
+    console.log('justOne')
+    // // wait vue render dom 有fl 不需要再添加样式了
+    // setTimeout(() => {
+    //   $$(`[${rItemsDataKey}*="${query}"]`).forEach((dom) => {})
+    // })
     setTimeout(() => {
-      $$(`[${rItemsDataKey}*="${query}"]`).forEach((dom) => {})
-    })
-    setTimeout(() => {
-      allLine.forEach(({ words, lineIdx }) => {
-        findAllIndex(words, query)?.forEach((wordIdx) => {
-          deleteItem(rItemsData[lineIdx]![wordIdx]!, query)
-        })
-      })
+      delete rItemsData[query]
     }, 2000)
   }
 })
