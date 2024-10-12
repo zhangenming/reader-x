@@ -14,5 +14,7 @@ document.addEventListener('mousemove', ({ target }) => {
 
   if (r === hoverR.value) return
 
+  console.log(`hover: ${hoverR.value} -> ${r}`)
+
   hoverR.value = r
 })

@@ -14,7 +14,6 @@ type RItemsData = {
   }
 }
 
-export const rItemsDataKey = 'rItemsDataKey'
 export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
 
 document.addEventListener('click', ({ target }) => {
@@ -28,7 +27,8 @@ document.addEventListener('click', ({ target }) => {
   getSelection()!.empty()
 
   if (rItemsData[query]) {
-    return delete rItemsData[query]
+    delete rItemsData[query]
+    return
   } else {
     rItemsData[query] = {
       wordIdx: [],
@@ -74,7 +74,7 @@ document.addEventListener('click', ({ target }) => {
 })
 
 export function getDomR(dom: HTMLElement) {
-  const r = dom.getAttribute(rItemsDataKey)
+  const r = dom.getAttribute('rItemsDataKey')
 
   return r?.split(',')[0]
 }

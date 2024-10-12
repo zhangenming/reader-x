@@ -3,7 +3,7 @@ import { allLine, datas, 每个section前面有几个line } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
-import { rItemsData, rItemsDataKey } from './feat/3selectionAddR' //.ts
+import { rItemsData } from './feat/3selectionAddR' //.ts
 import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
@@ -41,7 +41,7 @@ function getDomAttr(wordID: string) {
 
   return {
     class: classs || undefined,
-    [rItemsDataKey]: Object.entries(rItemsData).find(([k, v]) => v.wordIdx.includes(wordID))?.[0],
+    rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.wordIdx.includes(wordID))?.[0],
   }
 }
 </script>
