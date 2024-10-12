@@ -28,7 +28,8 @@ document.addEventListener('click', ({ target }) => {
   getSelection()!.empty()
 
   if (rItemsData[query]) {
-    return delete rItemsData[query]
+    delete rItemsData[query]
+    return
   } else {
     rItemsData[query] = {
       wordIdx: [],
