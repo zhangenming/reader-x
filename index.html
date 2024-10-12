@@ -10,40 +10,32 @@
   </head>
 
   <body>
-    <div id="miniMap" style="width: 20px; height: 1px; position: absolute"></div>
     <div id="app"></div>
+    <div id="miniMap" style="width: 20px; height: 1px; position: absolute; top: 0; right: 0"></div>
 
     <!--  -->
     <style>
       html {
         font-size: 50px;
-        font-family: fangsong;
-        color: transparent;
       }
       body {
         margin: 0;
       }
       #app {
+        font-family: fangsong;
+        color: transparent;
         white-space: pre;
         height: 100vh;
-        overflow: scroll;
-        direction: rtl;
-      }
-      #app > div {
-        direction: ltr;
+        overflow-x: hidden;
+        overflow-y: scroll;
       }
 
-      ::selection {
-        background-color: #eee;
-        color: #ddd;
-      }
       /*  */
       section,
       period,
       line {
         display: block;
       }
-
       period:nth-child(2n + 3) {
         display: block;
         box-shadow: inset 5px 0 0 0 #eee;
@@ -54,32 +46,26 @@
         line-height: 1em;
       }
 
-      .spk {
-        /* background-color: #aea; */
-        /* margin-left: 1em; */
-        font-family: cursive;
-        font-weight: 900;
+      /*  */
+      #app::-webkit-scrollbar {
+        width: 30px;
+        height: 10px;
       }
-      /* [word='“'] ~ word {
-  background-color: #aaeeee;
-}
-[word='”'] ~ word {
-  background-color: transparent;
-}
+      #app::-webkit-scrollbar-thumb {
+        height: 1px;
+        background-color: black;
+        /* width: 100px; */
+      }
+      #app::-webkit-scrollbar-thumb:hover {
+        height: 50px;
+      }
+      #app::-webkit-scrollbar-track {
+      }
 
-[word='”'] ~ [word='“'] ~ word {
-  background-color: #aaeeee;
-}
-[word='”'] ~ [word='“'] ~ [word='”'] ~ word {
-  background-color: transparent;
-}
-
-[word='”'] {
-  background-color: transparent !important;
-} */
-
-      [data-selection] {
-        cursor: pointer;
+      /*  */
+      ::selection {
+        background-color: #eee;
+        color: #ddd;
       }
     </style>
 

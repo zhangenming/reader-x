@@ -72,6 +72,16 @@ function getDomAttr(wordID: string) {
 </template>
 
 <style>
+[ritemsdatakey] {
+  cursor: pointer;
+}
+.spk {
+  /* background-color: #aea; */
+  /* margin-left: 1em; */
+  font-family: cursive;
+  font-weight: 900;
+}
+
 .文案 {
   color: #eee;
 }
