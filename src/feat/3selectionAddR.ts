@@ -15,6 +15,16 @@ type RItemsData = {
 
 export const rItemsDataKey = 'rItemsDataKey'
 export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
+export const rItemsFL: RItemsFL = useStorage('rItemsFL', { first: {}, last: {} }).value
+
+type RItemsFL = {
+  first: {
+    [idx: string]: boolean
+  }
+  last: {
+    [idx: string]: boolean
+  }
+}
 
 document.addEventListener('click', ({ target }) => {
   if (!(target instanceof HTMLElement)) return
@@ -31,6 +41,7 @@ document.addEventListener('click', ({ target }) => {
     .flat(2)
     .includes(query)
 
+  let isFirst = ''
   allLine.forEach(({ words, lineIdx }) => {
     findAllIndex(words, query)?.forEach((wordIdx) => {
       if (已经存在) {
@@ -40,9 +51,16 @@ document.addEventListener('click', ({ target }) => {
         if (Object.keys(rItemsData[lineIdx]!).length === 0) delete rItemsData[lineIdx]
       } else {
         ;((rItemsData[lineIdx] ??= {})[wordIdx] ??= []).push(query)
+
+        const idx = `${lineIdx}-${wordIdx}`
+        if (isFirst === '') {
+          rItemsFL.first[idx] = true
+        }
+        isFirst = idx
       }
     })
   })
+  rItemsFL.last[isFirst] = true
 
   // justOne
   const len = txt.split(query).length - 1

@@ -3,7 +3,7 @@ import { allLine, datas, 每个section前面有几个line } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
-import { rItemsData, rItemsDataKey } from './feat/3selectionAddR' //.ts
+import { rItemsData, rItemsDataKey, rItemsFL } from './feat/3selectionAddR' //.ts
 import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
@@ -17,25 +17,33 @@ if (getParams().home) {
 console.log('App.vue')
 
 function getDomAttr(lineIdx: number, wordIdx: number) {
+  const idx = `${lineIdx}-${wordIdx}`
   const rItem = rItemsData[lineIdx]?.[wordIdx]
 
-  const style = (() => {
-    if (!rItem) return
+  const style: Record<string, string> = {}
 
-    if (rItem.includes(hoverR.value)) {
-      return {
-        color: '#888',
-      }
-    }
+  if (rItem?.includes(hoverR.value)) {
+    applyCss('color:#888')
+  } else if (rItem?.length) {
+    applyCss('color:#eee')
+  }
 
-    if (rItem.length) {
-      return {
-        color: '#eee',
-      }
-    }
-  })()
+  if (rItemsFL.first[idx]) {
+    applyCss('box-shadow: red -1px 0px 0 0, red 0px -1px 0 0')
+  }
+  if (rItemsFL.last[idx]) {
+    applyCss('box-shadow: red 1px 0px 0 0, red 0px 1px 0 0')
+  }
 
-  return { style, [rItemsDataKey]: rItem }
+  return {
+    style,
+    [rItemsDataKey]: rItem,
+  }
+
+  function applyCss(css: string) {
+    const [prop, val] = css.split(':')
+    style[prop] = val
+  }
 }
 </script>
 
@@ -45,6 +53,8 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
     :style="{
       height: allLine.length * 50 + 'px',
       paddingTop: 每个section前面有几个line[startSection] + 'px',
+      width: 'fit-content',
+      boxSizing: 'border-box',
     }"
   >
     <section
