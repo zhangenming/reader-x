@@ -68,15 +68,20 @@ function geneData() {
 
       function period2line(period: string) {
         let spk = false
-        const allFlag = '。！？，—；：…'
+        const allFlag = '。！？，—；：…”'
         return [...period]
           .reduce(
             (acc, cur, i, arr) => {
               acc[acc.length - 1] += cur
 
+              const prev = arr[i - 1]
               const next = arr[i + 1]
 
-              if (allFlag.includes(cur) && !(allFlag + '”').includes(next)) {
+              if (cur === '”') {
+                if (allFlag.includes(prev)) {
+                  acc.push('')
+                }
+              } else if (allFlag.includes(cur) && !allFlag.includes(next)) {
                 if (i !== arr.length - 1) {
                   acc.push('')
                 }
@@ -90,7 +95,7 @@ function geneData() {
             if (e) {
               return true
             }
-            console.error(e) // todo?
+            // console.error(e) // todo?
           })
           .map((line) => {
             if (line[0] === '“') {
