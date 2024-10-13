@@ -11,14 +11,9 @@ import './feat/6miniMap' //.ts
 import { getParams } from './assets/utils' //.ts
 import { computed } from 'vue'
 
-if (getParams().home) {
-  document.documentElement.style.color = 'black'
-}
-
 console.log('App.vue')
 
 const t = computed(() => Object.values(rItemsData))
-const all高亮坐标 = computed(() => t.value.flatMap((e) => e.wordIdx))
 const allFirst = computed(() => t.value.map((e) => e.first))
 const allLast = computed(() => t.value.map((e) => e.last))
 
@@ -26,9 +21,6 @@ const allLast = computed(() => t.value.map((e) => e.last))
 function getDomAttr(wordID: string) {
   let classs = ''
 
-  if (all高亮坐标.value.includes(wordID)) {
-    classs += '文案 '
-  }
   if (rItemsData[hoverR.value]?.wordIdx.includes(wordID)) {
     classs += '文案hover '
   }
@@ -47,8 +39,21 @@ function getDomAttr(wordID: string) {
 </script>
 
 <template>
+  <template v-if="getParams().static">
+    <section v-for="section of datas.slice(0, 200)">
+      <period v-for="period of section">
+        <line v-for="{ words } of period">
+          <word v-for="word of words">
+            {{ word }}
+          </word>
+        </line>
+      </period>
+    </section>
+  </template>
+
   <!-- todo 逐行渲染/着色 -->
   <div
+    v-else
     :style="{
       height: allLine.length * 50 + 'px',
       paddingTop: 每个section前面有几个line[startSection] + 'px',
@@ -73,8 +78,14 @@ function getDomAttr(wordID: string) {
 
 <style>
 [ritemsdatakey] {
+  color: red;
   cursor: pointer;
 }
+word:not([ritemsdatakey]) + word[ritemsdatakey]:not(:nth-child(3)),
+word[ritemsdatakey] + word:not([ritemsdatakey]) {
+  margin-left: 0.25rem;
+}
+/* word:not([ritemsdatakey]) */
 .spk {
   /* background-color: #aea; */
   /* margin-left: 1em; */
@@ -82,11 +93,9 @@ function getDomAttr(wordID: string) {
   font-weight: 900;
 }
 
-.文案 {
-  color: #eee;
-}
 .文案hover {
-  color: #111;
+  color: white;
+  background-color: red;
 }
 
 .first {

@@ -3,20 +3,28 @@
 import { ref } from 'vue'
 
 import { datas, 每个section前面有几个line, 滚动dom } from '../data'
-import { $, $$, get屏幕高度, get滚动info } from '../assets/utils'
+import { $, $$, getParams, get屏幕高度, get滚动info } from '../assets/utils'
+import { useStorage } from '@vueuse/core'
 
 console.log('.')
 
 export let startSection = ref(0)
 export let endSection = ref(0)
 
+export let appScroll = useStorage('appScroll', 0)
+
 const 屏幕高度 = get屏幕高度() * 2
 
-geneRenderDom()
-滚动dom.onscrollend = geneRenderDom
+setTimeout(() => {
+  滚动dom.scrollTo(0, appScroll.value)
+})
+
+滚动dom.onscrollend = getParams().static ? () => {} : geneRenderDom
 
 function geneRenderDom() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()
+
+  appScroll.value = 当前滚动位置
 
   if (滚动方向 === '下') {
     for (let i = startSection.value + 1; i < datas.length; i++) {
