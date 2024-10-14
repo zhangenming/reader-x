@@ -27,6 +27,8 @@ function geneData() {
     .split(/\r*\n */)
     .filter((e) => e.trim())
     .map(function doLayout(txt) {
+      // 从上往下分
+      // todo 从下往上 先把所有标点分割 再取消不必要的分割
       return section2period(txt).map(period2line)
 
       function section2period(section: string) {
