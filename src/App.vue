@@ -13,15 +13,14 @@ import { computed } from 'vue'
 
 console.log('App.vue')
 
-const t = computed(() => Object.values(rItemsData))
-const allFirst = computed(() => t.value.map((e) => e.first))
-const allLast = computed(() => t.value.map((e) => e.last))
+const allFirst = computed(() => Object.values(rItemsData).map((e) => e[0]))
+const allLast = computed(() => Object.values(rItemsData).map((e) => e.at(-1)))
 
 // 性能敏感
 function getDomAttr(wordID: string) {
   let classs = ''
 
-  if (rItemsData[hoverR.value]?.wordIdx.includes(wordID)) {
+  if (rItemsData[hoverR.value]?.includes(wordID)) {
     classs += '文案hover '
   }
   if (allFirst.value.includes(wordID)) {
@@ -33,12 +32,13 @@ function getDomAttr(wordID: string) {
 
   return {
     class: classs || undefined,
-    rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.wordIdx.includes(wordID))?.[0],
+    rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.includes(wordID))?.[0],
   }
 }
 </script>
 
 <template>
+  <!-- format diff -->
   <template v-if="getParams().static">
     <section v-for="section of datas.slice(0, 200)">
       <period v-for="period of section">
@@ -74,6 +74,14 @@ function getDomAttr(wordID: string) {
       </period>
     </section>
   </div>
+
+  <component is="style" v-if="!getParams().home">
+    <!--  -->
+    html{ filter: opacity(2.3%); }
+    <!--  -->
+    html:hover{ filter: opacity(3%); }
+    <!--  -->
+  </component>
 </template>
 
 <style>
