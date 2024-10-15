@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { allLine, datas, 每个section前面有几个line } from './data' //.ts
+import { datas } from './data' //.ts
 
 let sectionIdx = ref(100)
-let periodIdx = ref(0)
+let periodIdx = ref(1)
 
 document.onclick = function add() {
   periodIdx.value++
   if (periodIdx.value === datas[sectionIdx.value].length) {
-    periodIdx.value = 0
+    periodIdx.value = 1
     sectionIdx.value++
   }
 }
@@ -17,7 +17,7 @@ datas.xx
 </script>
 
 <template>
-  {{ sectionIdx }} -- {{ periodIdx }}
+  <!-- {{ sectionIdx }} -- {{ periodIdx }} -->
   <period
     v-for="(period, pIdx) of datas[sectionIdx]"
     :style="
@@ -36,7 +36,7 @@ datas.xx
 
 <style>
 html {
-  font-size: 10px !important;
+  font-size: 5px !important;
 }
 word {
   color: #eee6;

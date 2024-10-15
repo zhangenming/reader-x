@@ -49,10 +49,7 @@ function geneData() {
             if (cur === '“' && periodFlag.includes(下一个下引号前面的字符)) {
               spk = true
             }
-            if (
-              (!spk && periodFlag.includes(cur) && !periodFlag.includes(next)) ||
-              (periodFlag2.includes(prev) && cur === '”')
-            ) {
+            if ((!spk && periodFlag.includes(cur) && !periodFlag.includes(next)) || (periodFlag2.includes(prev) && cur === '”')) {
               if (i !== arr.length - 1) {
                 // console.log('p')
                 acc.push('')

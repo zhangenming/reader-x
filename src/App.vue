@@ -82,6 +82,8 @@ function getDomAttr(wordID: string) {
 </template>
 
 <style>
+[word='的'] {
+}
 [ritemsdatakey] {
   color: red;
   cursor: pointer;
@@ -118,9 +120,8 @@ period,
 line {
   display: block;
 }
-period:nth-child(2n + 3) {
-  display: block;
-  box-shadow: -10px 0px 0 0 blue;
+period {
+  margin-bottom: 0.5rem;
 }
 line {
   /* display: inline-block; */
