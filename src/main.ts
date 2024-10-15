@@ -1,11 +1,12 @@
 import { createApp } from 'vue'
 
-import App from './App.vue'
+import { getParams } from './assets/utils'
 
 console.log('main 1')
 
-const app = createApp(App)
+const APP = await import(getParams().m ? './AppM.vue' : './App.vue')
+const app = createApp(APP.default)
 app.config.performance = true
 app.mount('#app')
 
-console.log('main 2')
+console.log('main 2') 

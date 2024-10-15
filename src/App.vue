@@ -61,10 +61,7 @@ function getDomAttr(wordID: string) {
       boxSizing: 'border-box',
     }"
   >
-    <section
-      v-for="(section, sIdx) of datas.slice(startSection, endSection)"
-      :key="sIdx + startSection"
-    >
+    <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
       <period v-for="period of section">
         <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
           <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(`${lineIdx}-${wordIdx}`)">
@@ -93,12 +90,12 @@ word:not([ritemsdatakey]) + word[ritemsdatakey]:not(:nth-child(3)),
 word[ritemsdatakey] + word:not([ritemsdatakey]) {
   margin-left: 0.25rem;
 }
-/* word:not([ritemsdatakey]) */
 .spk {
   /* background-color: #aea; */
   /* margin-left: 1em; */
+  text-indent: 1em;
   font-family: cursive;
-  font-weight: 900;
+  font-weight: 100;
 }
 
 .文案hover {
@@ -113,5 +110,21 @@ word[ritemsdatakey] + word:not([ritemsdatakey]) {
 .last {
   box-shadow: inset red -3px 0px 0 0, inset red 0px -3px 0 0;
   border-radius: 0 0 10px 0;
+}
+/*  */
+
+section,
+period,
+line {
+  display: block;
+}
+period:nth-child(2n + 3) {
+  display: block;
+  box-shadow: -10px 0px 0 0 blue;
+}
+line {
+  /* display: inline-block; */
+  width: fit-content;
+  line-height: 1em;
 }
 </style>

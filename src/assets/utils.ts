@@ -37,8 +37,12 @@ export function deleteItem<T>(arr: T[], item: T) {
   arr.splice(idx, 1)
 }
 
-export const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s))
-export const $ = (s: string) => document.querySelector<HTMLElement>(s)!
+export function $(selector: string) {
+  return document.querySelector<HTMLElement>(selector)!
+}
+export function $$<T extends HTMLElement>(selector: string) {
+  return Array.from(document.querySelectorAll<T>(selector))
+}
 
 let _上次滚动位置 = 0
 export function get滚动info() {
