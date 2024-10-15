@@ -82,7 +82,7 @@ $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
     <!--  -->
   </component>
   <component is="style">
-    {{ [...'就把是不那都在'].map((e) => `[word='${e}']`).join(',') }}
+    {{ [...'就把是不那都在还几他她做你我这吗的得地没倒了个着而跟竟然到'].map((e) => `[word='${e}']`).join(',') }}
     { font-weight: 900; }
   </component>
 </template>
