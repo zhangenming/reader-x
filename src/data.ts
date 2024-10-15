@@ -15,6 +15,8 @@ type line = {
 }
 
 export const 每个section前面有几个line: number[] = []
+export const 前面有几个margin: number[] = []
+let 前面有几个marginAcc = 0
 export const datas = reactive<datas>(geneData()) // 没必要缓存
 export const allLine = datas.flat(3) //所有的line引用
 
@@ -35,9 +37,7 @@ function geneData() {
         let spk = false
         const periodFlag = '。！？…'
         const periodFlag2 = '。！？…'
-        每个section前面有几个line.push(lineIdx * 50)
-
-        return [...section].reduce(
+        const rs = [...section].reduce(
           (acc, cur, i, arr) => {
             acc[acc.length - 1] += cur
 
@@ -63,6 +63,9 @@ function geneData() {
           },
           [' ', ''] // section之间的空行
         )
+        每个section前面有几个line.push(lineIdx * 50)
+        前面有几个margin.push((前面有几个marginAcc += (rs.length - 1) * 25))
+        return rs
       }
 
       function period2line(period: string) {

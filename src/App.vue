@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { allLine, datas, 每个section前面有几个line } from './data' //.ts
+import { allLine, datas, 每个section前面有几个line, 前面有几个margin } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
@@ -8,7 +8,7 @@ import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
 
-import { getParams } from './assets/utils' //.ts
+import { $, getParams } from './assets/utils' //.ts
 import { computed } from 'vue'
 
 console.log('App.vue')
@@ -35,6 +35,8 @@ function getDomAttr(wordID: string) {
     rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.includes(wordID))?.[0],
   }
 }
+
+$('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
 </script>
 
 <template>
@@ -56,7 +58,7 @@ function getDomAttr(wordID: string) {
     v-else
     :style="{
       height: allLine.length * 50 + 'px',
-      paddingTop: 每个section前面有几个line[startSection] + 'px',
+      paddingTop: 每个section前面有几个line[startSection] + 前面有几个margin[startSection - 1] + 'px',
       width: 'fit-content',
       boxSizing: 'border-box',
     }"
@@ -96,8 +98,9 @@ word[ritemsdatakey] + word:not([ritemsdatakey]) {
   /* background-color: #aea; */
   /* margin-left: 1em; */
   text-indent: 1em;
-  font-family: cursive;
   font-weight: 100;
+  font-family: cursive;
+  font-style: italic;
 }
 
 .文案hover {
@@ -120,8 +123,10 @@ period,
 line {
   display: block;
 }
-period {
-  margin-bottom: 0.5rem;
+
+/* 为了保证页面不shift 不能margin 也不能bottom */
+period + period {
+  padding-top: 0.5rem;
 }
 line {
   /* display: inline-block; */
