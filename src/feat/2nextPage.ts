@@ -3,28 +3,29 @@ import { $$, get屏幕高度 } from '../assets/utils'
 
 console.log('.')
 
-function nextPage() {
-  get屏幕内LineDoms().at(-2)!.scrollIntoView({
-    block: 'start',
-    // behavior: 'smooth',
-  })
-}
-function prevPage() {
-  $$('line').at(-20)!.scrollIntoView({
-    // behavior: 'smooth',
-    block: 'end',
-  })
-}
-
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault()
+  // e.preventDefault()
 
+  if (e.code === 'NumpadEnter') {
     if (e.shiftKey) {
       prevPage()
     } else {
       nextPage()
     }
+  } else if (e.code === 'NumpadDecimal') {
+    prevPage()
+  }
+
+  // todo 以period
+  function nextPage() {
+    get屏幕内LineDoms().at(-2)!.scrollIntoView({
+      block: 'start',
+    })
+  }
+  function prevPage() {
+    get屏幕内LineDoms().at(0)!.scrollIntoView({
+      block: 'end',
+    })
   }
 })
 
