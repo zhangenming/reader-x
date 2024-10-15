@@ -66,7 +66,7 @@ $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
     <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
       <period v-for="period of section">
         <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
-          <word v-for="(word, wordIdx) of words" v-bind="getDomAttr(`${lineIdx}-${wordIdx}`)">
+          <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(`${lineIdx}-${wordIdx}`)">
             {{ word }}
           </word>
         </line>
@@ -81,11 +81,13 @@ $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
     html:hover{ filter: opacity(3%); }
     <!--  -->
   </component>
+  <component is="style">
+    {{ [...'就把是不那都在'].map((e) => `[word='${e}']`).join(',') }}
+    { font-weight: 900; }
+  </component>
 </template>
 
 <style>
-[word='的'] {
-}
 [ritemsdatakey] {
   color: red;
   cursor: pointer;
