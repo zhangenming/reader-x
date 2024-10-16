@@ -16,8 +16,9 @@ export type line = {
   top: number
 }
 export const 各个Section的Top: number[] = []
+let P间隔Acc上一次: number
 let P间隔Acc = 0
-export const datas = reactive<datas>(geneData().xx) // 没必要缓存
+export const datas = reactive<datas>(geneData()) // 没必要缓存
 export const allLine = datas.flat(3) //所有的line引用
 
 function geneData() {
@@ -63,12 +64,12 @@ function geneData() {
         )
 
         各个Section的Top.push(lineIdx * 50 + P间隔Acc * 25)
+        P间隔Acc上一次 = P间隔Acc
         P间隔Acc += rs.length - 1
-
         return rs
       }
 
-      function period2line(period: string) {
+      function period2line(period: string, periodIdx: number) {
         let spk = false
         const allFlag = '。！？，—；：…”'
         return [...period]
@@ -110,7 +111,7 @@ function geneData() {
               lineIdx: lineIdx++,
               spk,
               sectionIdx,
-              top: [P间隔Acc, lineIdx, 'P间隔Acc* 25 + 50 * lineIdx', P间隔Acc * 25 + 50 * lineIdx],
+              top: (P间隔Acc上一次 + periodIdx) * 25 + 50 * (lineIdx - 1),
             }
 
             if (spk) {

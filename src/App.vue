@@ -96,13 +96,15 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
   <component is="style">
     {{
       (() => {
-        const 连词 = '也但而又则且却或非乃因此和与所以即还再就把是不那做都在几竟然到说'
-        const 人称代词 = '他她它你我们您咱俺'
+        const 连词 = '没跟已经有无甚至于但而又则且却或非乃因此和与所以即还再就把是不那做都在几竟然到说'
+        const 人称代词 = '他她它你我们您咱俺自己'
         const 指示代词 = '这那其'
-        const 语气词 = '怎吧啊'
+        const 转折 = '才'
+        const 语气词 = '怎吧啊着'
         const 助词 = '了子'
+        const 之乎者也 = '之乎者也'
         const 的 = '的得地'
-        return [...连词, ...人称代词, ...的, ...指示代词, ...助词, ...语气词]
+        return [...连词, ...人称代词, ...的, ...转折, ...指示代词, ...助词, ...语气词, ...之乎者也]
       })()
         .map((e) => `[word='${e}']`)
         .join(',')
@@ -117,7 +119,7 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
   cursor: pointer;
 }
 
-word:not([ritemsdatakey]) + word[ritemsdatakey]:not(:nth-child(3)),
+word:not([ritemsdatakey]):not([word=' ']) + word[ritemsdatakey],
 word[ritemsdatakey] + word:not([ritemsdatakey]) {
   margin-left: 0.25rem;
 }
@@ -158,7 +160,7 @@ period {
 }
 /* 为了保证页面不shift 不能margin 也不能bottom */
 period + period {
-  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 line {
   /* display: inline-block; */
