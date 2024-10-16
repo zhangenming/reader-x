@@ -8,7 +8,7 @@ import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
 
-import { $, getParams } from './assets/utils' //.ts
+import { $, getParams, get屏幕宽度 } from './assets/utils' //.ts
 import { computed } from 'vue'
 
 console.log('App.vue')
@@ -32,22 +32,15 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
     classs += 'last '
   }
 
-  let y = wordIdx - 一行容纳
-  let translate
-  if (y > 0) {
-    translate = `translateX(${y * -50}px) translateY(${y * 50}px)`
-  }
-
   return {
     class: classs || undefined,
     rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.includes(wordID))?.[0],
-    style: translate ? { transform: translate } : undefined,
   }
 }
 
 $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
 
-const 一行容纳 = 10
+const 行容纳 = Math.floor(get屏幕宽度() / 50)
 </script>
 
 <template>
@@ -76,7 +69,14 @@ const 一行容纳 = 10
   >
     <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
       <period v-for="period of section">
-        <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
+        <line
+          v-for="{ words, lineIdx, spk } of period"
+          v-bind="spk && { class: { spk } }"
+          :style="{
+            fontSize: words.length > 行容纳 ? 100 / (words.length + 1) + 'vw' : undefined,
+            // todo 需要减去旁白宽度 暂时+1
+          }"
+        >
           <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx)">
             {{ word }}
           </word>
@@ -85,9 +85,20 @@ const 一行容纳 = 10
     </section>
   </div>
 
-  <component is="style" v-if="!getParams().home"> word{ color:white } </component>
+  <component is="style" v-if="!getParams().home"> line{ color:white;transition: all 1s; } line:hover{ color:#eee } </component>
   <component is="style">
-    {{ [...'就把是不那都在还几他她做你我这吗的得地没倒了个着而跟竟然到'].map((e) => `[word='${e}']`).join(',') }}
+    {{
+      (() => {
+        const 连词 = '但而又则且却或非乃因此和与所以'
+        const 人称代词 = '他她它你我们您咱俺'
+        const 指示代词 = '这那其'
+        const 助词 = '了'
+        const 语气词 = '吧啊'
+        return [...连词, ...人称代词, ...指示代词, ...助词, ...语气词, ...'就把是不那做都在还几竟然到']
+      })()
+        .map((e) => `[word='${e}']`)
+        .join(',')
+    }}
     { font-weight: 900; }
   </component>
 </template>
@@ -97,9 +108,7 @@ const 一行容纳 = 10
   color: red;
   cursor: pointer;
 }
-word {
-  display: inline-block;
-}
+
 word:not([ritemsdatakey]) + word[ritemsdatakey]:not(:nth-child(3)),
 word[ritemsdatakey] + word:not([ritemsdatakey]) {
   margin-left: 0.25rem;
@@ -134,6 +143,9 @@ line {
   display: block;
 }
 
+period {
+  width: fit-content;
+}
 /* 为了保证页面不shift 不能margin 也不能bottom */
 period + period {
   padding-top: 0.5rem;
@@ -141,6 +153,6 @@ period + period {
 line {
   /* display: inline-block; */
   width: fit-content;
-  line-height: 1em;
+  line-height: 1rem;
 }
 </style>

@@ -57,6 +57,10 @@ export function get屏幕高度() {
   return window.innerHeight
 }
 
+export function get屏幕宽度() {
+  return window.innerWidth
+}
+
 export function getParams() {
   const urlParams = new URLSearchParams(location.search)
   return new Proxy(urlParams, {
