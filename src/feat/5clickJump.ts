@@ -13,8 +13,8 @@ document.addEventListener('click', ({ target, shiftKey, ctrlKey }) => {
   const 含有lines = allLine.filter((line) => line.words.includes(r))
   const 第一个line = 含有lines[0]
   const 末一个line = 含有lines.at(-1)!
-  const 下一个line = 含有lines.find((e) => e.lineIdx * 50 > offsetTopClick)
-  const 上一个line = 含有lines.findLast((e) => e.lineIdx * 50 < offsetTopClick)
+  const 下一个line = 含有lines.find((line) => line.top > offsetTopClick)
+  const 上一个line = 含有lines.findLast((line) => line.top < offsetTopClick)
 
   const jmpLine = (() => {
     if (shiftKey && ctrlKey) return 第一个line
@@ -24,7 +24,7 @@ document.addEventListener('click', ({ target, shiftKey, ctrlKey }) => {
   })()
 
   滚动dom.scrollBy({
-    top: jmpLine.lineIdx * 50 - offsetTopClick,
+    top: jmpLine.top - offsetTopClick,
     behavior: 'smooth', //todo
   })
 })

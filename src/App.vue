@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { allLine, datas, 每个section前面有几个line, 前面有几个margin } from './data' //.ts
+import { allLine, datas, 各个Section的Top } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
@@ -62,20 +62,21 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
     v-else
     :style="{
       height: allLine.length * 50 + 'px',
-      paddingTop: 每个section前面有几个line[startSection] + 前面有几个margin[startSection - 1] + 'px',
+      paddingTop: 各个Section的Top[startSection] + 'px',
       width: 'fit-content',
       boxSizing: 'border-box',
     }"
   >
-    <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
+    <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection" :top="各个Section的Top[sIdx + startSection]">
       <period v-for="period of section">
         <line
-          v-for="{ words, lineIdx, spk } of period"
+          v-for="{ words, lineIdx, spk, top } of period"
           v-bind="spk && { class: { spk } }"
           :style="{
             fontSize: words.length > 行容纳 ? 100 / (words.length + 1) + 'vw' : undefined,
             // todo 需要减去旁白宽度 暂时+1
           }"
+          :top="top"
         >
           <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx)">
             {{ word }}
@@ -85,11 +86,17 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
     </section>
   </div>
 
-  <component is="style" v-if="!getParams().home"> line{ color:white;transition: all 1s; } line:hover{ color:#eee } </component>
+  <component is="style" v-if="!getParams().home">
+    line{ color:white;transition: all 1s; } line:hover{ color:#eee }
+    <!--  -->
+    [ritemsdatakey] { color: #eee; }
+    <!--  -->
+    .文案hover { background-color: #eee; }
+  </component>
   <component is="style">
     {{
       (() => {
-        const 连词 = '也但而又则且却或非乃因此和与所以即还再就把是不那做都在几竟然到'
+        const 连词 = '也但而又则且却或非乃因此和与所以即还再就把是不那做都在几竟然到说'
         const 人称代词 = '他她它你我们您咱俺'
         const 指示代词 = '这那其'
         const 语气词 = '怎吧啊'
