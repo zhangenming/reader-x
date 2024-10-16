@@ -17,7 +17,9 @@ const allFirst = computed(() => Object.values(rItemsData).map((e) => e[0]))
 const allLast = computed(() => Object.values(rItemsData).map((e) => e.at(-1)))
 
 // 性能敏感
-function getDomAttr(wordID: string) {
+function getDomAttr(lineIdx: number, wordIdx: number) {
+  const wordID = `${lineIdx}-${wordIdx}`
+
   let classs = ''
 
   if (rItemsData[hoverR.value]?.includes(wordID)) {
@@ -30,13 +32,22 @@ function getDomAttr(wordID: string) {
     classs += 'last '
   }
 
+  let y = wordIdx - 一行容纳
+  let translate
+  if (y > 0) {
+    translate = `translateX(${y * -50}px) translateY(${y * 50}px)`
+  }
+
   return {
     class: classs || undefined,
     rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.includes(wordID))?.[0],
+    style: translate ? { transform: translate } : undefined,
   }
 }
 
 $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
+
+const 一行容纳 = 10
 </script>
 
 <template>
@@ -66,7 +77,7 @@ $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
     <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
       <period v-for="period of section">
         <line v-for="{ words, lineIdx, spk } of period" v-bind="spk && { class: { spk } }">
-          <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(`${lineIdx}-${wordIdx}`)">
+          <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx)">
             {{ word }}
           </word>
         </line>
@@ -74,13 +85,7 @@ $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
     </section>
   </div>
 
-  <component is="style" v-if="!getParams().home">
-    <!--  -->
-    html{ filter: opacity(2.3%); }
-    <!--  -->
-    html:hover{ filter: opacity(3%); }
-    <!--  -->
-  </component>
+  <component is="style" v-if="!getParams().home"> word{ color:white } </component>
   <component is="style">
     {{ [...'就把是不那都在还几他她做你我这吗的得地没倒了个着而跟竟然到'].map((e) => `[word='${e}']`).join(',') }}
     { font-weight: 900; }
@@ -91,6 +96,9 @@ $('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
 [ritemsdatakey] {
   color: red;
   cursor: pointer;
+}
+word {
+  display: inline-block;
 }
 word:not([ritemsdatakey]) + word[ritemsdatakey]:not(:nth-child(3)),
 word[ritemsdatakey] + word:not([ritemsdatakey]) {
