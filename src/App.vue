@@ -89,12 +89,13 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
   <component is="style">
     {{
       (() => {
-        const 连词 = '但而又则且却或非乃因此和与所以'
+        const 连词 = '也但而又则且却或非乃因此和与所以即还再就把是不那做都在几竟然到'
         const 人称代词 = '他她它你我们您咱俺'
         const 指示代词 = '这那其'
-        const 助词 = '了'
-        const 语气词 = '吧啊'
-        return [...连词, ...人称代词, ...指示代词, ...助词, ...语气词, ...'就把是不那做都在还几竟然到']
+        const 语气词 = '怎吧啊'
+        const 助词 = '了子'
+        const 的 = '的得地'
+        return [...连词, ...人称代词, ...的, ...指示代词, ...助词, ...语气词]
       })()
         .map((e) => `[word='${e}']`)
         .join(',')
@@ -114,12 +115,14 @@ word[ritemsdatakey] + word:not([ritemsdatakey]) {
   margin-left: 0.25rem;
 }
 .spk {
-  /* background-color: #aea; */
-  /* margin-left: 1em; */
-  text-indent: 1em;
   font-weight: 100;
   font-family: cursive;
   font-style: italic;
+}
+.spk :nth-child(1),
+.spk :nth-child(2) {
+  width: 1rem;
+  display: inline-block;
 }
 
 .文案hover {

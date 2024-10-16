@@ -59,6 +59,6 @@ period {
 line {
   /* display: inline-block; */
   width: fit-content;
-  line-height: 1em;
+  line-height: 1rem;
 }
 </style>

@@ -20,7 +20,14 @@ let 前面有几个marginAcc = 0
 export const datas = reactive<datas>(geneData()) // 没必要缓存
 export const allLine = datas.flat(3) //所有的line引用
 
-export { txt }
+// export { txt }
+
+console.log(
+  [...txt].reduce((acc, cur, i, arr) => {
+    acc[cur] = (acc[cur] || 0) + 1
+    return acc
+  }, {} as Record<string, number>)
+)
 
 function geneData() {
   let lineIdx = 0
