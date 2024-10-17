@@ -15,7 +15,7 @@ watchEffect(() => {
   $('#miniMap')!.style.boxShadow = [...new Set(data.map((e) => Number(e.split('-')[0])))] // 去重
     .map((lineIdx) => allLines[lineIdx].top)
     .map((高度) => (高度 / 总高度) * 外壳高度)
-    .map((e) => Math.max(1, Math.floor(e))) //向下取整 但不小于1
-    .map((e) => `red 0px ${e}px 0px 0px`)
+    .map((e) => Math.max(1, Math.round(e))) //取整防止模糊 但不小于1
+    .map((e) => `red 0px ${e - 1}px 0px 0px`)
     .join(',')
 })

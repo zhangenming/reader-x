@@ -13,8 +13,10 @@ import { computed } from 'vue'
 
 console.log('App.vue')
 
-const allFirst = computed(() => Object.values(rItemsData).map((e) => e[0]))
-const allLast = computed(() => Object.values(rItemsData).map((e) => e.at(-1)))
+// 计算 rItemsData 的所有值，避免重复调用 Object.values
+const rItemsFlat = computed(() => Object.values(rItemsData))
+const allFirst = computed(() => rItemsFlat.value.map((e) => e[0]))
+const allLast = computed(() => rItemsFlat.value.map((e) => e.at(-1)))
 
 // 性能敏感
 function getDomAttr(lineIdx: number, wordIdx: number) {
@@ -113,6 +115,17 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
 </template>
 
 <style>
+html {
+  user-select: none;
+  background: #829b92;
+}
+#app {
+  background: white;
+}
+line:hover {
+  user-select: text;
+}
+
 [ritemsdatakey] {
   color: red;
   cursor: pointer;

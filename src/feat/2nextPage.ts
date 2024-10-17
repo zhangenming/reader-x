@@ -1,5 +1,5 @@
-import { 滚动dom } from '../data'
-import { $$, get屏幕高度 } from '../assets/utils'
+import { 外壳高度, 滚动dom } from '../data'
+import { $$ } from '../assets/utils'
 
 console.log('.')
 
@@ -18,9 +18,11 @@ document.addEventListener('keydown', (e) => {
 
   // todo 以period
   function nextPage() {
-    get屏幕内LineDoms().at(-2)!.scrollIntoView({
-      block: 'start',
-    })
+    $$('line')
+      .find((e) => e.offsetTop + 50 > 滚动dom.scrollTop + 外壳高度)!
+      .scrollIntoView({
+        block: 'start',
+      })
   }
   function prevPage() {
     get屏幕内LineDoms().at(0)!.scrollIntoView({
@@ -31,6 +33,6 @@ document.addEventListener('keydown', (e) => {
 
 function get屏幕内LineDoms() {
   return $$('line').filter((line) => {
-    return line.offsetTop > 滚动dom.scrollTop && line.offsetTop < 滚动dom.scrollTop + get屏幕高度()
+    return line.offsetTop > 滚动dom.scrollTop && line.offsetTop < 滚动dom.scrollTop + 外壳高度
   })
 }
