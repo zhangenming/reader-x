@@ -3,28 +3,49 @@ import { getDomR } from './3selectionAddR'
 
 console.log('.')
 
-document.addEventListener('click', ({ target, shiftKey, ctrlKey }) => {
-  if (!(target instanceof HTMLElement)) return
+let prevR: string
+let prevTop: number
 
-  const r = getDomR(target)
+// 鼠标点击跳转
+document.addEventListener('click', (e) => {
+  if (!(e.target instanceof HTMLElement)) return
+
+  const r = getDomR(e.target)
   if (!r) return
 
-  const { offsetTop: offsetTopClick } = target
+  执行跳转(r, e.target.offsetTop, e)
+})
+
+// 键盘连续跳转
+document.addEventListener('keydown', (e) => {
+  if (!prevR) return
+
+  if (e.key === 'Alt') {
+    e.preventDefault()
+    执行跳转(prevR, prevTop, e)
+  }
+})
+
+//
+function 执行跳转(r: string, 当前top: number, { shiftKey, ctrlKey }: { shiftKey: boolean; ctrlKey: boolean }) {
   const 含有lines = allLine.filter((line) => line.words.includes(r))
   const 第一个line = 含有lines[0]
   const 末一个line = 含有lines.at(-1)!
-  const 下一个line = 含有lines.find((line) => line.top > offsetTopClick)
-  const 上一个line = 含有lines.findLast((line) => line.top < offsetTopClick)
+  const 下一个line = 含有lines.find((line) => line.top > 当前top)
+  const 上一个line = 含有lines.findLast((line) => line.top < 当前top)
 
-  const jmpLine = (() => {
+  const 目标top = (() => {
     if (shiftKey && ctrlKey) return 第一个line
     if (ctrlKey) return 末一个line
     if (shiftKey) return 上一个line || 末一个line
     return 下一个line || 第一个line
-  })()
+  })().top
 
   滚动dom.scrollBy({
-    top: jmpLine.top - offsetTopClick,
-    behavior: 'smooth', //todo
+    top: 目标top - 当前top,
+    behavior: 'smooth',
   })
-})
+
+  prevR = r
+  prevTop = 目标top
+}
