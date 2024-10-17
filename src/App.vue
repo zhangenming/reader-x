@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { allLine, datas, 各个Section的Top } from './data' //.ts
+import { datas, 各个Section的Top, 总高度, 外壳高度 } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
@@ -38,7 +38,7 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
   }
 }
 
-$('#app').style.height = Math.floor(innerHeight / 50) * 50 + 'px'
+$('#app').style.height = 外壳高度 + 'px'
 
 const 行容纳 = Math.floor(get屏幕宽度() / 50)
 </script>
@@ -61,22 +61,20 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
   <div
     v-else
     :style="{
-      height: allLine.length * 50 + 'px',
+      height: 总高度 + 'px',
       paddingTop: 各个Section的Top[startSection] + 'px',
       width: 'fit-content',
-      boxSizing: 'border-box',
     }"
   >
-    <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection" :top="各个Section的Top[sIdx + startSection]">
+    <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
       <period v-for="period of section">
         <line
-          v-for="{ words, lineIdx, spk, top } of period"
+          v-for="{ words, lineIdx, spk } of period"
           v-bind="spk && { class: { spk } }"
           :style="{
             fontSize: words.length > 行容纳 ? 100 / (words.length + 1) + 'vw' : undefined,
             // todo 需要减去旁白宽度 暂时+1
           }"
-          :top="top"
         >
           <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx)">
             {{ word }}
@@ -96,7 +94,7 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
   <component is="style">
     {{
       (() => {
-        const 连词 = '由于过以为没跟已经有无甚至但而又则且却或非乃因此和与所即还再就把是不那做都在几竟然到说'
+        const 连词 = '如果真假由于过以为没跟已经有无甚至但而又则且却或非乃因此和与所即还再就把是不那做都在几竟然到说'
         const 人称代词 = '他她它你我们您咱俺自己'
         const 指示代词 = '这那其'
         const 转折 = '别可才反'

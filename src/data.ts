@@ -1,7 +1,8 @@
 import txt from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
 import { reactive } from 'vue'
-import { $ } from './assets/utils'
+
+import { $, get屏幕高度 } from './assets/utils'
 
 console.log('data')
 
@@ -15,11 +16,15 @@ export type line = {
   sectionIdx: number
   top: number
 }
+
 export const 各个Section的Top: number[] = []
 let P间隔Acc上一次: number
 let P间隔Acc = 0
+
 export const datas = reactive<datas>(geneData()) // 没必要缓存
 export const allLine = datas.flat(3) //所有的line引用
+export const 总高度 = allLine.at(-1)!.top + 50
+export const 外壳高度 = Math.floor(get屏幕高度() / 50) * 50
 
 function geneData() {
   let lineIdx = 0
@@ -132,4 +137,3 @@ function geneData() {
 }
 
 export const 滚动dom = $('#app')
-// console.log(rItemsData, JSON.stringify(rItemsData.value).length)
