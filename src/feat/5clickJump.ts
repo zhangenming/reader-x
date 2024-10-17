@@ -1,7 +1,10 @@
+import { get滚动info } from '../assets/utils'
 import { allLine, 滚动dom } from '../data'
 import { getDomR } from './3selectionAddR'
 
 console.log('.')
+
+let prevScrollTop: number
 
 let prevR: string
 let prevTop: number
@@ -13,16 +16,26 @@ document.addEventListener('click', (e) => {
   const r = getDomR(e.target)
   if (!r) return
 
+  prevScrollTop = get滚动info().当前滚动位置
+
   执行跳转(r, e.target.offsetTop, e)
 })
 
-// 键盘连续跳转
 document.addEventListener('keydown', (e) => {
-  if (!prevR) return
+  if (prevScrollTop === undefined) return
 
+  // 键盘连续跳转
   if (e.key === 'Alt') {
     e.preventDefault()
     执行跳转(prevR, prevTop, e)
+  }
+
+  // 还原
+  if (e.key === 'Backspace') {
+    滚动dom.scrollTo({
+      top: prevScrollTop,
+      behavior: 'smooth',
+    })
   }
 })
 
