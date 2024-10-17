@@ -19,6 +19,7 @@ type line = {
 export const 各个Section的Top: number[] = []
 let P间隔Acc上一次: number
 let P间隔Acc = 0
+const P间隔高度 = 50
 
 function geneData(): datas {
   let lineIdx = 0
@@ -58,7 +59,7 @@ function geneData(): datas {
         [' ', ''] // section之间的空行
       )
 
-      各个Section的Top.push(lineIdx * 50 + P间隔Acc * 25)
+      各个Section的Top.push(lineIdx * 50 + P间隔Acc * P间隔高度)
       P间隔Acc上一次 = P间隔Acc
       P间隔Acc += periods.length - 1
 
@@ -103,7 +104,7 @@ function geneData(): datas {
               words: '', // 待定
               lineIdx: lineIdx++,
               spk,
-              top: (P间隔Acc上一次 + periodIdx) * 25 + 50 * (lineIdx - 1),
+              top: (P间隔Acc上一次 + periodIdx) * P间隔高度 + 50 * (lineIdx - 1),
             }
 
             if (spk) {

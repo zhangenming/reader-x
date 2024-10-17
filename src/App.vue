@@ -131,9 +131,13 @@ line:hover {
   cursor: pointer;
 }
 
-word:not([ritemsdatakey]):not([word=' ']) + word[ritemsdatakey],
-word[ritemsdatakey] + word:not([ritemsdatakey]) {
+word:not([ritemsdatakey]):not([word=' ']) + word[ritemsdatakey] {
   margin-left: 0.25rem;
+  /* border-left: 1px solid red; */
+}
+word[ritemsdatakey]:has(+ word:not([ritemsdatakey])) {
+  margin-right: 0.25rem;
+  /* border-right: 1px solid red; */
 }
 .spk {
   font-weight: 100;
@@ -147,8 +151,8 @@ word[ritemsdatakey] + word:not([ritemsdatakey]) {
 }
 
 .文案hover {
-  color: white;
-  border-color: red;
+  border-top: 1px solid red;
+  border-bottom: 1px solid red;
 }
 
 .first {
@@ -172,11 +176,16 @@ period {
 }
 /* 为了保证页面不shift 不能bottom */
 period + period {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  /* P间隔高度 */
 }
 line {
   /* display: inline-block; */
   width: fit-content;
   line-height: 1rem;
+}
+
+line word:first-child {
+  font-size: 1rem;
 }
 </style>
