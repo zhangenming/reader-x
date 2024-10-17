@@ -21,60 +21,48 @@ export const 各个Section的Top: number[] = []
 let P间隔Acc上一次: number
 let P间隔Acc = 0
 
-export const datas = reactive<datas>(geneData()) // 没必要缓存
-export const allLine = datas.flat(3) //所有的line引用
-export const 总高度 = allLine.at(-1)!.top + 50
-export const 外壳高度 = Math.floor(get屏幕高度() / 50) * 50
-
-function geneData() {
+function geneData(): datas {
   let lineIdx = 0
 
   return txt
     .split(/\r*\n */)
     .filter((e) => e.trim())
-    .map(function doLayout(section, sectionIdx) {
-      // 从上往下分
-      // todo 从下往上 先把所有标点分割 再取消不必要的分割
-      return section2period(section).map(period2line)
+    .map(function section2periods(section, sectionIdx) {
+      let spk = false
+      const periodFlag = '。！？…'
 
-      function section2period(section: string) {
-        let spk = false
-        const periodFlag = '。！？…'
+      const rs = [...section].reduce(
+        (acc, cur, i, arr) => {
+          acc[acc.length - 1] += cur
 
-        const rs = [...section].reduce(
-          (acc, cur, i, arr) => {
-            acc[acc.length - 1] += cur
+          const prev = arr[i - 1]
+          const next = arr[i + 1]
 
-            const prev = arr[i - 1]
-            const next = arr[i + 1]
-
-            const 下一个下引号前面的字符 = arr[arr.indexOf('”', i) - 1]
-            // 引号里面整体作为一句话
-            if (cur === '“' && periodFlag.includes(下一个下引号前面的字符)) {
-              spk = true
+          const 下一个下引号前面的字符 = arr[arr.indexOf('”', i) - 1]
+          // 引号里面整体作为一句话
+          if (cur === '“' && periodFlag.includes(下一个下引号前面的字符)) {
+            spk = true
+          }
+          if ((!spk && periodFlag.includes(cur) && !periodFlag.includes(next)) || (periodFlag.includes(prev) && cur === '”')) {
+            if (i !== arr.length - 1) {
+              // console.log('p')
+              acc.push('')
             }
-            if ((!spk && periodFlag.includes(cur) && !periodFlag.includes(next)) || (periodFlag.includes(prev) && cur === '”')) {
-              if (i !== arr.length - 1) {
-                // console.log('p')
-                acc.push('')
-              }
-            }
-            if (periodFlag.includes(prev) && cur === '”') {
-              spk = false
-            }
+          }
+          if (periodFlag.includes(prev) && cur === '”') {
+            spk = false
+          }
 
-            return acc
-          },
-          [' ', ''] // section之间的空行
-        )
+          return acc
+        },
+        [' ', ''] // section之间的空行
+      )
 
-        各个Section的Top.push(lineIdx * 50 + P间隔Acc * 25)
-        P间隔Acc上一次 = P间隔Acc
-        P间隔Acc += rs.length - 1
-        return rs
-      }
+      各个Section的Top.push(lineIdx * 50 + P间隔Acc * 25)
+      P间隔Acc上一次 = P间隔Acc
+      P间隔Acc += rs.length - 1
 
-      function period2line(period: string, periodIdx: number) {
+      return rs.map(function period2lines(period, periodIdx) {
         let spk = false
         const allFlag = '。！？，—；：…”'
         return [...period]
@@ -132,8 +120,13 @@ function geneData() {
 
             return rs
           })
-      }
+      })
     })
 }
+
+export const datas = reactive(geneData()) // 没必要缓存
+export const allLine = datas.flat(3) //所有的line引用
+export const 总高度 = allLine.at(-1)!.top + 50
+export const 外壳高度 = Math.floor(get屏幕高度() / 50) * 50
 
 export const 滚动dom = $('#app')
