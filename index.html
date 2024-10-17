@@ -62,7 +62,11 @@
       Object.defineProperties(Object.prototype, {
         xx: {
           get() {
-            console.log(this)
+            if (this instanceof String) {
+              console.log(String(this))
+            } else {
+              console.log(this)
+            }
             return this
           },
         },
