@@ -1,5 +1,5 @@
 import { get滚动info } from '../assets/utils'
-import { allLine, 滚动dom } from '../data'
+import { allLines, 滚动dom } from '../data'
 import { getDomR } from './3selectionAddR'
 
 console.log('.')
@@ -41,7 +41,7 @@ document.addEventListener('keydown', (e) => {
 
 //
 function 执行跳转(r: string, 当前top: number, { shiftKey, ctrlKey }: { shiftKey: boolean; ctrlKey: boolean }) {
-  const 含有lines = allLine.filter((line) => line.words.includes(r))
+  const 含有lines = allLines.filter((line) => line.words.includes(r))
   const 第一个line = 含有lines[0]
   const 末一个line = 含有lines.at(-1)!
   const 下一个line = 含有lines.find((line) => line.top > 当前top)

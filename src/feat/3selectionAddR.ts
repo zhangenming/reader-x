@@ -1,6 +1,6 @@
 import { useStorage } from '@vueuse/core'
 
-import { allLine } from '../data'
+import { allLines } from '../data'
 import { findAllIndex } from '../assets/utils'
 
 console.log('.')
@@ -28,21 +28,19 @@ document.addEventListener('click', ({ target }) => {
     rItemsData[query] = []
   }
 
-  allLine.forEach(({ words, lineIdx }) => {
+  allLines.forEach(({ words, lineIdx }) => {
     findAllIndex(words, query)?.forEach((wordIdx) => {
       rItemsData[query].push(`${lineIdx}-${wordIdx}`)
     })
   })
 
+  // 或者 屏幕内显示完毕 添加删除样式
   if (rItemsData[query].length / query.length === 1) {
     console.log('justOne')
     // // wait vue render dom 有fl 不需要再添加样式了
     // setTimeout(() => {
     //   $$(`[${rItemsDataKey}*="${query}"]`).forEach((dom) => {})
     // })
-    setTimeout(() => {
-      delete rItemsData[query]
-    }, 2000)
   }
 })
 

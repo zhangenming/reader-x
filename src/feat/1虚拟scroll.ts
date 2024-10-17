@@ -11,12 +11,14 @@ console.log('.')
 export const startSection = ref(0)
 export const endSection = ref(0)
 
-let appPrevScroll = useStorage('appPrevScroll', 0)
+let appScroll = useStorage('appScroll', 0)
 
 const 屏幕高度 = get屏幕高度() * 2
 
 setTimeout(() => {
-  滚动dom.scrollTo(0, appPrevScroll.value)
+  滚动dom.scrollTo({
+    top: appScroll.value || 1,
+  })
 })
 
 滚动dom.onscrollend = getParams().static ? () => {} : geneRenderDom
@@ -24,7 +26,7 @@ setTimeout(() => {
 function geneRenderDom() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()
 
-  appPrevScroll.value = 当前滚动位置
+  appScroll.value = 当前滚动位置
 
   if (滚动方向 === '下') {
     for (let i = startSection.value + 1; i < datas.length; i++) {

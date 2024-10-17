@@ -9,11 +9,10 @@ console.log('data')
 type datas = section[]
 type section = period[]
 type period = line[]
-export type line = {
+type line = {
   words: string
   spk: boolean
   lineIdx: number
-  sectionIdx: number
   top: number
 }
 
@@ -26,12 +25,13 @@ function geneData(): datas {
 
   return txt
     .split(/\r*\n */)
-    .filter((e) => e.trim())
-    .map(function section2periods(section, sectionIdx) {
+    .filter((section) => section.trim())
+    .map(function section2periods(section) {
       let spk = false
       const periodFlag = '。！？…'
 
-      const rs = [...section].reduce(
+      // 分句
+      const periods = [...section].reduce(
         (acc, cur, i, arr) => {
           acc[acc.length - 1] += cur
 
@@ -60,9 +60,9 @@ function geneData(): datas {
 
       各个Section的Top.push(lineIdx * 50 + P间隔Acc * 25)
       P间隔Acc上一次 = P间隔Acc
-      P间隔Acc += rs.length - 1
+      P间隔Acc += periods.length - 1
 
-      return rs.map(function period2lines(period, periodIdx) {
+      return periods.map(function period2lines(period, periodIdx) {
         let spk = false
         const allFlag = '。！？，—；：…”'
         return [...period]
@@ -103,7 +103,6 @@ function geneData(): datas {
               words: '', // 待定
               lineIdx: lineIdx++,
               spk,
-              sectionIdx,
               top: (P间隔Acc上一次 + periodIdx) * 25 + 50 * (lineIdx - 1),
             }
 
@@ -125,8 +124,8 @@ function geneData(): datas {
 }
 
 export const datas = reactive(geneData()) // 没必要缓存
-export const allLine = datas.flat(3) //所有的line引用
-export const 总高度 = allLine.at(-1)!.top + 50
+export const allLines = datas.flat(3) //所有的line引用
+export const 总高度 = allLines.at(-1)!.top + 50
 export const 外壳高度 = Math.floor(get屏幕高度() / 50) * 50
 
 export const 滚动dom = $('#app')
