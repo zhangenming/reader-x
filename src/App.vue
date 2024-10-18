@@ -8,7 +8,7 @@ import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
 
-import { $, getParams, get屏幕宽度 } from './assets/utils' //.ts
+import { $, getParams } from './assets/utils' //.ts
 import { computed } from 'vue'
 
 console.log('App.vue')
@@ -84,26 +84,27 @@ $('#app').style.height = 外壳高度 + 'px'
     </section>
   </div>
 
-  <component is="style" v-if="!getParams().home">
-    line{ color:white;transition: all 1s; } line:hover{ color:#eee }
+  <component is="style" v-if="!getParams().home" boss>
+    line{ color:white;} line:hover{ color:#eee }
     <!--  -->
     [ritemsdatakey] { color: #eee; }
     <!--  -->
     .文案hover { background-color: #eee; }
   </component>
-  <component is="style">
+  <component is="style" 动态>
     {{
       (() => {
-        const 连词 = '如果真假由于过以为没跟已经有无甚至又且非乃因此和与所即还再就把是不那做都在几竟到说'
+        const 连词 = '如果真假由于过以为没跟已经有无甚至又乃因此和与所即还再就把是不那做都在几竟到说'
         const 人称代词 = '他她它你我们您咱俺自己'
         const 指示代词 = '这那其'
-        const 转折 = '更别可才反越否则但而虽然却或'
-        const 语气词 = '只怎吧啊着什么呢'
+        const 转折 = '更别可才反越否则但而虽然却且或非'
+        const 语气词 = '只怎吧着什么呢'
+        const 叹词 = '啊嗯哦哎'
         const 助词 = '了子'
         const 之乎者也 = '之乎者也'
         const 量词 = '每各个'
         const 的 = '的得地'
-        return [...连词, ...人称代词, ...的, ...转折, ...指示代词, ...助词, ...语气词, ...之乎者也, ...量词]
+        return [...连词, ...人称代词, ...的, ...转折, ...指示代词, ...叹词, ...助词, ...语气词, ...之乎者也, ...量词]
       })()
         .map((e) => `[word='${e}']`)
         .join(',')
@@ -113,6 +114,100 @@ $('#app').style.height = 外壳高度 + 'px'
 </template>
 
 <style>
+html {
+  font-size: 50px;
+}
+body {
+  margin: 0;
+  background: #829b92;
+}
+
+#app {
+  background: white;
+  user-select: none;
+  font-family: fangsong;
+  white-space: pre;
+  height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  /* margin-left: 10px; */
+}
+
+/*  */
+#app::-webkit-scrollbar {
+  width: 30px;
+  height: 10px;
+}
+
+#app::-webkit-scrollbar-thumb {
+  height: 1px;
+  background-color: black;
+}
+
+#app::-webkit-scrollbar-thumb:hover {
+  height: 50px;
+}
+
+@font-face {
+  font-family: 'spkFont';
+  /* src: url(https://cdn.jsdelivr.net/fontsource/fonts/ma-shan-zheng@latest/chinese-simplified-400-normal.ttf) format('truetype'); */
+  src: url(./assets/描边.ttf) format('truetype');
+}
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+
+section,
+period,
+line {
+  display: block;
+  box-sizing: border-box;
+}
+
+period {
+  width: fit-content;
+}
+/* 为了保证页面不shift 不能bottom */
+period + period {
+  margin-top: 1rem;
+  /* P间隔高度 */
+}
+line {
+  width: fit-content;
+  height: 1rem;
+}
+line:hover {
+  user-select: text;
+}
+
+.spk {
+  font-weight: 100;
+  font-family: spkFont;
+  font-style: italic;
+}
+.spk > :nth-child(1),
+.spk > :nth-child(2) {
+  width: 1rem;
+  display: inline-block;
+}
+
+/* word */
+
+word:first-child {
+  font-size: 1rem;
+}
+
 [ritemsdatakey] {
   color: red;
   cursor: pointer;
@@ -120,23 +215,17 @@ $('#app').style.height = 外壳高度 + 'px'
 
 word:not([ritemsdatakey]):not([word=' ']) + word[ritemsdatakey] {
   margin-left: 0.25rem;
-  /* border-left: 1px solid red; */
 }
 word[ritemsdatakey]:has(+ word:not([ritemsdatakey])) {
   margin-right: 0.25rem;
-  /* border-right: 1px solid red; */
-}
-.spk {
-  font-weight: 100;
-  font-family: Ma Shan Zheng;
-  font-style: italic;
-}
-.spk :nth-child(1),
-.spk :nth-child(2) {
-  width: 1rem;
-  display: inline-block;
 }
 
+:not(.文案hover) + .文案hover {
+  border-left: 1px solid red;
+}
+.文案hover:has(+ :not(.文案hover)) {
+  border-right: 1px solid red;
+}
 .文案hover {
   border-top: 1px solid red;
   border-bottom: 1px solid red;
@@ -149,33 +238,5 @@ word[ritemsdatakey]:has(+ word:not([ritemsdatakey])) {
 .last {
   box-shadow: inset red -3px 0px 0 0, inset red 0px -3px 0 0;
   border-radius: 0 0 10px 0;
-}
-/*  */
-
-section,
-period,
-line {
-  display: block;
-}
-
-period {
-  width: fit-content;
-}
-/* 为了保证页面不shift 不能bottom */
-period + period {
-  margin-top: 1rem;
-  /* P间隔高度 */
-}
-line {
-  /* display: inline-block; */
-  width: fit-content;
-  height: 1rem;
-}
-line:hover {
-  user-select: text;
-}
-
-line word:first-child {
-  font-size: 1rem;
 }
 </style>
