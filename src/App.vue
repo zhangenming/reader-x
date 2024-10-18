@@ -96,10 +96,10 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
   <component is="style">
     {{
       (() => {
-        const 连词 = '如果真假由于过以为没跟已经有无甚至但而又则且却或非乃因此和与所即还再就把是不那做都在几竟虽然到说'
+        const 连词 = '如果真假由于过以为没跟已经有无甚至又且非乃因此和与所即还再就把是不那做都在几竟到说'
         const 人称代词 = '他她它你我们您咱俺自己'
         const 指示代词 = '这那其'
-        const 转折 = '更别可才反越'
+        const 转折 = '更别可才反越否则但而虽然却或'
         const 语气词 = '只怎吧啊着什么呢'
         const 助词 = '了子'
         const 之乎者也 = '之乎者也'
@@ -115,17 +115,6 @@ const 行容纳 = Math.floor(get屏幕宽度() / 50)
 </template>
 
 <style>
-html {
-  user-select: none;
-  background: #829b92;
-}
-#app {
-  background: white;
-}
-line:hover {
-  user-select: text;
-}
-
 [ritemsdatakey] {
   color: red;
   cursor: pointer;
@@ -141,7 +130,7 @@ word[ritemsdatakey]:has(+ word:not([ritemsdatakey])) {
 }
 .spk {
   font-weight: 100;
-  font-family: cursive;
+  font-family: Ma Shan Zheng;
   font-style: italic;
 }
 .spk :nth-child(1),
@@ -182,7 +171,10 @@ period + period {
 line {
   /* display: inline-block; */
   width: fit-content;
-  line-height: 1rem;
+  height: 1rem;
+}
+line:hover {
+  user-select: text;
 }
 
 line word:first-child {

@@ -16,18 +16,11 @@ document.addEventListener('keydown', (e) => {
     prevPage()
   }
 
-  // todo 以period
   function nextPage() {
-    $$('line')
-      .find((e) => e.offsetTop + 50 > 滚动dom.scrollTop + 外壳高度)!
-      .scrollIntoView({
-        block: 'start',
-      })
+    滚动dom.scrollTop = Math.floor((滚动dom.scrollTop + 外壳高度) / 50) * 50
   }
   function prevPage() {
-    get屏幕内LineDoms().at(0)!.scrollIntoView({
-      block: 'end',
-    })
+    滚动dom.scrollTop = Math.floor((滚动dom.scrollTop - 外壳高度) / 50) * 50
   }
 })
 

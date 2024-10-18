@@ -10,21 +10,28 @@
 
     <!--  -->
     <style>
+      @font-face {
+        font-family: 'Ma Shan Zheng';
+        /* src: url(https://cdn.jsdelivr.net/fontsource/fonts/ma-shan-zheng@latest/chinese-simplified-400-normal.ttf) format('truetype'); */
+        src: url(./src/assets/font3.ttf) format('truetype');
+      }
       * {
         box-sizing: border-box;
       }
       html {
         font-size: 50px;
       }
-
       body {
         margin: 0;
         height: 100vh;
         display: flex;
         /* align-items: center; */
+        background: #829b92;
       }
 
       #app {
+        background: white;
+        user-select: none;
         font-family: fangsong;
         white-space: pre;
         height: 100vh;
