@@ -17,10 +17,12 @@ document.addEventListener('keydown', (e) => {
   }
 
   function nextPage() {
-    滚动dom.scrollTop = Math.floor((滚动dom.scrollTop + 外壳高度) / 50) * 50
+    const snap = 滚动dom.scrollTop % 50
+    滚动dom.scrollTop += 外壳高度 - snap
   }
   function prevPage() {
-    滚动dom.scrollTop = Math.floor((滚动dom.scrollTop - 外壳高度) / 50) * 50
+    const snap = 滚动dom.scrollTop % 50
+    滚动dom.scrollTop -= 外壳高度 - snap
   }
 })
 

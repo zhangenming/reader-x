@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { datas, 各个Section的Top, 总高度, 外壳高度 } from './data' //.ts
+import { datas, 各个Section的Top, 总高度, 外壳高度, 行容纳 } from './data' //.ts
 
 import { startSection, endSection } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
@@ -41,8 +41,6 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
 }
 
 $('#app').style.height = 外壳高度 + 'px'
-
-const 行容纳 = Math.floor(get屏幕宽度() / 50)
 </script>
 
 <template>

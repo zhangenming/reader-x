@@ -2,7 +2,7 @@ import txt from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
 
 import { reactive } from 'vue'
 
-import { $, get屏幕高度 } from './assets/utils'
+import { $, get屏幕宽度, get屏幕高度 } from './assets/utils'
 
 console.log('data')
 
@@ -127,6 +127,8 @@ function geneData(): datas {
 export const datas = reactive(geneData()) // 没必要缓存
 export const allLines = datas.flat(3) //所有的line引用
 export const 总高度 = allLines.at(-1)!.top + 50
-export const 外壳高度 = Math.floor(get屏幕高度() / 50) * 50
+export const 外壳高度 = get屏幕高度() - (get屏幕高度() % 50) // snap布局对齐
+
+export const 行容纳 = Math.floor(get屏幕宽度() / 50)
 
 export const 滚动dom = $('#app')
