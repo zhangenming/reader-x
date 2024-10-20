@@ -19,7 +19,7 @@ const allFirst = computed(() => rItemsFlat.value.map((e) => e[0]))
 const allLast = computed(() => rItemsFlat.value.map((e) => e.at(-1)))
 
 // 性能敏感
-function getDomAttr(lineIdx: number, wordIdx: number) {
+function getDomAttr(lineIdx: number, wordIdx: number, spk: boolean) {
   const wordID = `${lineIdx}-${wordIdx}`
 
   let classs = ''
@@ -37,6 +37,7 @@ function getDomAttr(lineIdx: number, wordIdx: number) {
   return {
     class: classs || undefined,
     rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.includes(wordID))?.[0],
+    lineFirst: wordIdx === (spk ? 2 : 0) ? '' : undefined,
   }
 }
 
@@ -72,11 +73,10 @@ $('#app').style.height = 外壳高度 + 'px'
           v-for="{ words, lineIdx, spk } of period"
           v-bind="spk && { class: { spk } }"
           :style="{
-            fontSize: words.length > 行容纳 ? 100 / (words.length + 1) + 'vw' : undefined,
-            // todo 需要减去旁白宽度 暂时+1
+            fontSize: `clamp(16px, ${100 / (words.length + (spk ? 3 : 1))}vw, 50px)`,
           }"
         >
-          <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx)">
+          <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx, spk)">
             {{ word }}
           </word>
         </line>
@@ -94,26 +94,41 @@ $('#app').style.height = 外壳高度 + 'px'
   <component is="style" 动态>
     {{
       (() => {
-        const 连词 = '如果真假由于过以为没跟已经有无甚至又乃因此和与所即还再就把是不那做都在几竟到说'
-        const 人称代词 = '他她它你我们您咱俺自己'
-        const 指示代词 = '这那其'
-        const 转折 = '更别可才反越否则但而虽然却且或非'
+        const 连词 = '以就是还再' //'连则如果真假由于过以为没跟已经有甚至乃因此和与所即把做都在几竟说'
+        const 动词 = '到'
+        const 人称代词 = '他她它你们您咱俺自己'
+        const 指示代词 = '这那其此'
+        const 转折 = '又更别可才反越但而虽然却且或'
+        const 否定 = '否不没无非'
         const 语气词 = '只怎吧着什么呢'
         const 叹词 = '啊嗯哦哎'
-        const 助词 = '了子'
+        const 助词 = '子' // 了
         const 之乎者也 = '之乎者也'
-        const 量词 = '每各个'
-        const 的 = '的得地'
-        return [...连词, ...人称代词, ...的, ...转折, ...指示代词, ...叹词, ...助词, ...语气词, ...之乎者也, ...量词]
+        const 量词 = '每各' //个
+        const 的 = '得地' // 的
+        return [...连词, ...动词, ...人称代词, ...的, ...转折, ...否定, ...指示代词, ...叹词, ...助词, ...语气词, ...之乎者也, ...量词]
       })()
         .map((e) => `[word='${e}']`)
         .join(',')
     }}
-    { font-weight: 900; }
+    { font-weight: 900;
+    <!-- border-bottom:1px solid red  -->
+    <!-- color:#118dcb -->
+    <!--  -->
+    }
   </component>
 </template>
 
 <style>
+/* liao不需要 */
+/* [word='了'] + 名词 */
+[word='了']:not(:has(+ :is([word='个'], [word='却']))),
+[word='的'],
+[word='个']:not(:has(+ :is([word='个']))),
+:not([word='了']) + [word='我']:not(:is([lineFirst], :has(+ :is([word='的'], [word='们'])))) {
+  margin-right: 0.5em;
+}
+
 html {
   font-size: 50px;
 }
@@ -151,8 +166,7 @@ body {
 
 @font-face {
   font-family: 'spkFont';
-  /* src: url(https://cdn.jsdelivr.net/fontsource/fonts/ma-shan-zheng@latest/chinese-simplified-400-normal.ttf) format('truetype'); */
-  src: url(./assets/描边.ttf) format('truetype');
+  src: url(./assets/font/包图小白体.ttf) format('truetype');
 }
 /*  */
 /*  */
@@ -170,7 +184,8 @@ body {
 
 section,
 period,
-line {
+line,
+div {
   display: block;
   box-sizing: border-box;
 }
@@ -192,33 +207,35 @@ line:hover {
 }
 
 .spk {
-  font-weight: 100;
-  font-family: spkFont;
-  font-style: italic;
+  /* font-weight: 100; */
+  font-family: spkFont, fangsong;
+  /* font-style: italic; */
 }
 .spk > :nth-child(1),
 .spk > :nth-child(2) {
+  font-size: 1rem;
   width: 1rem;
   display: inline-block;
 }
 
 /* word */
-
-word:first-child {
+[lineFirst] {
   font-size: 1rem;
 }
 
 [ritemsdatakey] {
-  color: red;
   cursor: pointer;
+  /* font-weight: 900; */
+  color: red;
+  text-shadow: 2px 2px 5px #00e5ff;
 }
 
-word:not([ritemsdatakey]):not([word=' ']) + word[ritemsdatakey] {
+/* word:not([ritemsdatakey]):not([word=' ']) + word[ritemsdatakey] {
   margin-left: 0.25rem;
 }
 word[ritemsdatakey]:has(+ word:not([ritemsdatakey])) {
   margin-right: 0.25rem;
-}
+} */
 
 :not(.文案hover) + .文案hover {
   border-left: 1px solid red;
