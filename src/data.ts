@@ -8,12 +8,12 @@ console.log('data')
 
 type datas = section[]
 type section = period[]
-type period = line[]
+type period = line[] // & { pi?: number }
 type line = {
   words: string
   spk: boolean
   lineIdx: number
-  top: number
+  lineTop: number
 }
 
 export const 各个Section的Top: number[] = []
@@ -104,7 +104,7 @@ function geneData(): datas {
               words: '', // 待定
               lineIdx: lineIdx++,
               spk,
-              top: (P间隔Acc上一次 + periodIdx) * P间隔高度 + 50 * (lineIdx - 1),
+              lineTop: (P间隔Acc上一次 + periodIdx) * P间隔高度 + 50 * (lineIdx - 1),
             }
 
             if (spk) {
@@ -125,10 +125,26 @@ function geneData(): datas {
 }
 
 export const datas = reactive(geneData()) // 没必要缓存
-export const allLines = datas.flat(3) //所有的line引用
-export const 总高度 = allLines.at(-1)!.top + 50
+export const allLines = datas.flat(2) //所有的line引用
+export const 总高度 = allLines.at(-1)!.lineTop + 50
 export const 外壳高度 = get屏幕高度() - (get屏幕高度() % 50) // snap布局对齐
 
 export const 行容纳 = Math.floor(get屏幕宽度() / 50)
+export const 列容纳 = Math.floor(get屏幕高度() / 50)
 
 export const 滚动dom = $('#app')
+
+// export const linesKeyMap = geneKeyMap(allLines)
+// export const periodsKeyMap = geneKeyMap(datas.flat(1))
+// export const sectionsKeyMap = geneKeyMap(datas)
+
+// function geneKeyMap<T>(datas: T[]) {
+//   const keyMap = new Map<T, number>()
+
+//   for (let i = 0; i < datas.length; i++) {
+//     const e = datas[i]
+//     keyMap.set(e, i)
+//   }
+
+//   return keyMap
+// }

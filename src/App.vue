@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { datas, 各个Section的Top, 总高度, 外壳高度, 行容纳 } from './data' //.ts
+import { datas, 各个Section的Top, 总高度, 外壳高度, 滚动dom } from './data' //.ts
 
-import { startSection, endSection } from './feat/1虚拟scroll' //.ts
+import { startSection, renderDatas } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
 import { rItemsData } from './feat/3selectionAddR' //.ts
 import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
 
-import { $, getParams } from './assets/utils' //.ts
+import { $, $$, getParams } from './assets/utils' //.ts
 import { computed } from 'vue'
 
 console.log('App.vue')
@@ -42,6 +42,49 @@ function getDomAttr(lineIdx: number, wordIdx: number, spk: boolean) {
 }
 
 $('#app').style.height = 外壳高度 + 'px'
+
+let prev = 0
+function getDomLength() {
+  const cur = $$(' *').length
+  const diff = cur - prev
+  prev = cur
+  return diff
+}
+
+// 统计每帧dom变化
+// let i = 0
+// let domLength = getDomLength()
+// domLength && console.time(i + ' ' + domLength)
+// requestAnimationFrame(function f() {
+//   domLength && console.timeEnd(i + ' ' + domLength)
+//   domLength = getDomLength()
+//   domLength && i++
+//   domLength && console.time(i + ' ' + domLength)
+
+//   requestAnimationFrame(f)
+// })
+
+// document.onclick = () => {
+//   // 滚动dom.scrollTop += 1
+//   console.log('document')
+// }
+
+// document.documentElement.onclick = (e) => {
+//   console.log('document.documentElement')
+//   e.stopPropagation()
+//   e.stopImmediatePropagation()
+//   滚动dom.scrollTop += 1
+// }
+
+// document.body.onclick = (e) => {
+//   console.log('document.body')
+//   e.stopPropagation()
+//   e.stopImmediatePropagation()
+//   滚动dom.scrollTop -= 1
+// }
+// window.onclick = () => {
+//   console.log('window')
+// }
 </script>
 
 <template>
@@ -63,14 +106,16 @@ $('#app').style.height = 外壳高度 + 'px'
     v-else
     :style="{
       height: 总高度 + 'px',
-      paddingTop: 各个Section的Top[startSection] + 'px',
+      paddingTop: renderDatas[0]?.[0][0].lineTop + 'px',
       width: 'fit-content',
     }"
   >
-    <section v-for="(section, sIdx) of datas.slice(startSection, endSection)" :key="sIdx + startSection">
-      <period v-for="period of section">
+    <section v-for="(section, sIdx) of renderDatas" :key="startSection + sIdx" :i="startSection + sIdx">
+      <period v-for="period of section" :key="period[0].lineTop" :i="period[0].lineTop">
         <line
-          v-for="{ words, lineIdx, spk } of period"
+          v-for="{ words, lineIdx, spk, lineTop } of period"
+          :key="lineTop"
+          :i="lineTop"
           v-bind="spk && { class: { spk } }"
           :style="{
             fontSize: `clamp(16px, ${100 / (words.length + (spk ? 3 : 1))}vw, 50px)`,
@@ -85,7 +130,7 @@ $('#app').style.height = 外壳高度 + 'px'
   </div>
 
   <component is="style" v-if="!getParams().home" boss>
-    line{ color:white;} line:hover{ color:#eee }
+    line{ color:#eee5;} line:hover{ color:#eee }
     <!--  -->
     [ritemsdatakey] { color: #eee; }
     <!--  -->
@@ -98,8 +143,8 @@ $('#app').style.height = 外壳高度 + 'px'
         const 动词 = '到'
         const 人称代词 = '他她它你们您咱俺自己'
         const 指示代词 = '这那其此'
-        const 转折 = '又更别可才反越但而虽然却且或'
-        const 否定 = '否不没无非'
+        const 转折 = '又更可才越但而虽然却且或'
+        const 否定 = '否不没无非勿别反'
         const 语气词 = '只怎吧着什么呢'
         const 叹词 = '啊嗯哦哎'
         const 助词 = '子' // 了
@@ -157,7 +202,7 @@ body {
 
 #app::-webkit-scrollbar-thumb {
   height: 1px;
-  background-color: black;
+  background-color: blue;
 }
 
 #app::-webkit-scrollbar-thumb:hover {

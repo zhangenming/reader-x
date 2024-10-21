@@ -3,6 +3,9 @@ import { $$ } from '../assets/utils'
 
 console.log('.')
 
+let prevDate = +new Date()
+let maxDiff = 0,
+  minDiff = Infinity
 document.addEventListener('keydown', (e) => {
   // e.preventDefault()
 
@@ -19,6 +22,12 @@ document.addEventListener('keydown', (e) => {
   function nextPage() {
     const snap = 滚动dom.scrollTop % 50
     滚动dom.scrollTop += 外壳高度 - snap
+    performance.mark('nextPage') // 持续发送频率 18~30ms
+    // const diff = +new Date() - prevDate
+    // maxDiff = Math.max(maxDiff, diff)
+    // minDiff = Math.min(minDiff, diff)
+    // prevDate = +new Date()
+    // console.log(diff, maxDiff, minDiff)
   }
   function prevPage() {
     const snap = 滚动dom.scrollTop % 50

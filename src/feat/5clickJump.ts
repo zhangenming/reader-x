@@ -52,15 +52,15 @@ function 执行跳转(r: string, 当前top: number, { shiftKey, ctrlKey }: { shi
   const 含有lines = allLines.filter((line) => line.words.includes(r))
   const 第一个line = 含有lines[0]
   const 末一个line = 含有lines.at(-1)!
-  const 下一个line = 含有lines.find((line) => line.top > 当前top)
-  const 上一个line = 含有lines.findLast((line) => line.top < 当前top)
+  const 下一个line = 含有lines.find((line) => line.lineTop > 当前top)
+  const 上一个line = 含有lines.findLast((line) => line.lineTop < 当前top)
 
   const 目标top = (() => {
     if (shiftKey && ctrlKey) return 第一个line
     if (ctrlKey) return 末一个line
     if (shiftKey) return 上一个line || 末一个line
     return 下一个line || 第一个line
-  })().top
+  })().lineTop
 
   滚动dom.scrollBy({
     top: 目标top - 当前top,

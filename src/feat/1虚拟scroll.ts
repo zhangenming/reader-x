@@ -8,8 +8,10 @@ import { useStorage } from '@vueuse/core'
 
 console.log('.')
 
-export const startSection = ref(0)
-export const endSection = ref(0)
+export let startSection = 0
+let endSection = 0
+type x = (typeof datas)[0]
+export const renderDatas = ref([] as x[])
 
 let appScroll = useStorage('appScroll', 0)
 
@@ -29,27 +31,46 @@ function geneRenderDom() {
   appScroll.value = 当前滚动位置
 
   if (滚动方向 === '下') {
-    for (let i = startSection.value + 1; i < datas.length; i++) {
+    for (let i = startSection + 1; i < datas.length; i++) {
       if (各个Section的Top[i] > 当前滚动位置) {
-        startSection.value = i - 1
+        startSection = i - 1
         break
       }
     }
   } else {
-    for (let i = startSection.value; i >= 0; i--) {
+    for (let i = startSection; i >= 0; i--) {
       if (各个Section的Top[i] <= 当前滚动位置) {
-        startSection.value = i
+        startSection = i
         break
       }
     }
   }
 
+  const 开始renderTop = 当前滚动位置 - 50
+  const 结束renderTop = 当前滚动位置 + 屏幕高度
+
   // 确定了开始 自然就确定了结束 开始位置往后加几个就行
-  endSection.value = startSection.value
-  for (let i = startSection.value; i < datas.length; i++) {
-    if (各个Section的Top[i] > 当前滚动位置 + 屏幕高度) {
+  endSection = startSection
+  for (let i = startSection; i < datas.length; i++) {
+    if (各个Section的Top[i] > 结束renderTop) {
       break
     }
-    endSection.value++
+    endSection++
   }
+
+  const _renderDatas = datas.slice(startSection, endSection) as typeof datas
+
+  renderDatas.value = _renderDatas.map((section) =>
+    section
+      .map((period, i) => {
+        const rs = period.filter((line) => {
+          return line.lineTop > 开始renderTop && line.lineTop < 结束renderTop
+        })
+        return rs
+      })
+      .filter((period) => period.length)
+  )
+
+  // renderDatas.value = [[[renderDatas.value[0][0][0]]]]  //justOne
+  // vue(renderDatas,1)
 }
