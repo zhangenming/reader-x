@@ -1,4 +1,4 @@
-import txt from '../txt/沧浪之水 (阎真) (Z-Library).txt?raw'
+import txt from '../txt/笑傲江湖.txt?raw'
 
 import { reactive } from 'vue'
 
@@ -125,6 +125,8 @@ function geneData(): datas {
 }
 
 export const datas = reactive(geneData()) // 没必要缓存
+console.log(datas)
+
 export const allLines = datas.flat(2) //所有的line引用
 export const 总高度 = allLines.at(-1)!.lineTop + 50
 export const 外壳高度 = get屏幕高度() - (get屏幕高度() % 50) // snap布局对齐
