@@ -1,5 +1,3 @@
-// 滚动位置 -> 渲染dom
-// 滚动的时候什么也不做 下一页提前渲染好
 import { ref } from 'vue'
 
 import { datas, 各个Section的Top, 滚动dom } from '../data'
@@ -15,7 +13,9 @@ export const renderDatas = ref([] as x[])
 
 let appScroll = useStorage('appScroll', 0)
 
-const 屏幕高度X2 = get屏幕高度()
+// 滚动位置 -> 渲染dom
+// 滚动的时候什么也不做 下一页提前渲染好
+const 屏幕高度X2 = get屏幕高度() //* 2
 
 setTimeout(() => {
   滚动dom.scrollTo({
@@ -23,9 +23,10 @@ setTimeout(() => {
   })
 })
 
-滚动dom.onscroll = getParams().static ? () => {} : geneRenderDom
+滚动dom.onscrollend = getParams().static ? () => {} : geneRenderData
 
-function geneRenderDom() {
+let prevData = [] as x[0]
+function geneRenderData() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()
 
   appScroll.value = 当前滚动位置
@@ -71,6 +72,14 @@ function geneRenderDom() {
       .filter((period) => period.length)
   )
 
+  const curData = renderDatas.value.flat(2)
+
+  console.log({
+    add: curData.filter((e) => !prevData.map((ee) => ee.lineIdx).includes(e.lineIdx)).map((e) => e.words),
+    del: prevData.filter((e) => !curData.map((ee) => ee.lineIdx).includes(e.lineIdx)).map((e) => e.words),
+  })
+
+  prevData = curData
   // renderDatas.value = [[[renderDatas.value[0][0][0]]]]  //justOne
   // vue(renderDatas,1)
 }

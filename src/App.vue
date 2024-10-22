@@ -111,7 +111,7 @@ function getDomLength() {
     }"
   >
     <section v-for="(section, sIdx) of renderDatas" :key="startSection + sIdx" :i="startSection + sIdx">
-      <period v-for="period of section" :key="period[0].lineTop" :i="period[0].lineTop">
+      <period v-for="period of section" :key="period[0].periodIdx" :i="period[0].periodIdx">
         <line
           v-for="{ words, lineIdx, spk, lineTop } of period"
           :key="lineTop"
