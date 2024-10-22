@@ -15,7 +15,7 @@ export const renderDatas = ref([] as x[])
 
 let appScroll = useStorage('appScroll', 0)
 
-const 屏幕高度 = get屏幕高度() * 2
+const 屏幕高度X2 = get屏幕高度()
 
 setTimeout(() => {
   滚动dom.scrollTo({
@@ -23,7 +23,7 @@ setTimeout(() => {
   })
 })
 
-滚动dom.onscrollend = getParams().static ? () => {} : geneRenderDom
+滚动dom.onscroll = getParams().static ? () => {} : geneRenderDom
 
 function geneRenderDom() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()
@@ -47,7 +47,7 @@ function geneRenderDom() {
   }
 
   const 开始renderTop = 当前滚动位置 - 50
-  const 结束renderTop = 当前滚动位置 + 屏幕高度
+  const 结束renderTop = 当前滚动位置 + 屏幕高度X2
 
   // 确定了开始 自然就确定了结束 开始位置往后加几个就行
   endSection = startSection

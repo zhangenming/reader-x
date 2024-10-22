@@ -12,6 +12,7 @@ type period = line[] // & { pi?: number }
 type line = {
   words: string
   spk: boolean
+  periodIdx: number
   lineIdx: number
   lineTop: number
 }
@@ -103,6 +104,7 @@ function geneData(): datas {
             const rs = {
               words: '', // 待定
               lineIdx: lineIdx++,
+              periodIdx,
               spk,
               lineTop: (P间隔Acc上一次 + periodIdx) * P间隔高度 + 50 * (lineIdx - 1),
             }
@@ -125,12 +127,10 @@ function geneData(): datas {
 }
 
 export const datas = reactive(geneData()) // 没必要缓存
-console.log(datas)
-
 export const allLines = datas.flat(2) //所有的line引用
+
 export const 总高度 = allLines.at(-1)!.lineTop + 50
 export const 外壳高度 = get屏幕高度() - (get屏幕高度() % 50) // snap布局对齐
-
 export const 行容纳 = Math.floor(get屏幕宽度() / 50)
 export const 列容纳 = Math.floor(get屏幕高度() / 50)
 
