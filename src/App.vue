@@ -141,7 +141,7 @@ function getDomLength() {
       (() => {
         const 的 = '得地' // 的
         const 助词 = '子' // 了
-        const 连词 = '以就是还再曾经些' //连则如果真假由于过以为没跟已有甚至乃因此和与所即把做都在几竟说
+        const 连词 = '以及就是还再曾经些' //连则如果真假由于过以为没跟已有甚至乃因此和与所即把做都在几竟说
         const 人称代词 = '他她它你们您咱俺自己'
         const 指示代词 = '这那其此'
         const 转折 = '又更可才越但而虽然却且或'
@@ -161,9 +161,9 @@ function getDomLength() {
 
     {{
       `
-     :not([ritemsdatakey*="${hoverR}"]) + [ritemsdatakey*="${hoverR}"] { border-left: 1px solid red; }
-     [ritemsdatakey*="${hoverR}"]:has(+ :not([ritemsdatakey*="${hoverR}"])) { border-right: 1px solid red; }
-     [ritemsdatakey*="${hoverR}"] { border-top: 1px solid red; border-bottom: 1px solid red; }
+     :not([ritemsdatakey*="-${hoverR}-"]) + [ritemsdatakey*="-${hoverR}-"] { border-left: 1px solid red; }
+     [ritemsdatakey*="-${hoverR}-"]:has(+ :not([ritemsdatakey*="-${hoverR}-"])) { border-right: 1px solid red; }
+     [ritemsdatakey*="-${hoverR}-"] { border-top: 1px solid red; border-bottom: 1px solid red; }
       `
     }}
   </component>

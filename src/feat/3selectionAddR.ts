@@ -11,13 +11,35 @@ console.log('.')
 type RItemsData = {
   [query: string]: string[]
 }
+type rItemsDataWordID = {
+  [query: string]: string
+}
 
 export const rItemsData = useStorage<RItemsData>('rItemsData', {}).value
 export const rItemsDataWordID = computed(() => {
   return Object.entries(rItemsData).reduce((acc, [query, wordIDs]) => {
-    wordIDs.forEach((wordID) => (acc[wordID] ??= []).push(query))
+    // wordIDs.forEach((wordID) => {
+    //   if (!acc[wordID]) acc[wordID] = []
+    //   acc[wordID].push(query)
+    //   // 简写
+    //   ;(acc[wordID] ||= []).push(query)
+    // })
+    // wordIDs.forEach((wordID) => {
+    //   if (!acc[wordID]) acc[wordID] = ''
+    //   acc[wordID] += query
+    //   // 简写
+    //   acc[wordID] ||= '' += query
+    // })
+
+    wordIDs.forEach((wordID) => {
+      // acc[wordID] ??= '-'
+      // acc[wordID] += query + '-'
+
+      acc[wordID] = (acc[wordID] || '-') + query + '-'
+    })
+
     return acc
-  }, {} as RItemsData)
+  }, {} as rItemsDataWordID)
 })
 
 console.log(

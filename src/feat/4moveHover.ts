@@ -8,19 +8,22 @@ console.log('.')
 
 export const hoverR = ref('')
 
+let prevTarget: HTMLElement
 document.addEventListener('mousemove', ({ target }) => {
   if (!(target instanceof HTMLElement)) return
+
+  if (prevTarget === target) return
 
   const r = getDomR(target)
   if (!r) return
 
   showIdxInfo(r, target)
 
-  if (r === hoverR.value) return
-
   // console.log(`hoverChange: ${hoverR.value} -> ${r}`)
 
   hoverR.value = r
+
+  prevTarget = target
 })
 
 let prevRs = ''

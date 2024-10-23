@@ -2,7 +2,7 @@ import { 滚动dom } from '../data'
 import { getRandomElement } from './utils'
 
 export function getDomR(dom: HTMLElement) {
-  const rs = dom.getAttribute('rItemsDataKey')?.split(',')
+  const rs = dom.getAttribute('rItemsDataKey')?.split('-')
   if (!rs) return
 
   return getRandomElement(rs)
