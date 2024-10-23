@@ -1,8 +1,9 @@
 import { ref } from 'vue'
+import { useStorage } from '@vueuse/core'
 
 import { datas, 各个Section的Top, 滚动dom } from '../data'
-import { getParams, get屏幕高度, get滚动info } from '../assets/utils'
-import { useStorage } from '@vueuse/core'
+import { getParams, get屏幕高度 } from '../utils/utils'
+import { get滚动info } from '../utils/utilsX'
 
 console.log('.')
 

@@ -1,9 +1,10 @@
 // add R
+
+import { computed } from 'vue'
 import { useStorage } from '@vueuse/core'
 
 import { allLines } from '../data'
-import { findAllIndex } from '../assets/utils'
-import { computed } from 'vue'
+import { findAllIndex } from '../utils/utils'
 
 console.log('.')
 

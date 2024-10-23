@@ -2,7 +2,7 @@ import txt from '../txt/笑傲江湖.txt?raw'
 
 import { reactive } from 'vue'
 
-import { $, get屏幕宽度, get屏幕高度 } from './assets/utils'
+import { $, get屏幕宽度, get屏幕高度 } from './utils/utils'
 
 console.log('data')
 

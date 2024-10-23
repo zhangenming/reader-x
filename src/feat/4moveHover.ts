@@ -1,6 +1,7 @@
 // hover R
+
 import { ref } from 'vue'
-import { getDomR } from '../assets/utilsX'
+import { getDomR } from '../utils/utilsX'
 import { rItemsData } from './3selectionAddR'
 
 console.log('.')

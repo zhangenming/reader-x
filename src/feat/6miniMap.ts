@@ -1,12 +1,12 @@
 // miniMap R
 import { watchEffect } from 'vue'
 
+import { $ } from '../utils/utils'
+
 import { allLines, 总高度, 外壳高度 } from '../data'
 
 import { rItemsData } from './3selectionAddR'
 import { hoverR } from './4moveHover'
-
-import { $ } from '../assets/utils'
 
 watchEffect(() => {
   const data = rItemsData[hoverR.value] // vue 监控hoverR值变化事件

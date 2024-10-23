@@ -8,7 +8,7 @@ import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
 
-import { $, $$, getParams } from './assets/utils' //.ts
+import { $, $$, getParams } from './utils/utils' //.ts
 import { computed } from 'vue'
 
 console.log('App.vue')

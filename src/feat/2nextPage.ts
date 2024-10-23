@@ -1,5 +1,5 @@
 import { 外壳高度, 滚动dom } from '../data'
-import { $$ } from '../assets/utils'
+import { $$ } from '../utils/utils'
 
 console.log('.')
 
