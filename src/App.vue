@@ -3,7 +3,7 @@ import { datas, 各个Section的Top, 总高度, 外壳高度, 滚动dom } from '
 
 import { startSection, renderDatas } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
-import { rItemsData } from './feat/3selectionAddR' //.ts
+import { rItemsData, rItemsDataWordID } from './feat/3selectionAddR' //.ts
 import { hoverR } from './feat/4moveHover' //.ts
 import './feat/5clickJump' //.ts
 import './feat/6miniMap' //.ts
@@ -24,9 +24,6 @@ function getDomAttr(lineIdx: number, wordIdx: number, spk: boolean) {
 
   let classs = ''
 
-  if (rItemsData[hoverR.value]?.includes(wordID)) {
-    classs += '文案hover '
-  }
   if (allFirst.value.includes(wordID)) {
     classs += 'first '
   }
@@ -34,10 +31,13 @@ function getDomAttr(lineIdx: number, wordIdx: number, spk: boolean) {
     classs += 'last '
   }
 
+  if (wordIdx === (spk ? 2 : 0)) {
+    classs += 'lineFirst '
+  }
+
   return {
+    rItemsDataKey: rItemsDataWordID.value[wordID],
     class: classs || undefined,
-    rItemsDataKey: Object.entries(rItemsData).find(([k, v]) => v.includes(wordID))?.[0],
-    lineFirst: wordIdx === (spk ? 2 : 0) ? '' : undefined,
   }
 }
 
@@ -134,8 +134,6 @@ function getDomLength() {
     <!--  -->
     [ritemsdatakey] { color: #eee; }
     <!--  -->
-    .文案hover { background-color: #eee; }
-    <!--  -->
     word{text-shadow: unset!important;}
   </component>
   <component is="style" 动态>
@@ -161,8 +159,15 @@ function getDomLength() {
     { font-weight: 900;
     <!-- border-bottom:1px solid red  -->
     <!-- color:#118dcb -->
-    <!--  -->
     }
+
+    {{
+      `
+     :not([ritemsdatakey*="${hoverR}"]) + [ritemsdatakey*="${hoverR}"] { border-left: 1px solid red; }
+     [ritemsdatakey*="${hoverR}"]:has(+ :not([ritemsdatakey*="${hoverR}"])) { border-right: 1px solid red; }
+     [ritemsdatakey*="${hoverR}"] { border-top: 1px solid red; border-bottom: 1px solid red; }
+    `
+    }}
   </component>
 </template>
 
@@ -172,7 +177,7 @@ function getDomLength() {
 [word='了']:not(:has(+ :is([word='个'], [word='却']))),
 [word='的'],
 [word='个']:not(:has(+ :is([word='个']))),
-:not([word='了']) + [word='我']:not(:is([lineFirst], :has(+ :is([word='的'], [word='们'])))) {
+:not([word='了']) + [word='我']:not(:is(.lineFirst, :has(+ :is([word='的'], [word='们'])))) {
   margin-right: 0.5em;
 }
 
@@ -266,7 +271,7 @@ line:hover {
 }
 
 /* word */
-[lineFirst] {
+.lineFirst {
   font-size: 1rem;
 }
 
@@ -283,17 +288,6 @@ line:hover {
 word[ritemsdatakey]:has(+ word:not([ritemsdatakey])) {
   margin-right: 0.25rem;
 } */
-
-:not(.文案hover) + .文案hover {
-  border-left: 1px solid red;
-}
-.文案hover:has(+ :not(.文案hover)) {
-  border-right: 1px solid red;
-}
-.文案hover {
-  border-top: 1px solid red;
-  border-bottom: 1px solid red;
-}
 
 .first {
   box-shadow: inset red 3px 0px 0 0, inset red 0px 3px 0 0;

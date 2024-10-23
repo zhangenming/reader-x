@@ -1,8 +1,8 @@
 // jump R
 
+import { getDomR } from 'src/assets/utilsX'
 import { get滚动info } from '../assets/utils'
 import { allLines, 滚动dom } from '../data'
-import { getDomR } from './3selectionAddR'
 
 console.log('.')
 

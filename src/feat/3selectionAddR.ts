@@ -3,6 +3,7 @@ import { useStorage } from '@vueuse/core'
 
 import { allLines } from '../data'
 import { findAllIndex } from '../assets/utils'
+import { computed } from 'vue'
 
 console.log('.')
 
@@ -10,14 +11,20 @@ type RItemsData = {
   [query: string]: string[]
 }
 
-export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
+export const rItemsData = useStorage<RItemsData>('rItemsData', {}).value
+export const rItemsDataWordID = computed(() => {
+  return Object.entries(rItemsData).reduce((acc, [query, wordIDs]) => {
+    wordIDs.forEach((wordID) => (acc[wordID] ??= []).push(query))
+    return acc
+  }, {} as RItemsData)
+})
 
-// console.log(
-//   '出现顺序',
-//   Object.entries(rItemsData)
-//     .sort((q, w) => Number(q[1][0].split('-')[0]) - Number(w[1][0].split('-')[0]))
-//     .map((e) => e[0])
-// )
+console.log(
+  '出现顺序',
+  Object.entries(rItemsData)
+    .sort((q, w) => Number(q[1][0].split('-')[0]) - Number(w[1][0].split('-')[0]))
+    .map((e) => e[0])
+)
 
 document.addEventListener('click', ({ target }) => {
   if (!(target instanceof HTMLElement)) return
@@ -51,9 +58,3 @@ document.addEventListener('click', ({ target }) => {
     // })
   }
 })
-
-export function getDomR(dom: HTMLElement) {
-  const r = dom.getAttribute('rItemsDataKey')
-
-  return r?.split(',')[0]
-}
