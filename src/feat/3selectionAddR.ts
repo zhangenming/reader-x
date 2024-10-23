@@ -1,3 +1,4 @@
+// add R
 import { useStorage } from '@vueuse/core'
 
 import { allLines } from '../data'
@@ -10,6 +11,13 @@ type RItemsData = {
 }
 
 export const rItemsData: RItemsData = useStorage('rItemsData', {}).value
+
+// console.log(
+//   '出现顺序',
+//   Object.entries(rItemsData)
+//     .sort((q, w) => Number(q[1][0].split('-')[0]) - Number(w[1][0].split('-')[0]))
+//     .map((e) => e[0])
+// )
 
 document.addEventListener('click', ({ target }) => {
   if (!(target instanceof HTMLElement)) return

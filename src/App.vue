@@ -135,6 +135,8 @@ function getDomLength() {
     [ritemsdatakey] { color: #eee; }
     <!--  -->
     .文案hover { background-color: #eee; }
+    <!--  -->
+    word{text-shadow: unset!important;}
   </component>
   <component is="style" 动态>
     {{
