@@ -61,3 +61,8 @@ export function getParams() {
     },
   }) as unknown as { [s: string]: string | boolean }
 }
+
+export function getRandomElement<T>(arr: T[]) {
+  const randomIndex = Math.floor(Math.random() * arr.length)
+  return arr[randomIndex]
+}

@@ -1,9 +1,11 @@
 import { 滚动dom } from '../data'
+import { getRandomElement } from './utils'
 
 export function getDomR(dom: HTMLElement) {
-  const r = dom.getAttribute('rItemsDataKey')
+  const rs = dom.getAttribute('rItemsDataKey')?.split(',')
+  if (!rs) return
 
-  return r?.split(',')[0]
+  return getRandomElement(rs)
 }
 
 let _上次滚动位置 = 0
