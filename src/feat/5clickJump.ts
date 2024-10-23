@@ -1,6 +1,6 @@
 // jump R
 
-import { getDomR } from 'src/assets/utilsX'
+import { getDomR } from '../assets/utilsX'
 import { get滚动info } from '../assets/utils'
 import { allLines, 滚动dom } from '../data'
 

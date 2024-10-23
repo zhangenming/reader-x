@@ -113,9 +113,9 @@ function getDomLength() {
     <section v-for="(section, sIdx) of renderDatas" :key="startSection + sIdx" :i="startSection + sIdx">
       <period v-for="period of section" :key="period[0].periodIdx" :i="period[0].periodIdx">
         <line
-          v-for="{ words, lineIdx, spk, lineTop } of period"
-          :key="lineTop"
-          :i="lineTop"
+          v-for="{ words, spk, lineIdx } of period"
+          :key="lineIdx"
+          :i="lineIdx"
           v-bind="spk && { class: { spk } }"
           :style="{
             fontSize: `clamp(16px, ${100 / (words.length + (spk ? 3 : 1))}vw, 50px)`,
@@ -156,17 +156,14 @@ function getDomLength() {
         .map((e) => `[word='${e}']`)
         .join(',')
     }}
-    { font-weight: 900;
-    <!-- border-bottom:1px solid red  -->
-    <!-- color:#118dcb -->
-    }
+    { font-weight: 900; }
 
     {{
       `
      :not([ritemsdatakey*="${hoverR}"]) + [ritemsdatakey*="${hoverR}"] { border-left: 1px solid red; }
      [ritemsdatakey*="${hoverR}"]:has(+ :not([ritemsdatakey*="${hoverR}"])) { border-right: 1px solid red; }
      [ritemsdatakey*="${hoverR}"] { border-top: 1px solid red; border-bottom: 1px solid red; }
-    `
+      `
     }}
   </component>
 </template>
