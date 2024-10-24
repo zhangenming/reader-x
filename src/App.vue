@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { datas, 各个Section的Top, 总高度, 外壳高度, 滚动dom } from './data' //.ts
+import { datas, 总高度, 外壳高度 } from './data' //.ts
 
 import { startSection, renderDatas } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts

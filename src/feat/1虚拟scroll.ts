@@ -14,9 +14,12 @@ export const renderDatas = ref([] as x[])
 
 let appScroll = useStorage('appScroll', 0)
 
+const event = getParams().home ? 'onscroll' : 'onscrollend'
+
 // 滚动位置 -> 渲染dom
 // 滚动的时候什么也不做 下一页提前渲染好
-const 屏幕高度X2 = get屏幕高度() //* 2
+const overScan = 50 * 5
+const 屏幕高度X2 = get屏幕高度() + (event === 'onscrollend' ? overScan : 0)
 
 setTimeout(() => {
   滚动dom.scrollTo({
@@ -24,7 +27,7 @@ setTimeout(() => {
   })
 })
 
-滚动dom.onscrollend = getParams().static ? () => {} : geneRenderData
+滚动dom[event] = getParams().static ? () => {} : geneRenderData
 
 let prevData = [] as x[0]
 function geneRenderData() {
