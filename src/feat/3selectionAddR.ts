@@ -42,6 +42,20 @@ export const rItemsDataWordID = computed(() => {
   }, {} as rItemsDataWordID)
 })
 
+// export const rItemsDataWordID1 = Object.entries(rItemsData).reduce((acc, [query, wordIDs]) => {
+//   wordIDs.forEach((wordID) => (acc[wordID] ??= []).push(query))
+//   return acc
+// }, {} as RItemsData)
+
+// export const rItemsDataWordID2 = Object.entries(rItemsData).reduce((acc, [query, wordIDs]) => {
+//   return wordIDs.reduce((acc2, wordID) => {
+//     ;(acc2[wordID] ??= []).push(query)
+//     return acc2
+//   }, acc)
+// }, {} as RItemsData)
+
+// export const rItemsDataWordID3 = Object.entries(rItemsData).xx
+
 console.log(
   '出现顺序',
   Object.entries(rItemsData)

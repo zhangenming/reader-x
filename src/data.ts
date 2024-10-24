@@ -1,8 +1,7 @@
-import txt from '../txt/笑傲江湖.txt?raw'
-
+import * as fflate from 'fflate'
 import { reactive } from 'vue'
 
-import { $, get屏幕宽度, get屏幕高度 } from './utils/utils'
+import { $, getParams, get屏幕宽度, get屏幕高度 } from './utils/utils'
 
 console.log('data')
 
@@ -17,13 +16,14 @@ type line = {
   lineTop: number
 }
 
-export const 各个Section的Top: number[] = []
 let P间隔Acc上一次: number
 let P间隔Acc = 0
 const P间隔高度 = 50
 
-function geneData(): datas {
+async function geneData(): Promise<datas> {
   let lineIdx = 0
+
+  const txt = (await import('../txt/笑傲江湖.txt?raw')).default
 
   return txt
     .split(/\r*\n */)
@@ -60,7 +60,6 @@ function geneData(): datas {
         [' ', ''] // section之间的空行
       )
 
-      各个Section的Top.push(lineIdx * 50 + P间隔Acc * P间隔高度)
       P间隔Acc上一次 = P间隔Acc
       P间隔Acc += periods.length - 1
 
@@ -125,9 +124,25 @@ function geneData(): datas {
       })
     })
 }
+async function withCache(): Promise<datas> {
+  const cacheData = localStorage.getItem('data')
+  if (cacheData && !getParams().cache) {
+    console.log('hint Cache')
 
-export const datas = reactive(geneData()) // 没必要缓存
+    return JSON.parse(fflate.strFromU8(fflate.decompressSync(fflate.strToU8(cacheData, true))))
+  }
+
+  console.log('geneData')
+  const data = await geneData()
+  localStorage.setItem('data', fflate.strFromU8(fflate.compressSync(fflate.strToU8(JSON.stringify(data))), true))
+  return data
+}
+
+const data = await withCache()
+
+export const datas = reactive(data)
 export const allLines = datas.flat(2) //所有的line引用
+export const 各个Section的Top = datas.map((e) => e[0][0].lineTop)
 
 export const 总高度 = allLines.at(-1)!.lineTop + 50
 export const 外壳高度 = get屏幕高度() - (get屏幕高度() % 50) // snap布局对齐
