@@ -11,9 +11,9 @@ type period = line[]
 type line = {
   words: string
   spk: boolean
-  periodIdx: number
   lineIdx: number
   lineTop: number
+  periodIdx: number
 }
 
 async function geneData(): Promise<datas> {
@@ -22,106 +22,114 @@ async function geneData(): Promise<datas> {
   let P间隔Acc = 0
   const P间隔高度 = 50
 
-  const txt = (await import('../txt/笑傲江湖.txt?raw')).default
+  const txt = (await import('../txt/一个叫欧维的男人决定去死.txt?raw')).default
+
+  ;(window as any).fj = section2periods
 
   return txt
     .split(/\r*\n */)
     .filter((section) => section.trim())
-    .map(function section2periods(section) {
+    .map(section2periods)
+
+  function section2periods(section: string, dbg: any) {
+    let spk = false
+    const periodFlag = '。！？…'
+
+    // 分句
+    const periods = [...section].reduce(
+      (acc, cur, i, arr) => {
+        acc[acc.length - 1] += cur
+
+        const prev = arr[i - 1]
+        const next = arr[i + 1]
+
+        const 下一个下引号前面的字符 = arr[arr.indexOf('”', i) - 1]
+        // 引号里面整体作为一句话
+        if (cur === '“' && periodFlag.includes(下一个下引号前面的字符)) {
+          spk = true
+        }
+        if ((periodFlag.includes(cur) && !periodFlag.includes(next)) || (periodFlag.includes(prev) && cur === '”')) {
+          if (!spk && i !== arr.length - 1) {
+            // console.log('p')
+            acc.push('')
+          }
+        }
+        if (periodFlag.includes(prev) && cur === '”') {
+          spk = false
+        }
+
+        return acc
+      },
+      [' ', ''] // section之间的空行
+    )
+
+    if (dbg === undefined) {
+      console.log(periods)
+    }
+
+    P间隔Acc上一次 = P间隔Acc
+    P间隔Acc += periods.length - 1
+
+    return periods.map(function period2lines(period, periodIdx) {
       let spk = false
-      const periodFlag = '。！？…'
+      const allFlag = '。！？，—；：…”'
+      return [...period]
+        .reduce(
+          (acc, cur, i, arr) => {
+            acc[acc.length - 1] += cur
 
-      // 分句
-      const periods = [...section].reduce(
-        (acc, cur, i, arr) => {
-          acc[acc.length - 1] += cur
+            const prev = arr[i - 1]
+            const next = arr[i + 1]
 
-          const prev = arr[i - 1]
-          const next = arr[i + 1]
-
-          const 下一个下引号前面的字符 = arr[arr.indexOf('”', i) - 1]
-          // 引号里面整体作为一句话
-          if (cur === '“' && periodFlag.includes(下一个下引号前面的字符)) {
-            spk = true
-          }
-          if ((!spk && periodFlag.includes(cur) && !periodFlag.includes(next)) || (periodFlag.includes(prev) && cur === '”')) {
-            if (i !== arr.length - 1) {
-              // console.log('p')
-              acc.push('')
-            }
-          }
-          if (periodFlag.includes(prev) && cur === '”') {
-            spk = false
-          }
-
-          return acc
-        },
-        [' ', ''] // section之间的空行
-      )
-
-      P间隔Acc上一次 = P间隔Acc
-      P间隔Acc += periods.length - 1
-
-      return periods.map(function period2lines(period, periodIdx) {
-        let spk = false
-        const allFlag = '。！？，—；：…”'
-        return [...period]
-          .reduce(
-            (acc, cur, i, arr) => {
-              acc[acc.length - 1] += cur
-
-              const prev = arr[i - 1]
-              const next = arr[i + 1]
-
-              if (cur === '”') {
-                if (allFlag.includes(prev)) {
-                  acc.push('')
-                }
-              } else if (allFlag.includes(cur) && !allFlag.includes(next)) {
-                if (i !== arr.length - 1) {
-                  acc.push('')
-                }
+            if (cur === '”') {
+              if (allFlag.includes(prev)) {
+                acc.push('')
               }
-
-              return acc
-            },
-            ['']
-          )
-          .filter((e) => {
-            if (e) {
-              return true
-            }
-            // console.error(e) // todo?
-          })
-          .map((line) => {
-            if (line[0] === '“') {
-              spk = true
-              line = line.slice(1)
+            } else if (allFlag.includes(cur) && !allFlag.includes(next)) {
+              if (i !== arr.length - 1) {
+                acc.push('')
+              }
             }
 
-            const rs = {
-              words: '', // 待定
-              lineIdx: lineIdx++,
-              periodIdx,
-              spk,
-              lineTop: (P间隔Acc上一次 + periodIdx) * P间隔高度 + 50 * (lineIdx - 1),
-            }
+            return acc
+          },
+          ['']
+        )
+        .filter((e) => {
+          if (e) {
+            return true
+          }
+          // console.error(e) // todo?
+        })
+        .map((line) => {
+          if (line[0] === '“') {
+            spk = true
+            line = line.slice(1)
+          }
 
-            if (spk) {
-              line = '  ' + line
-            }
+          const rs = {
+            words: '', // 待定
+            lineIdx: lineIdx++,
+            periodIdx,
+            spk,
+            lineTop: (P间隔Acc上一次 + periodIdx) * P间隔高度 + 50 * (lineIdx - 1),
+          }
 
-            if (spk && line[line.length - 1] === '”') {
-              spk = false
-              line = line.slice(0, -1)
-            }
+          if (spk) {
+            line = '  ' + line
+          }
 
-            rs.words = line
+          if (spk && line[line.length - 1] === '”') {
+            spk = false
+            line = line.slice(0, -1)
+          }
 
-            return rs
-          })
-      })
+          rs.words = line
+
+          return rs
+        })
     })
+  }
 }
 async function withCache(): Promise<datas> {
   const cacheData = localStorage.getItem('data')

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { datas, 总高度, 外壳高度 } from './data' //.ts
+import { datas, 总高度, 外壳高度, 行容纳 } from './data' //.ts
 
 import { startSection, renderDatas } from './feat/1虚拟scroll' //.ts
 import './feat/2nextPage' //.ts
@@ -115,10 +115,15 @@ function getDomLength() {
         <line
           v-for="{ words, spk, lineIdx } of period"
           :key="lineIdx"
-          :i="lineIdx"
-          v-bind="spk && { class: { spk } }"
-          :style="{
-            fontSize: `clamp(16px, ${100 / (words.length + (spk ? 3 : 1))}vw, 50px)`,
+          v-bind="{
+            i: lineIdx,
+            ...(spk && { class: { spk } }),
+            ...(words.length > 行容纳 - 2 && {
+              title: words,
+              style: {
+                fontSize: `clamp(16px, ${100 / (words.length + (spk ? 3 : 1))}vw, 50px)`,
+              },
+            }),
           }"
         >
           <word v-for="(word, wordIdx) of words" :word="word" v-bind="getDomAttr(lineIdx, wordIdx, spk)">
@@ -141,10 +146,10 @@ function getDomLength() {
       (() => {
         const 的 = '得地' // 的
         const 助词 = '子' // 了
-        const 连词 = '与和以及就是定还再曾经些将' //连则如果真假由于过以为没跟已有甚至乃因此所即把做都在几竟说
+        const 连词 = '连与和以及就是定还再曾经些将' //如果真假由于过以为跟已有甚至乃因此所即把做都在几竟说
         const 人称代词 = '他她它你们您咱俺自己'
         const 指示代词 = '这那其此'
-        const 转折 = '又更可才越但而虽然却且或'
+        const 转折 = '又更可才越但而虽然却且或则'
         const 语气词 = '呀啊嗯哦哎'
         const 问 = '吗哪吧呢'
         const 叹词 = '只怎着什么于'
