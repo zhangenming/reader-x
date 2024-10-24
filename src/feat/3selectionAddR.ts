@@ -76,15 +76,16 @@ document.addEventListener('click', ({ target }) => {
   if (rItemsData[query]) {
     delete rItemsData[query]
     return
-  } else {
-    rItemsData[query] = []
   }
 
+  const tmp: string[] = []
   allLines.forEach(({ words, lineIdx }) => {
     findAllIndex(words, query)?.forEach((wordIdx) => {
-      rItemsData[query].push(`${lineIdx}-${wordIdx}`)
+      tmp.push(`${lineIdx}-${wordIdx}`)
     })
   })
+
+  rItemsData[query] = tmp
 
   // 或者 屏幕内显示完毕 添加删除样式
   if (rItemsData[query].length / query.length === 1) {

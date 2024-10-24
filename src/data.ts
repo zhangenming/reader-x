@@ -140,7 +140,7 @@ async function withCache(): Promise<datas> {
 const data = await withCache()
 
 export const datas = reactive(data)
-export const allLines = datas.flat(2) //所有的line引用
+export const allLines = data.flat(2) //所有的line引用
 export const 各个Section的Top = datas.map((e) => e[0][0].lineTop)
 
 export const 总高度 = allLines.at(-1)!.lineTop + 50
