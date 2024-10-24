@@ -18,8 +18,8 @@ const event = getParams().home ? 'onscroll' : 'onscrollend'
 
 // 滚动位置 -> 渲染dom
 // 滚动的时候什么也不做 下一页提前渲染好
-const overScan = 50 * 5
-const 屏幕高度X2 = get屏幕高度() + (event === 'onscrollend' ? overScan : 0)
+const overScan = 0
+const 渲染高度 = get屏幕高度() + (event === 'onscrollend' ? overScan : 0)
 
 setTimeout(() => {
   滚动dom.scrollTo({
@@ -27,10 +27,10 @@ setTimeout(() => {
   })
 })
 
-滚动dom[event] = getParams().static ? () => {} : geneRenderData
+滚动dom[event] = getParams().static ? () => {} : filterDataForRender
 
 let prevData = [] as x[0]
-function geneRenderData() {
+function filterDataForRender() {
   const { 当前滚动位置, 滚动方向 } = get滚动info()
 
   appScroll.value = 当前滚动位置
@@ -52,7 +52,7 @@ function geneRenderData() {
   }
 
   const 开始renderTop = 当前滚动位置 - 50
-  const 结束renderTop = 当前滚动位置 + 屏幕高度X2
+  const 结束renderTop = 当前滚动位置 + 渲染高度
 
   // 确定了开始 自然就确定了结束 开始位置往后加几个就行
   endSection = startSection
@@ -63,9 +63,7 @@ function geneRenderData() {
     endSection++
   }
 
-  const _renderDatas = datas.slice(startSection, endSection) as typeof datas
-
-  renderDatas.value = _renderDatas.map((section) =>
+  renderDatas.value = datas.slice(startSection, endSection).map((section) =>
     section
       .map((period, i) => {
         const rs = period.filter((line) => {

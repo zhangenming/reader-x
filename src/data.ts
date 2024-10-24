@@ -7,7 +7,7 @@ console.log('data')
 
 type datas = section[]
 type section = period[]
-type period = line[] // & { pi?: number }
+type period = line[]
 type line = {
   words: string
   spk: boolean
@@ -16,12 +16,11 @@ type line = {
   lineTop: number
 }
 
-let P间隔Acc上一次: number
-let P间隔Acc = 0
-const P间隔高度 = 50
-
 async function geneData(): Promise<datas> {
   let lineIdx = 0
+  let P间隔Acc上一次: number
+  let P间隔Acc = 0
+  const P间隔高度 = 50
 
   const txt = (await import('../txt/笑傲江湖.txt?raw')).default
 
